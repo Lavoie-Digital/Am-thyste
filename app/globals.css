@@ -1,26 +1,159 @@
 @import "tailwindcss";
 
+/* ============================================================
+   Améthyste — "Amethyst noir" — quiet-luxury system (Tailwind v4)
+   Restraint over effects: muted palette, editorial type, hairlines,
+   negative space. Color comes from photography, not gradients.
+   ============================================================ */
+@theme {
+  /* Amethyst — desaturated, sophisticated mauve (no neon) */
+  --color-amethyst-50: #f6f3f8;
+  --color-amethyst-100: #ebe4ef;
+  --color-amethyst-200: #d6c9de;
+  --color-amethyst-300: #bfaecb;
+  --color-amethyst-400: #a18cae;
+  --color-amethyst-500: #836d92;
+  --color-amethyst-600: #6a5677;
+  --color-amethyst-700: #51415d;
+  --color-amethyst-800: #382c42;
+  --color-amethyst-900: #241b2c;
+  --color-amethyst-950: #150f1b;
+
+  /* Aubergine night — near-black with a cool plum undertone */
+  --color-night-900: #0b0810;
+  --color-night-800: #110d18;
+  --color-night-700: #181221;
+  --color-night-600: #211a2c;
+
+  /* Champagne — matte, restrained gold */
+  --color-gold: #c2a878;
+  --color-gold-soft: #d8c4a0;
+  --color-silver: #c6bfce;
+
+  /* Warm ivory for headlines (warmth against the cool ground) */
+  --color-ivory: #efe9e1;
+
+  --font-display: var(--font-cinzel);
+  --font-script: var(--font-script);
+  --font-serif: var(--font-cormorant);
+  --font-sans: var(--font-sans);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0b0810;
+  --foreground: #e7e1ec;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 350;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* A single, very subtle vignette — no rainbow of radial blooms. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(120% 80% at 50% -20%, rgba(40, 28, 54, 0.55), transparent 60%),
+    radial-gradient(100% 70% at 50% 120%, rgba(20, 14, 28, 0.6), transparent 55%);
+  pointer-events: none;
+}
+
+/* Whisper of grain for a printed, editorial feel. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.025;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@layer utilities {
+  .font-display { font-family: var(--font-display), serif; }
+  .font-script { font-family: var(--font-script), cursive; }
+  .font-serif-lux { font-family: var(--font-serif), serif; }
+
+  /* Editorial display heading: warm ivory, tight, optical balance. */
+  .heading {
+    color: var(--color-ivory);
+    font-family: var(--font-display), serif;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.05;
+  }
+
+  /* Small tracked label (eyebrow). */
+  .eyebrow {
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.34em;
+    color: var(--color-amethyst-300);
+  }
+
+  /* Kept for backwards compatibility — now SOLID, no gradient. */
+  .text-gold-gradient { color: var(--color-gold-soft); }
+  .text-amethyst-gradient { color: var(--color-ivory); }
+
+  /* Surfaces: hairline-bordered, barely-there fill — not heavy glass. */
+  .surface {
+    background: rgba(255, 255, 255, 0.018);
+    border: 1px solid rgba(191, 174, 203, 0.1);
+  }
+  .glass {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(191, 174, 203, 0.1);
+  }
+  .glass-strong {
+    background: rgba(13, 9, 18, 0.82);
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    border: 1px solid rgba(191, 174, 203, 0.12);
+  }
+
+  /* Hairline divider. */
+  .hairline { border-color: rgba(191, 174, 203, 0.14); }
+
+  .ring-amethyst { box-shadow: inset 0 0 0 1px rgba(191, 174, 203, 0.22); }
+  .glow-amethyst { box-shadow: 0 30px 80px -40px rgba(0, 0, 0, 0.9); }
+
+  /* Slow, refined image reveal on hover (used by cards). */
+  .img-zoom { transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
+  .group:hover .img-zoom { transform: scale(1.045); }
+}
+
+/* Restrained focus ring. */
+*:focus-visible {
+  outline: 1px solid var(--color-amethyst-300);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: rgba(131, 109, 146, 0.35);
+  color: #fff;
+}
+
+::-webkit-scrollbar { width: 9px; }
+::-webkit-scrollbar-track { background: var(--color-night-900); }
+::-webkit-scrollbar-thumb { background: var(--color-amethyst-800); border-radius: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
