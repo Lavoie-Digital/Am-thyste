@@ -31,7 +31,7 @@ export function AmethystStarsHero() {
       <div className="absolute inset-0" aria-hidden>
         <div className="absolute inset-0 lg:hidden">
           {MOBILE_IMAGES.map((src, i) => (
-            <Slide key={src} src={src} active={i === idx % MOBILE_IMAGES.length} priority={i === 0} />
+            <Slide key={src} src={src} active={i === idx % MOBILE_IMAGES.length} priority={i === 0} position="center 22%" />
           ))}
         </div>
         <div className="absolute inset-0 hidden lg:block">
@@ -180,19 +180,37 @@ function Dots({ count, idx, onSelect }: { count: number; idx: number; onSelect: 
   );
 }
 
-function Slide({ src, active, priority }: { src: string; active: boolean; priority?: boolean }) {
+function Slide({
+  src,
+  active,
+  priority,
+  position = "center",
+}: {
+  src: string;
+  active: boolean;
+  priority?: boolean;
+  position?: string;
+}) {
   return (
     <motion.div
       aria-hidden
       className="absolute inset-0"
       initial={false}
-      animate={{ opacity: active ? 1 : 0, scale: active ? 1.07 : 1 }}
+      animate={{ opacity: active ? 1 : 0, scale: active ? 1.04 : 1 }}
       transition={{
         opacity: { duration: 1.8, ease },
         scale: { duration: SLIDE_MS / 1000 + 1.8, ease: "linear" },
       }}
     >
-      <Image src={src} alt="" fill priority={priority} sizes="100vw" className="object-cover" />
+      <Image
+        src={src}
+        alt=""
+        fill
+        priority={priority}
+        sizes="100vw"
+        className="object-cover"
+        style={{ objectPosition: position }}
+      />
     </motion.div>
   );
 }
