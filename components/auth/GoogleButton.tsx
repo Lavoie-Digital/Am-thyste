@@ -44,7 +44,7 @@ export function GoogleButton() {
         type="button"
         onClick={handle}
         disabled={loading}
-        className="flex h-12 w-full items-center justify-center gap-3 rounded-full border border-[#bfaecb]/25 text-sm text-[#efe9e1] transition-colors hover:border-[#bfaecb]/50 hover:bg-white/[0.03] disabled:opacity-50"
+        className="flex h-12 w-full items-center justify-center gap-3 rounded-full border border-[#211a2c]/15 text-sm text-[#211a2c] transition-colors hover:border-[#211a2c]/40 hover:bg-[#211a2c]/[0.03] disabled:opacity-50"
       >
         <GoogleGlyph />
         {loading ? dict.common.loading : dict.nav.login + " · Google"}

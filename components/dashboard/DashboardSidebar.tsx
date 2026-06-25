@@ -20,12 +20,12 @@ export function DashboardSidebar() {
   ];
 
   return (
-    <aside className="flex w-full shrink-0 flex-col gap-1 border-amethyst-300/15 lg:h-[100svh] lg:w-72 lg:border-r lg:p-6">
+    <aside className="flex w-full shrink-0 flex-col gap-1 border-ink/10 lg:h-[100svh] lg:w-72 lg:border-r lg:p-6">
       <Link href="/" className="mb-6 flex items-center gap-3 px-2">
-        <span className="relative h-10 w-10 overflow-hidden rounded-full ring-1 ring-amethyst-300/30">
+        <span className="relative h-10 w-10 overflow-hidden rounded-full ring-1 ring-ink/10">
           <Image src="/logo.jpeg" alt="Améthyste" fill sizes="40px" className="object-cover" />
         </span>
-        <span className="font-display text-sm tracking-[0.2em] text-amethyst-50">AMÉTHYSTE</span>
+        <span className="font-display text-sm tracking-[0.2em] text-ink">AMÉTHYSTE</span>
       </Link>
 
       <nav className="flex flex-row gap-1 overflow-x-auto lg:flex-col">
@@ -38,8 +38,8 @@ export function DashboardSidebar() {
               className={cn(
                 "whitespace-nowrap rounded-xl px-4 py-2.5 text-sm transition-colors",
                 active
-                  ? "bg-amethyst-500/20 text-white ring-1 ring-amethyst-300/30"
-                  : "text-amethyst-100/70 hover:bg-white/5 hover:text-white",
+                  ? "bg-amethyst-500/20 text-ink ring-1 ring-ink/10"
+                  : "text-ink/65 hover:bg-ink/[0.04] hover:text-ink",
               )}
             >
               {l.label}

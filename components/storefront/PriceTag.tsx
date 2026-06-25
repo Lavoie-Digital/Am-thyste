@@ -35,13 +35,13 @@ export function PriceTag({
         className,
       )}
     >
-      <span className={cn("font-serif-lux tracking-wide", hasReseller ? "text-gold-soft" : "text-ivory", sizes[size])}>
+      <span className={cn("font-serif-lux tracking-wide", hasReseller ? "text-gold" : "text-ink", sizes[size])}>
         {formatPrice(primary, locale)}
       </span>
       {hasReseller && (
         <>
-          <span className="text-xs text-amethyst-200/40 line-through">{formatPrice(marketPrice, locale)}</span>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-gold/70">{dict.common.resellerPrice}</span>
+          <span className="text-xs text-ink/35 line-through">{formatPrice(marketPrice, locale)}</span>
+          <span className="text-[10px] uppercase tracking-[0.2em] text-gold">{dict.common.resellerPrice}</span>
         </>
       )}
     </div>

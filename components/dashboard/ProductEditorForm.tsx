@@ -109,7 +109,7 @@ export function ProductEditorForm({ product }: { product: Product | null }) {
       </div>
 
       <div className="rounded-2xl glass p-6">
-        <p className="mb-3 block text-xs uppercase tracking-[0.15em] text-amethyst-300/70">{dict.dashboard.imagesLabel}</p>
+        <p className="mb-3 block text-xs uppercase tracking-[0.15em] text-ink-mute">{dict.dashboard.imagesLabel}</p>
         <ImageDropzone value={images} onChange={setImages} />
         <div className="mt-4 grid gap-4 sm:grid-cols-3">
           <Field label="Catégorie">
@@ -124,7 +124,7 @@ export function ProductEditorForm({ product }: { product: Product | null }) {
           <Field label="Ordre"><input type="number" value={f.sortOrder} onChange={upd("sortOrder")} className={inputClass} /></Field>
           <label className="flex items-end gap-2 pb-3">
             <input type="checkbox" checked={f.active} onChange={upd("active")} className="h-5 w-5 rounded" />
-            <span className="text-sm text-amethyst-100">{dict.dashboard.activeLabel}</span>
+            <span className="text-sm text-ink">{dict.dashboard.activeLabel}</span>
           </label>
         </div>
       </div>

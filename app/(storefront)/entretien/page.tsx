@@ -41,7 +41,7 @@ export default async function EntretienPage() {
         <Container>
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <Reveal>
-              <div className="relative aspect-[4/5] overflow-hidden rounded-3xl ring-1 ring-amethyst-300/20">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-3xl ring-1 ring-ink/10">
                 <Image src="/description.jpeg" alt="Rituel" fill sizes="(max-width:1024px) 100vw, 50vw" className="object-cover" />
               </div>
             </Reveal>
@@ -49,10 +49,10 @@ export default async function EntretienPage() {
               {steps.map((s, i) => (
                 <Reveal key={s.n} delay={i * 0.08}>
                   <div className="flex gap-5 rounded-2xl glass p-6">
-                    <span className="font-display text-3xl text-gold/70">{s.n}</span>
+                    <span className="font-display text-3xl text-gold">{s.n}</span>
                     <div>
-                      <h3 className="font-display text-xl tracking-wide text-amethyst-50">{s.t}</h3>
-                      <p className="mt-2 text-sm leading-relaxed text-amethyst-200/75">{s.d}</p>
+                      <h3 className="font-display text-xl tracking-wide text-ink">{s.t}</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-ink/65">{s.d}</p>
                     </div>
                   </div>
                 </Reveal>

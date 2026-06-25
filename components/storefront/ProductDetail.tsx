@@ -34,7 +34,7 @@ export function ProductDetail({ product }: { product: ProductDTO }) {
           initial={{ opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6 }}
-          className="relative aspect-square overflow-hidden bg-night-800"
+          className="relative aspect-square overflow-hidden bg-bone"
         >
           <AnimatePresence mode="wait">
             <motion.div
@@ -65,7 +65,7 @@ export function ProductDetail({ product }: { product: ProductDTO }) {
                 onClick={() => setActiveImage(i)}
                 className={cn(
                   "relative h-20 w-20 overflow-hidden transition-opacity",
-                  i === activeImage ? "opacity-100 ring-1 ring-amethyst-300/60" : "opacity-50 hover:opacity-90",
+                  i === activeImage ? "opacity-100 ring-1 ring-ink/15" : "opacity-50 hover:opacity-90",
                 )}
               >
                 <Image src={img} alt="" fill sizes="80px" className="object-cover" unoptimized={img.startsWith("data:")} />
@@ -79,7 +79,7 @@ export function ProductDetail({ product }: { product: ProductDTO }) {
       <div className="flex flex-col">
         <p className="eyebrow">{dict.brand.subtitle}</p>
         <h1 className="mt-4 heading text-4xl sm:text-5xl">{pick(product.name, locale)}</h1>
-        <p className="mt-5 text-lg leading-relaxed text-amethyst-200/70">
+        <p className="mt-5 text-lg leading-relaxed text-ink/65">
           {pick(product.shortDesc, locale)}
         </p>
 
@@ -90,7 +90,7 @@ export function ProductDetail({ product }: { product: ProductDTO }) {
         {/* Sizes */}
         {product.sizes.length > 1 && (
           <div className="mt-8">
-            <p className="mb-3 text-xs uppercase tracking-[0.2em] text-amethyst-300/70">
+            <p className="mb-3 text-xs uppercase tracking-[0.2em] text-ink-mute">
               {dict.shop.sizeLabel}
             </p>
             <div className="flex flex-wrap gap-2">
@@ -101,8 +101,8 @@ export function ProductDetail({ product }: { product: ProductDTO }) {
                   className={cn(
                     "rounded-full border px-4 py-2 text-sm transition-all",
                     s.id === sizeId
-                      ? "border-amethyst-300/60 bg-amethyst-500/15 text-white"
-                      : "border-amethyst-300/20 text-amethyst-100/70 hover:border-amethyst-300/40",
+                      ? "border-ink/15 bg-amethyst-500/15 text-ink"
+                      : "border-ink/10 text-ink/65 hover:border-ink/12",
                   )}
                 >
                   {pick(s.label, locale)}
@@ -114,17 +114,17 @@ export function ProductDetail({ product }: { product: ProductDTO }) {
 
         {/* Quantity + add */}
         <div className="mt-8 flex flex-wrap items-center gap-4">
-          <div className="inline-flex items-center rounded-full border border-amethyst-300/25">
-            <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} className="px-4 py-3 text-amethyst-100 hover:text-white" aria-label="−">−</button>
-            <span className="min-w-8 text-center text-white">{quantity}</span>
-            <button onClick={() => setQuantity((q) => q + 1)} className="px-4 py-3 text-amethyst-100 hover:text-white" aria-label="+">+</button>
+          <div className="inline-flex items-center rounded-full border border-ink/10">
+            <button onClick={() => setQuantity((q) => Math.max(1, q - 1))} className="px-4 py-3 text-ink hover:text-ink" aria-label="−">−</button>
+            <span className="min-w-8 text-center text-ink">{quantity}</span>
+            <button onClick={() => setQuantity((q) => q + 1)} className="px-4 py-3 text-ink hover:text-ink" aria-label="+">+</button>
           </div>
           <AddToCartButton product={product} sizeId={sizeId} quantity={quantity} className="flex-1" />
         </div>
 
         {/* Tabs */}
         {tabs.length > 0 && (
-          <div className="mt-12 border-t border-amethyst-300/15 pt-8">
+          <div className="mt-12 border-t border-ink/10 pt-8">
             <div className="flex gap-6">
               {tabs.map((t) => (
                 <button
@@ -133,8 +133,8 @@ export function ProductDetail({ product }: { product: ProductDTO }) {
                   className={cn(
                     "pb-2 text-sm tracking-wide transition-colors",
                     tab === t.key
-                      ? "border-b-2 border-amethyst-300 text-white"
-                      : "text-amethyst-200/60 hover:text-white",
+                      ? "border-b-2 border-ink/15 text-ink"
+                      : "text-ink/55 hover:text-ink",
                   )}
                 >
                   {t.label}
@@ -148,7 +148,7 @@ export function ProductDetail({ product }: { product: ProductDTO }) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.25 }}
-                className="mt-5 leading-relaxed text-amethyst-200/80"
+                className="mt-5 leading-relaxed text-ink/70"
               >
                 {tabs.find((t) => t.key === tab)?.content}
               </motion.p>

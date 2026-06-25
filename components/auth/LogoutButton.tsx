@@ -18,7 +18,7 @@ export function LogoutButton({ className }: { className?: string }) {
         router.refresh();
       }}
       className={cn(
-        "rounded-full border border-amethyst-300/25 px-4 py-2 text-sm text-amethyst-100/80 transition-colors hover:bg-white/5 hover:text-white",
+        "rounded-full border border-ink/10 px-4 py-2 text-sm text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink",
         className,
       )}
     >

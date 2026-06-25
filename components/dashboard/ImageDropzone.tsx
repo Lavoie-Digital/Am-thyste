@@ -24,7 +24,7 @@ function compress(file: File): Promise<Blob> {
         canvas.height = h;
         const ctx = canvas.getContext("2d");
         if (!ctx) return reject(new Error("no-canvas"));
-        ctx.fillStyle = "#0b0810";
+        ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, w, h);
         ctx.drawImage(img, 0, 0, w, h);
         canvas.toBlob(
@@ -114,7 +114,7 @@ export function ImageDropzone({
         }}
         className={cn(
           "flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed px-6 py-10 text-center transition-colors",
-          dragging ? "border-amethyst-300/60 bg-amethyst-500/10" : "border-amethyst-300/25 hover:border-amethyst-300/40",
+          dragging ? "border-ink/15 bg-amethyst-500/10" : "border-ink/10 hover:border-ink/12",
         )}
       >
         <input
@@ -125,10 +125,10 @@ export function ImageDropzone({
           className="hidden"
           onChange={(e) => e.target.files && addFiles(e.target.files)}
         />
-        <p className="text-sm text-amethyst-100/80">
+        <p className="text-sm text-ink/70">
           {busy ? "Téléversement…" : "Glissez vos images ici"}
         </p>
-        <p className="mt-1 text-xs text-amethyst-200/50">ou cliquez pour parcourir · JPEG/PNG</p>
+        <p className="mt-1 text-xs text-ink/45">ou cliquez pour parcourir · JPEG/PNG</p>
       </div>
 
       {error && <p className="mt-3 text-xs text-red-300">{error}</p>}
@@ -136,16 +136,16 @@ export function ImageDropzone({
       {value.length > 0 && (
         <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-4">
           {value.map((src, i) => (
-            <div key={src + i} className="group relative aspect-square overflow-hidden rounded-xl ring-1 ring-amethyst-300/20">
+            <div key={src + i} className="group relative aspect-square overflow-hidden rounded-xl ring-1 ring-ink/10">
               <Image src={src} alt="" fill sizes="120px" className="object-cover" unoptimized={src.startsWith("data:")} />
               {i === 0 && (
-                <span className="absolute left-1.5 top-1.5 rounded-full bg-night-900/80 px-2 py-0.5 text-[9px] uppercase tracking-wider text-gold-soft">
+                <span className="absolute left-1.5 top-1.5 rounded-full bg-ivory/85 px-2 py-0.5 text-[9px] uppercase tracking-wider text-gold">
                   Principale
                 </span>
               )}
-              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-1 bg-night-900/70 px-2 py-1 opacity-0 transition-opacity group-hover:opacity-100">
+              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-1 bg-ivory/85 px-2 py-1 opacity-0 transition-opacity group-hover:opacity-100">
                 {i !== 0 && (
-                  <button type="button" onClick={() => makePrimary(i)} title="Définir comme principale" className="text-[11px] text-amethyst-100 hover:text-white">
+                  <button type="button" onClick={() => makePrimary(i)} title="Définir comme principale" className="text-[11px] text-ink hover:text-ink">
                     ★
                   </button>
                 )}

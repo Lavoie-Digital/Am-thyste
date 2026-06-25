@@ -48,8 +48,8 @@ export function AddToCartButton({
       className={cn(
         "inline-flex h-12 items-center justify-center rounded-full px-6 text-xs uppercase tracking-[0.18em] transition-colors duration-500",
         tone === "fill"
-          ? "bg-ivory text-night-900 hover:bg-[#e3d8c6]"
-          : "border border-amethyst-300/25 text-ivory hover:border-amethyst-300/50 hover:bg-white/[0.03]",
+          ? "bg-ink text-ivory hover:bg-amethyst-800"
+          : "border border-ink/15 text-ink hover:border-ink/40 hover:bg-ink/[0.03]",
         fullWidth && "w-full",
         className,
       )}

@@ -24,14 +24,14 @@ export default async function DashboardHome() {
   return (
     <div>
       <header className="mb-8">
-        <p className="text-xs uppercase tracking-[0.3em] text-amethyst-300/70">Améthyste</p>
-        <h1 className="mt-2 font-display text-3xl tracking-wide text-amethyst-50">{dict.dashboard.title}</h1>
+        <p className="text-xs uppercase tracking-[0.3em] text-ink-mute">Améthyste</p>
+        <h1 className="mt-2 font-display text-3xl tracking-wide text-ink">{dict.dashboard.title}</h1>
       </header>
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((c) => (
           <Link key={c.label} href={c.href} className="rounded-2xl glass p-6 transition-all hover:ring-amethyst hover:-translate-y-0.5">
-            <p className="text-xs uppercase tracking-[0.15em] text-amethyst-300/70">{c.label}</p>
-            <p className="mt-3 font-display text-3xl text-amethyst-50">{c.value}</p>
+            <p className="text-xs uppercase tracking-[0.15em] text-ink-mute">{c.label}</p>
+            <p className="mt-3 font-display text-3xl text-ink">{c.value}</p>
           </Link>
         ))}
       </div>

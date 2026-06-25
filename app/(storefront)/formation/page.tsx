@@ -39,9 +39,9 @@ export default async function FormationPage() {
         <Container className="grid gap-12 md:grid-cols-3">
           {modules.map((m, i) => (
             <Reveal key={m.t} delay={i * 0.1}>
-              <span className="font-serif-lux text-2xl italic text-gold/60">{String(i + 1).padStart(2, "0")}</span>
-              <h3 className="mt-5 font-display text-xl tracking-wide text-ivory">{m.t}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-amethyst-200/60">{m.d}</p>
+              <span className="font-serif-lux text-2xl italic text-gold/80">{String(i + 1).padStart(2, "0")}</span>
+              <h3 className="mt-5 font-display text-xl tracking-wide text-ink">{m.t}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-ink/55">{m.d}</p>
             </Reveal>
           ))}
         </Container>

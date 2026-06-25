@@ -15,9 +15,9 @@ export default async function ProLandingPage() {
       <section className="py-16">
         <Container className="grid items-center gap-14 lg:grid-cols-2">
           <Reveal>
-            <p className="eyebrow text-gold/70">{dict.pro.title}</p>
+            <p className="eyebrow text-gold">{dict.pro.title}</p>
             <h1 className="mt-5 heading text-4xl leading-tight sm:text-6xl">{dict.pro.hero}</h1>
-            <p className="mt-7 max-w-lg text-lg leading-relaxed text-amethyst-200/70">{dict.pro.heroDesc}</p>
+            <p className="mt-7 max-w-lg text-lg leading-relaxed text-ink/65">{dict.pro.heroDesc}</p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <ButtonLink href="/pro/inscription" variant="gold" size="lg">{dict.pro.join}</ButtonLink>
               <ButtonLink href="/pro/connexion" variant="secondary" size="lg">{dict.nav.login}</ButtonLink>
@@ -32,13 +32,13 @@ export default async function ProLandingPage() {
       </section>
 
       {/* Perks — numbered, editorial */}
-      <section className="border-t border-amethyst-300/12 py-20">
+      <section className="border-t border-ink/10 py-20">
         <Container className="grid gap-12 md:grid-cols-3">
           {perks.map((p, i) => (
             <Reveal key={p.title} delay={i * 0.1}>
-              <span className="font-serif-lux text-2xl italic text-gold/60">{String(i + 1).padStart(2, "0")}</span>
-              <h3 className="mt-5 font-display text-xl tracking-wide text-ivory">{p.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-amethyst-200/60">{p.desc}</p>
+              <span className="font-serif-lux text-2xl italic text-gold/80">{String(i + 1).padStart(2, "0")}</span>
+              <h3 className="mt-5 font-display text-xl tracking-wide text-ink">{p.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-ink/55">{p.desc}</p>
             </Reveal>
           ))}
         </Container>

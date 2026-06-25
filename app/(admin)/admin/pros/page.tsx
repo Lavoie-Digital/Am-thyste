@@ -11,8 +11,8 @@ export default async function AdminProsPage() {
   return (
     <div>
       <header className="mb-8">
-        <p className="text-xs uppercase tracking-[0.3em] text-amethyst-300/70">{dict.admin.title}</p>
-        <h1 className="mt-2 font-display text-3xl tracking-wide text-amethyst-50">{dict.admin.pros}</h1>
+        <p className="text-xs uppercase tracking-[0.3em] text-ink-mute">{dict.admin.title}</p>
+        <h1 className="mt-2 font-display text-3xl tracking-wide text-ink">{dict.admin.pros}</h1>
       </header>
       <ProApprovalTable initial={pros} />
     </div>

@@ -23,11 +23,11 @@ export default async function BoutiquePage() {
         <Reveal className="text-center">
           <p className="eyebrow">{pro ? dict.pro.approvedTitle : dict.brand.subtitle}</p>
           <h1 className="mt-5 heading text-4xl sm:text-6xl">{dict.shop.title}</h1>
-          <p className="mx-auto mt-5 max-w-xl text-amethyst-200/60">{dict.shop.subtitle}</p>
+          <p className="mx-auto mt-5 max-w-xl text-ink/55">{dict.shop.subtitle}</p>
         </Reveal>
 
         {products.length === 0 ? (
-          <p className="mt-20 text-center text-amethyst-200/60">{dict.shop.empty}</p>
+          <p className="mt-20 text-center text-ink/55">{dict.shop.empty}</p>
         ) : (
           <div className="mt-16 grid grid-cols-2 gap-x-6 gap-y-14 lg:grid-cols-3 lg:gap-x-10 xl:grid-cols-4">
             {products.map((p, i) => (

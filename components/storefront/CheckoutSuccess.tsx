@@ -23,10 +23,10 @@ export function CheckoutSuccess() {
         transition={{ duration: 0.7 }}
         className="mx-auto max-w-lg px-6"
       >
-        <Mark className="mx-auto mb-7 h-6 w-6 text-gold/70" />
+        <Mark className="mx-auto mb-7 h-6 w-6 text-gold" />
         <h1 className="heading text-4xl">{dict.checkout.successTitle}</h1>
-        <p className="mt-5 leading-relaxed text-amethyst-200/65">{dict.checkout.successDesc}</p>
-        <Link href="/boutique" className="mt-9 inline-flex h-[3.25rem] items-center rounded-full bg-ivory px-9 text-xs uppercase tracking-[0.18em] text-night-900 transition-colors hover:bg-[#e3d8c6]">
+        <p className="mt-5 leading-relaxed text-ink/60">{dict.checkout.successDesc}</p>
+        <Link href="/boutique" className="mt-9 inline-flex h-[3.25rem] items-center rounded-full bg-ink px-9 text-xs uppercase tracking-[0.18em] text-ivory transition-colors hover:bg-amethyst-800">
           {dict.checkout.backToShop}
         </Link>
       </motion.div>

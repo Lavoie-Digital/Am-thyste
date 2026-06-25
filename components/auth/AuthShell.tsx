@@ -16,9 +16,9 @@ export function AuthShell({
       <Container className="max-w-md">
         <div className="surface rounded-2xl p-8 sm:p-10">
           <div className="mb-8 text-center">
-            <Mark className="mx-auto text-gold/60" />
+            <Mark className="mx-auto text-gold/80" />
             <h1 className="mt-4 heading text-3xl">{title}</h1>
-            {subtitle && <p className="mt-3 text-sm leading-relaxed text-amethyst-200/60">{subtitle}</p>}
+            {subtitle && <p className="mt-3 text-sm leading-relaxed text-ink/55">{subtitle}</p>}
           </div>
           {children}
         </div>
@@ -38,12 +38,12 @@ export function Field({
 }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-xs uppercase tracking-[0.15em] text-amethyst-300/70">{label}</span>
+      <span className="mb-1.5 block text-xs uppercase tracking-[0.15em] text-ink-mute">{label}</span>
       {children}
-      {hint && <span className="mt-1 block text-xs text-amethyst-200/50">{hint}</span>}
+      {hint && <span className="mt-1 block text-xs text-ink/45">{hint}</span>}
     </label>
   );
 }
 
 export const inputClass =
-  "h-12 w-full rounded-xl border border-amethyst-300/20 bg-night-800/60 px-4 text-white placeholder:text-amethyst-200/40 transition-colors focus:border-amethyst-300/50";
+  "h-12 w-full rounded-xl border border-ink/10 bg-bone/70 px-4 text-ink placeholder:text-ink/35 transition-colors focus:border-ink/15";

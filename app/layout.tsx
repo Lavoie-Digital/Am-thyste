@@ -48,7 +48,6 @@ export const metadata: Metadata = {
     locale: "fr_CA",
     siteName: "Améthyste",
   },
-  icons: { icon: "/logo.jpeg" },
 };
 
 export default async function RootLayout({

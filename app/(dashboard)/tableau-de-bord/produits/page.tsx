@@ -10,8 +10,8 @@ export default async function DashboardProductsPage() {
   return (
     <div>
       <header className="mb-8 flex items-center justify-between">
-        <h1 className="font-display text-3xl tracking-wide text-amethyst-50">{dict.dashboard.products}</h1>
-        <Link href="/tableau-de-bord/produits/new" className="rounded-full bg-[#efe9e1] px-6 py-2.5 text-xs uppercase tracking-[0.16em] text-[#0b0810] transition-colors hover:bg-[#e3d8c6]">
+        <h1 className="font-display text-3xl tracking-wide text-ink">{dict.dashboard.products}</h1>
+        <Link href="/tableau-de-bord/produits/new" className="rounded-full bg-[#211a2c] px-6 py-2.5 text-xs uppercase tracking-[0.16em] text-[#faf7f2] transition-colors hover:bg-[#382c42]">
           {dict.dashboard.newProduct}
         </Link>
       </header>

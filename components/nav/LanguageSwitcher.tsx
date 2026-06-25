@@ -6,7 +6,7 @@ import { setLocale } from "@/lib/actions/locale";
 import { cn } from "@/lib/utils";
 import type { Locale } from "@/lib/types";
 
-export function LanguageSwitcher({ className }: { className?: string }) {
+export function LanguageSwitcher({ className, onDark = false }: { className?: string; onDark?: boolean }) {
   const { locale } = useLocale();
   const [pending, startTransition] = useTransition();
 
@@ -20,7 +20,8 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "inline-flex items-center rounded-full border border-amethyst-300/20 p-0.5 text-xs",
+        "inline-flex items-center rounded-full border p-0.5 text-xs",
+        onDark ? "border-ivory/30" : "border-ink/10",
         pending && "opacity-60",
         className,
       )}
@@ -34,9 +35,13 @@ export function LanguageSwitcher({ className }: { className?: string }) {
           aria-pressed={locale === l}
           className={cn(
             "rounded-full px-2.5 py-1 font-medium uppercase tracking-wider transition-colors",
-            locale === l
-              ? "bg-amethyst-500/30 text-white"
-              : "text-amethyst-200/70 hover:text-white",
+            onDark
+              ? locale === l
+                ? "bg-ivory/20 text-ivory"
+                : "text-ivory/70 hover:text-ivory"
+              : locale === l
+                ? "bg-amethyst-500/30 text-ink"
+                : "text-ink/65 hover:text-ink",
           )}
         >
           {l}

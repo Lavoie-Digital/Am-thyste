@@ -15,7 +15,7 @@ export default async function EditProductPage({ params }: Props) {
   return (
     <div>
       <header className="mb-8">
-        <h1 className="font-display text-3xl tracking-wide text-amethyst-50">
+        <h1 className="font-display text-3xl tracking-wide text-ink">
           {isNew ? dict.dashboard.newProduct : dict.dashboard.editProduct}
         </h1>
       </header>

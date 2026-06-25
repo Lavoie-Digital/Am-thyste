@@ -29,32 +29,32 @@ export function ProApprovalTable({ initial }: { initial: AppUser[] }) {
     ms ? new Intl.DateTimeFormat(locale === "fr" ? "fr-CA" : "en-CA", { dateStyle: "medium" }).format(ms) : "—";
 
   const statusStyle: Record<string, string> = {
-    pending: "bg-amethyst-500/20 text-amethyst-100",
-    approved: "bg-gold/15 text-gold-soft",
+    pending: "bg-amethyst-500/20 text-ink",
+    approved: "bg-gold/15 text-gold",
     rejected: "bg-red-500/15 text-red-300",
-    none: "bg-white/5 text-amethyst-200/60",
+    none: "bg-ink/[0.04] text-ink/55",
   };
 
   if (rows.length === 0) {
-    return <p className="rounded-2xl glass p-10 text-center text-amethyst-200/60">{dict.admin.noPros}</p>;
+    return <p className="rounded-2xl glass p-10 text-center text-ink/55">{dict.admin.noPros}</p>;
   }
 
   return (
     <div className="overflow-hidden rounded-2xl glass">
-      <div className="grid grid-cols-[1.5fr_1.5fr_1fr_auto] gap-4 border-b border-amethyst-300/15 px-6 py-4 text-xs uppercase tracking-[0.15em] text-amethyst-300/70">
+      <div className="grid grid-cols-[1.5fr_1.5fr_1fr_auto] gap-4 border-b border-ink/10 px-6 py-4 text-xs uppercase tracking-[0.15em] text-ink-mute">
         <span>{dict.admin.business}</span>
         <span>{dict.common.email}</span>
         <span>{dict.admin.status}</span>
         <span className="text-right">Actions</span>
       </div>
       {rows.map((u) => (
-        <div key={u.uid} className="grid grid-cols-[1.5fr_1.5fr_1fr_auto] items-center gap-4 border-b border-white/5 px-6 py-4 text-sm last:border-0">
+        <div key={u.uid} className="grid grid-cols-[1.5fr_1.5fr_1fr_auto] items-center gap-4 border-b border-ink/8 px-6 py-4 text-sm last:border-0">
           <div>
-            <p className="font-medium text-amethyst-50">{u.proProfile?.businessName || u.displayName}</p>
-            <p className="text-xs text-amethyst-200/50">{u.proProfile?.phone}</p>
-            <p className="text-xs text-amethyst-200/40">{dict.admin.appliedOn} {fmtDate(u.createdAt)}</p>
+            <p className="font-medium text-ink">{u.proProfile?.businessName || u.displayName}</p>
+            <p className="text-xs text-ink/45">{u.proProfile?.phone}</p>
+            <p className="text-xs text-ink/35">{dict.admin.appliedOn} {fmtDate(u.createdAt)}</p>
           </div>
-          <span className="truncate text-amethyst-200/80">{u.email}</span>
+          <span className="truncate text-ink/70">{u.email}</span>
           <span>
             <span className={cn("rounded-full px-3 py-1 text-xs", statusStyle[u.proStatus] ?? statusStyle.none)}>
               {u.proStatus}
@@ -65,7 +65,7 @@ export function ProApprovalTable({ initial }: { initial: AppUser[] }) {
               <button
                 onClick={() => act(u.uid, "approve")}
                 disabled={pending && busyId === u.uid}
-                className="rounded-full bg-[#c2a878] px-4 py-1.5 text-xs uppercase tracking-[0.12em] text-[#0b0810] transition-colors hover:bg-[#d8c4a0] disabled:opacity-50"
+                className="rounded-full bg-[#9c7c43] px-4 py-1.5 text-xs uppercase tracking-[0.12em] text-[#faf7f2] transition-colors hover:bg-[#b08f57] disabled:opacity-50"
               >
                 {dict.admin.approve}
               </button>

@@ -22,9 +22,9 @@ export function ArrowRight({ className }: { className?: string }) {
 export function Divider({ className }: { className?: string }) {
   return (
     <div className={cn("flex items-center justify-center gap-4", className)} aria-hidden>
-      <span className="h-px w-12 bg-amethyst-400/30" />
-      <Mark className="h-2.5 w-2.5 text-amethyst-400/70" />
-      <span className="h-px w-12 bg-amethyst-400/30" />
+      <span className="h-px w-12 bg-ink/12" />
+      <Mark className="h-2.5 w-2.5 text-amethyst-500/70" />
+      <span className="h-px w-12 bg-ink/12" />
     </div>
   );
 }

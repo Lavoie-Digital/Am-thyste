@@ -1,29 +1,56 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
-import { StarField } from "./StarField";
 import { Mark } from "@/components/ui/icons";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
+/* Background images per breakpoint, slowly cross-fading with a gentle
+   Ken-Burns drift, then dissolving into the ivory page below. Each set cycles
+   by its own length, so mobile (3) and desktop (2) stay independent. */
+const DESKTOP_IMAGES = ["/description banner.jpeg", "/ChatGPT Image 19 janv_edited_edited.avif"];
+const MOBILE_IMAGES = ["/femme2.jpeg", "/femmevertical.jpeg", "/femme.jpeg"];
+const SLIDE_MS = 6000;
+
 export function AmethystStarsHero() {
   const { dict } = useLocale();
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setIdx((i) => i + 1), SLIDE_MS);
+    return () => clearInterval(t);
+  }, []);
 
   return (
     <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden">
-      <StarField className="absolute inset-0 h-full w-full" />
+      {/* Background slideshow */}
+      <div className="absolute inset-0" aria-hidden>
+        <div className="absolute inset-0 lg:hidden">
+          {MOBILE_IMAGES.map((src, i) => (
+            <Slide key={src} src={src} active={i === idx % MOBILE_IMAGES.length} priority={i === 0} />
+          ))}
+        </div>
+        <div className="absolute inset-0 hidden lg:block">
+          {DESKTOP_IMAGES.map((src, i) => (
+            <Slide key={src} src={src} active={i === idx % DESKTOP_IMAGES.length} priority={i === 0} />
+          ))}
+        </div>
+      </div>
 
-      {/* Floating amethyst stones */}
-      <FloatingCrystal className="left-[7%] top-[20%] h-16 w-12 sm:h-24 sm:w-16" delay={0} dur={9} />
-      <FloatingCrystal className="right-[9%] top-[26%] h-20 w-14 sm:h-28 sm:w-20" delay={1.4} dur={11} />
-      <FloatingCrystal className="left-[13%] bottom-[16%] h-12 w-9 sm:h-20 sm:w-14" delay={0.7} dur={10} />
-      <FloatingCrystal className="right-[15%] bottom-[20%] h-14 w-10 sm:h-24 sm:w-16" delay={2} dur={12} />
+      {/* Legibility scrim — keeps white type crisp without crushing the photo */}
+      <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-ink/65 via-ink/25 to-ink/35" />
+      <div aria-hidden className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-ink/40 to-transparent" />
 
-      {/* Bottom legibility fade */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-night-900 to-transparent" />
+      {/* Smooth dissolve into the ivory page below */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[32%]"
+        style={{ background: "linear-gradient(to bottom, transparent, #faf7f2 94%)" }}
+      />
 
       <div className="relative z-10 flex flex-col items-center px-6 text-center">
         {/* Crest — logo mis en valeur, animé */}
@@ -37,32 +64,28 @@ export function AmethystStarsHero() {
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
             className="relative h-24 w-24 sm:h-28 sm:w-28"
           >
-            {/* pulsing solid hairline ring */}
             <motion.span
               aria-hidden
-              animate={{ opacity: [0.25, 0.6, 0.25], scale: [0.96, 1.04, 0.96] }}
+              animate={{ opacity: [0.3, 0.65, 0.3], scale: [0.96, 1.04, 0.96] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -inset-3 rounded-full border border-amethyst-200/30"
+              className="absolute -inset-3 rounded-full border border-ivory/40"
             />
-            {/* slow dashed ring */}
             <motion.span
               aria-hidden
               animate={{ rotate: 360 }}
               transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-              className="absolute -inset-5 rounded-full border border-dashed border-amethyst-300/20"
+              className="absolute -inset-5 rounded-full border border-dashed border-ivory/30"
             />
-            {/* logo */}
-            <span className="absolute inset-0 overflow-hidden rounded-full ring-1 ring-amethyst-200/40">
+            <span className="absolute inset-0 overflow-hidden rounded-full shadow-[0_24px_60px_-20px_rgba(0,0,0,0.6)] ring-1 ring-ivory/50">
               <Image src="/logo.jpeg" alt="Améthyste" fill sizes="128px" className="object-cover" priority />
             </span>
-            {/* orbiting mark */}
             <motion.span
               aria-hidden
               animate={{ rotate: 360 }}
               transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
               className="absolute -inset-5"
             >
-              <Mark className="absolute -top-1 left-1/2 h-2.5 w-2.5 -translate-x-1/2 text-amethyst-100/70" />
+              <Mark className="absolute -top-1 left-1/2 h-2.5 w-2.5 -translate-x-1/2 text-ivory/80" />
             </motion.span>
           </motion.div>
         </motion.div>
@@ -71,7 +94,7 @@ export function AmethystStarsHero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.2, delay: 0.4, ease }}
-          className="eyebrow mt-8"
+          className="mt-8 text-[0.6875rem] uppercase tracking-[0.34em] text-ivory/85"
         >
           {dict.home.ritualBadge}
         </motion.span>
@@ -80,7 +103,7 @@ export function AmethystStarsHero() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.3, delay: 0.5, ease }}
-          className="mt-4 heading text-[clamp(2.5rem,8vw,6.5rem)] leading-[0.95]"
+          className="mt-4 font-display text-[clamp(2.5rem,8vw,6.5rem)] font-medium leading-[0.95] tracking-[0.01em] text-ivory drop-shadow-[0_2px_24px_rgba(0,0,0,0.35)]"
         >
           AMÉTHYSTE
         </motion.h1>
@@ -91,16 +114,16 @@ export function AmethystStarsHero() {
           transition={{ duration: 1.3, delay: 0.7, ease }}
           className="mt-4 flex items-center gap-4"
         >
-          <span className="h-px w-10 bg-amethyst-400/40" />
-          <span className="font-serif-lux text-xs uppercase tracking-[0.5em] text-amethyst-200/80 sm:text-sm">Hair Botox</span>
-          <span className="h-px w-10 bg-amethyst-400/40" />
+          <span className="h-px w-10 bg-gold/70" />
+          <span className="font-serif-lux text-xs uppercase tracking-[0.5em] text-ivory/90 sm:text-sm">Hair Botox</span>
+          <span className="h-px w-10 bg-gold/70" />
         </motion.div>
 
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.3, delay: 0.85, ease }}
-          className="mt-6 max-w-md font-serif-lux text-lg font-light italic leading-relaxed text-amethyst-100/85 sm:text-xl"
+          className="mt-6 max-w-md font-serif-lux text-lg font-light italic leading-relaxed text-ivory/90 drop-shadow-[0_1px_12px_rgba(0,0,0,0.4)] sm:text-xl"
         >
           {dict.brand.tagline}
         </motion.p>
@@ -113,79 +136,63 @@ export function AmethystStarsHero() {
         >
           <Link
             href="/boutique"
-            className="inline-flex h-[3.25rem] items-center rounded-full bg-[#efe9e1] px-9 text-xs uppercase tracking-[0.18em] text-[#0b0810] transition-colors duration-500 hover:bg-[#e3d8c6]"
+            className="inline-flex h-[3.25rem] items-center rounded-full bg-ivory px-9 text-xs uppercase tracking-[0.18em] text-ink transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-bone active:scale-[0.98]"
           >
             {dict.home.heroCta}
           </Link>
           <Link
             href="/a-propos"
-            className="inline-flex h-[3.25rem] items-center rounded-full border border-[#bfaecb]/30 px-9 text-xs uppercase tracking-[0.18em] text-[#efe9e1] transition-colors duration-500 hover:border-[#bfaecb]/55"
+            className="inline-flex h-[3.25rem] items-center rounded-full border border-ivory/45 px-9 text-xs uppercase tracking-[0.18em] text-ivory transition-all duration-500 hover:border-ivory hover:bg-ivory/10"
           >
             {dict.home.heroCtaSecondary}
           </Link>
         </motion.div>
       </div>
 
-      {/* Scroll cue */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 1 }}
-        className="absolute bottom-9 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3"
-      >
-        <Mark className="h-2.5 w-2.5 text-amethyst-300/60" />
-        <span className="h-12 w-px overflow-hidden bg-amethyst-300/15">
-          <motion.span
-            animate={{ y: ["-100%", "180%"] }}
-            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-            className="block h-4 w-px bg-amethyst-200/70"
-          />
-        </span>
-      </motion.div>
+      {/* Slideshow indicators — one set per breakpoint */}
+      <div className="absolute bottom-9 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2.5 lg:hidden">
+        <Dots count={MOBILE_IMAGES.length} idx={idx} onSelect={setIdx} />
+      </div>
+      <div className="absolute bottom-9 left-1/2 z-10 hidden -translate-x-1/2 items-center gap-2.5 lg:flex">
+        <Dots count={DESKTOP_IMAGES.length} idx={idx} onSelect={setIdx} />
+      </div>
     </section>
   );
 }
 
-/** A slowly-floating faceted amethyst stone — quiet, low-opacity ambience. */
-function FloatingCrystal({
-  className,
-  delay,
-  dur,
-}: {
-  className: string;
-  delay: number;
-  dur: number;
-}) {
-  const gid = `am-${delay}-${dur}`;
+function Dots({ count, idx, onSelect }: { count: number; idx: number; onSelect: (i: number) => void }) {
+  const active = idx % count;
+  return (
+    <>
+      {Array.from({ length: count }, (_, i) => (
+        <button
+          key={i}
+          aria-label={`Image ${i + 1}`}
+          onClick={() => onSelect(i)}
+          className="h-1.5 rounded-full transition-all duration-500"
+          style={{
+            width: i === active ? "1.75rem" : "0.375rem",
+            backgroundColor: i === active ? "rgba(250,247,242,0.95)" : "rgba(250,247,242,0.45)",
+          }}
+        />
+      ))}
+    </>
+  );
+}
+
+function Slide({ src, active, priority }: { src: string; active: boolean; priority?: boolean }) {
   return (
     <motion.div
       aria-hidden
-      className={`pointer-events-none absolute ${className}`}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: [0, 0.5, 0.42], y: [0, -16, 0], rotate: [-3, 3, -3] }}
+      className="absolute inset-0"
+      initial={false}
+      animate={{ opacity: active ? 1 : 0, scale: active ? 1.07 : 1 }}
       transition={{
-        opacity: { duration: 2.4, delay },
-        y: { duration: dur, repeat: Infinity, ease: "easeInOut", delay },
-        rotate: { duration: dur * 1.3, repeat: Infinity, ease: "easeInOut", delay },
+        opacity: { duration: 1.8, ease },
+        scale: { duration: SLIDE_MS / 1000 + 1.8, ease: "linear" },
       }}
     >
-      <svg viewBox="0 0 60 100" className="h-full w-full drop-shadow-[0_8px_26px_rgba(83,65,93,0.5)]">
-        <defs>
-          <linearGradient id={gid} x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#d6c9de" stopOpacity="0.85" />
-            <stop offset="45%" stopColor="#836d92" stopOpacity="0.7" />
-            <stop offset="100%" stopColor="#382c42" stopOpacity="0.6" />
-          </linearGradient>
-        </defs>
-        {/* faceted gem body */}
-        <polygon points="30,2 50,30 42,98 18,98 10,30" fill={`url(#${gid})`} stroke="rgba(214,201,222,0.45)" strokeWidth="0.75" />
-        {/* table + inner facets */}
-        <polygon points="30,2 50,30 30,34 10,30" fill="rgba(239,233,225,0.18)" />
-        <polygon points="30,34 42,98 30,98" fill="rgba(255,255,255,0.08)" />
-        <polygon points="30,34 18,98 30,98" fill="rgba(0,0,0,0.12)" />
-        <line x1="10" y1="30" x2="42" y2="98" stroke="rgba(214,201,222,0.25)" strokeWidth="0.5" />
-        <line x1="50" y1="30" x2="18" y2="98" stroke="rgba(214,201,222,0.25)" strokeWidth="0.5" />
-      </svg>
+      <Image src={src} alt="" fill priority={priority} sizes="100vw" className="object-cover" />
     </motion.div>
   );
 }

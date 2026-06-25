@@ -10,7 +10,7 @@ export default async function PrivacyPage() {
     <>
       <PageHeader title={locale === "fr" ? "Politique de confidentialité" : "Privacy policy"} />
       <section className="pb-24">
-        <Container className="max-w-3xl space-y-4 text-amethyst-200/75 leading-relaxed">
+        <Container className="max-w-3xl space-y-4 text-ink/65 leading-relaxed">
           <p>
             {locale === "fr"
               ? "Améthyste respecte votre vie privée. Vos données (nom, courriel, adresse) sont utilisées uniquement pour traiter vos commandes et, le cas échéant, vous tenir informé de nos offres. Elles ne sont jamais revendues."

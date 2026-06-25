@@ -9,7 +9,7 @@ export default async function SettingsPage() {
   return (
     <div>
       <header className="mb-8">
-        <h1 className="font-display text-3xl tracking-wide text-amethyst-50">{dict.dashboard.settings}</h1>
+        <h1 className="font-display text-3xl tracking-wide text-ink">{dict.dashboard.settings}</h1>
       </header>
       <SettingsForm settings={settings} />
     </div>

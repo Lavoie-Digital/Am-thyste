@@ -16,7 +16,7 @@ export function PageHeader({
         <Reveal>
           {eyebrow && <p className="eyebrow">{eyebrow}</p>}
           <h1 className="mt-5 heading text-4xl sm:text-6xl">{title}</h1>
-          {subtitle && <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-amethyst-200/65">{subtitle}</p>}
+          {subtitle && <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ink/65">{subtitle}</p>}
         </Reveal>
       </Container>
     </div>

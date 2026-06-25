@@ -25,7 +25,7 @@ export function ContactForm() {
 
   if (sent) {
     return (
-      <div className="surface rounded-2xl p-8 text-center text-gold-soft">
+      <div className="surface rounded-2xl p-8 text-center text-gold">
         {dict.contact.sent}
       </div>
     );

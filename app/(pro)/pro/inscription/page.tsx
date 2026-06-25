@@ -10,10 +10,10 @@ export default async function InscriptionPage() {
         <div className="rounded-3xl glass-strong p-8 sm:p-10">
           <div className="mb-8 text-center">
             <span className="text-gold">✦</span>
-            <h1 className="mt-3 font-display text-3xl tracking-wide text-amethyst-50">
+            <h1 className="mt-3 font-display text-3xl tracking-wide text-ink">
               {dict.pro.signupTitle}
             </h1>
-            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-amethyst-200/70">
+            <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-ink/65">
               {dict.pro.signupDesc}
             </p>
           </div>

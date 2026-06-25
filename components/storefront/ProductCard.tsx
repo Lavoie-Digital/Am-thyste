@@ -22,7 +22,7 @@ export function ProductCard({ product, index = 0 }: { product: ProductDTO; index
       transition={{ duration: 1, delay: index * 0.07, ease }}
       className="group flex flex-col"
     >
-      <Link href={`/boutique/${product.slug}`} className="relative block aspect-square overflow-hidden bg-night-800">
+      <Link href={`/boutique/${product.slug}`} className="relative block aspect-square overflow-hidden rounded-sm bg-bone ring-1 ring-ink/[0.04]">
         <Image
           src={product.images[0]}
           alt={pick(product.name, locale)}
@@ -32,7 +32,7 @@ export function ProductCard({ product, index = 0 }: { product: ProductDTO; index
           unoptimized={product.images[0]?.startsWith("data:")}
         />
         {product.sizes[0] && (
-          <span className="absolute bottom-3 left-3 rounded-full bg-night-900/55 px-2.5 py-1 text-[10px] uppercase tracking-[0.18em] text-ivory/85 backdrop-blur-sm">
+          <span className="absolute bottom-3 left-3 rounded-full border border-ink/5 bg-ivory/85 px-2.5 py-1 text-[10px] uppercase tracking-[0.18em] text-ink/75 backdrop-blur-sm">
             {pick(product.sizes[0].label, locale)}
           </span>
         )}
@@ -40,11 +40,11 @@ export function ProductCard({ product, index = 0 }: { product: ProductDTO; index
 
       <div className="flex flex-1 flex-col pt-5">
         <Link href={`/boutique/${product.slug}`}>
-          <h3 className="font-display text-base tracking-wide text-ivory transition-colors group-hover:text-white">
+          <h3 className="font-display text-base tracking-wide text-ink transition-colors group-hover:text-amethyst-700">
             {pick(product.name, locale)}
           </h3>
         </Link>
-        <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-amethyst-200/60">
+        <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-ink/55">
           {pick(product.shortDesc, locale)}
         </p>
         <PriceTag

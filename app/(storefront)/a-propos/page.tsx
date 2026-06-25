@@ -32,18 +32,18 @@ export default async function AProposPage() {
       <section className="pb-24">
         <Container className="grid items-center gap-12 lg:grid-cols-2">
           <Reveal>
-            <div className="relative aspect-[3/4] overflow-hidden rounded-3xl ring-1 ring-amethyst-300/20">
+            <div className="relative aspect-[3/4] overflow-hidden rounded-3xl ring-1 ring-ink/10">
               <Image src="/présentation.jpeg" alt="Améthyste" fill sizes="(max-width:1024px) 100vw, 50vw" className="object-cover" />
             </div>
           </Reveal>
           <Reveal delay={0.15}>
-            <p className="font-script text-4xl text-amethyst-200">Améthyste</p>
-            <div className="mt-6 space-y-5 text-lg leading-relaxed text-amethyst-200/80">
+            <p className="font-script text-4xl text-ink/70">Améthyste</p>
+            <div className="mt-6 space-y-5 text-lg leading-relaxed text-ink/70">
               {body.map((p, i) => (
                 <p key={i}>{p}</p>
               ))}
             </div>
-            <p className="mt-8 font-serif-lux text-xl italic text-amethyst-100/80">« {dict.brand.tagline} »</p>
+            <p className="mt-8 font-serif-lux text-xl italic text-ink/70">« {dict.brand.tagline} »</p>
           </Reveal>
         </Container>
       </section>

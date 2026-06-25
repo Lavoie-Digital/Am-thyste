@@ -39,26 +39,30 @@ export function Navbar() {
     { href: "/contact", label: dict.nav.contact },
   ];
 
+  // Over the photographic hero (home, not yet scrolled) the bar floats on a
+  // dark scrim → ivory type. Everywhere else it sits on ivory → ink type.
+  const overHero = pathname === "/" && !scrolled;
+
   return (
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-colors duration-500",
         scrolled
-          ? "border-b border-amethyst-300/12 bg-night-900/92"
+          ? "glass-strong border-b border-ink/8"
           : "border-b border-transparent bg-transparent",
       )}
     >
       <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8">
         {/* Logo */}
         <Link href="/" className="group flex items-center gap-3">
-          <span className="relative h-11 w-11 overflow-hidden rounded-full ring-1 ring-amethyst-300/30 transition-transform duration-500 group-hover:scale-105">
+          <span className={cn("relative h-11 w-11 overflow-hidden rounded-full ring-1 transition-transform duration-500 group-hover:scale-105", overHero ? "ring-ivory/50" : "ring-ink/15")}>
             <Image src="/logo.jpeg" alt="Améthyste" fill sizes="44px" className="object-cover" />
           </span>
           <span className="hidden flex-col leading-none sm:flex">
-            <span className="font-display text-lg tracking-[0.25em] text-amethyst-50">
+            <span className={cn("font-display text-lg tracking-[0.25em]", overHero ? "text-ivory" : "text-ink")}>
               AMÉTHYSTE
             </span>
-            <span className="text-[10px] uppercase tracking-[0.3em] text-amethyst-300/70">
+            <span className={cn("text-[10px] uppercase tracking-[0.3em]", overHero ? "text-ivory/70" : "text-ink-mute")}>
               Professional Haircare
             </span>
           </span>
@@ -74,14 +78,20 @@ export function Navbar() {
                 href={l.href}
                 className={cn(
                   "relative px-3.5 py-2 text-sm tracking-wide transition-colors",
-                  active ? "text-white" : "text-amethyst-100/70 hover:text-white",
+                  overHero
+                    ? active
+                      ? "text-ivory"
+                      : "text-ivory/70 hover:text-ivory"
+                    : active
+                      ? "text-ink"
+                      : "text-ink/55 hover:text-ink",
                 )}
               >
                 {l.label}
                 {active && (
                   <motion.span
                     layoutId="nav-underline"
-                    className="absolute inset-x-3 -bottom-0.5 h-px bg-amethyst-300/70"
+                    className={cn("absolute inset-x-3 -bottom-0.5 h-px", overHero ? "bg-ivory/80" : "bg-amethyst-500")}
                   />
                 )}
               </Link>
@@ -91,12 +101,12 @@ export function Navbar() {
 
         {/* Right actions */}
         <div className="flex items-center gap-2 sm:gap-3">
-          <LanguageSwitcher className="hidden sm:inline-flex" />
+          <LanguageSwitcher className="hidden sm:inline-flex" onDark={overHero} />
 
           <Link
             href={user ? (role === "admin" ? "/tableau-de-bord" : "/pro/espace") : "/pro/connexion"}
             aria-label={dict.nav.account}
-            className="rounded-full p-2 text-amethyst-100/80 transition-colors hover:bg-white/5 hover:text-white"
+            className={cn("rounded-full p-2 transition-colors", overHero ? "text-ivory/85 hover:bg-ivory/10 hover:text-ivory" : "text-ink/70 hover:bg-ink/[0.04] hover:text-ink")}
           >
             <UserIcon />
           </Link>
@@ -104,7 +114,7 @@ export function Navbar() {
           {role === "admin" && (
             <Link
               href="/admin"
-              className="hidden rounded-full border border-gold/30 px-3 py-1.5 text-xs text-gold-soft transition-colors hover:bg-gold/10 sm:inline-block"
+              className="hidden rounded-full border border-gold/40 px-3 py-1.5 text-xs text-gold transition-colors hover:bg-gold/10 sm:inline-block"
             >
               {dict.nav.admin}
             </Link>
@@ -113,7 +123,7 @@ export function Navbar() {
           <button
             onClick={toggle}
             aria-label={dict.nav.cart}
-            className="relative rounded-full p-2 text-amethyst-100/80 transition-colors hover:bg-white/5 hover:text-white"
+            className={cn("relative rounded-full p-2 transition-colors", overHero ? "text-ivory/85 hover:bg-ivory/10 hover:text-ivory" : "text-ink/70 hover:bg-ink/[0.04] hover:text-ink")}
           >
             <CartIcon />
             <AnimatePresence>
@@ -123,7 +133,7 @@ export function Navbar() {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   exit={{ scale: 0 }}
-                  className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-ivory px-1 text-[10px] font-medium text-night-900"
+                  className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-ink px-1 text-[10px] font-medium text-ivory"
                 >
                   {count}
                 </motion.span>
@@ -135,7 +145,7 @@ export function Navbar() {
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Menu"
             aria-expanded={menuOpen}
-            className="rounded-full p-2 text-amethyst-100/80 hover:bg-white/5 hover:text-white lg:hidden"
+            className={cn("rounded-full p-2 lg:hidden", overHero ? "text-ivory/85 hover:bg-ivory/10 hover:text-ivory" : "text-ink/70 hover:bg-ink/[0.04] hover:text-ink")}
           >
             <MenuIcon open={menuOpen} />
           </button>
@@ -157,7 +167,7 @@ export function Navbar() {
                 <Link
                   key={l.href}
                   href={l.href}
-                  className="border-b border-white/5 py-3 text-amethyst-100/80 transition-colors hover:text-white"
+                  className="border-b border-ink/8 py-3 text-ink/70 transition-colors hover:text-ink"
                 >
                   {l.label}
                 </Link>

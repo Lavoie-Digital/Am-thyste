@@ -70,7 +70,7 @@ export function ProSignupForm() {
   return (
     <form onSubmit={submit} className="space-y-4 text-left">
       {!configured && (
-        <p className="rounded-xl border border-gold/30 bg-gold/10 px-4 py-3 text-xs text-gold-soft">
+        <p className="rounded-xl border border-gold/30 bg-gold/10 px-4 py-3 text-xs text-gold">
           Firebase n&apos;est pas encore configuré. Ajoutez vos clés dans .env.local.
         </p>
       )}
@@ -89,7 +89,7 @@ export function ProSignupForm() {
         <input type="password" required minLength={6} value={form.password} onChange={set("password")} className={inputClass} autoComplete="new-password" />
       </Field>
 
-      <div className="border-t border-amethyst-300/15 pt-4">
+      <div className="border-t border-ink/10 pt-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label={dict.pro.businessName}>
             <input required value={form.businessName} onChange={set("businessName")} className={inputClass} />
@@ -120,9 +120,9 @@ export function ProSignupForm() {
       <Button type="submit" disabled={loading} className="w-full" size="lg">
         {loading ? dict.common.loading : dict.pro.submitApplication}
       </Button>
-      <p className="pt-2 text-center text-sm text-amethyst-200/70">
+      <p className="pt-2 text-center text-sm text-ink/65">
         {dict.pro.alreadyMember}{" "}
-        <Link href="/pro/connexion" className="text-amethyst-200 underline-offset-4 hover:text-white hover:underline">
+        <Link href="/pro/connexion" className="text-ink/70 underline-offset-4 hover:text-ink hover:underline">
           {dict.nav.login}
         </Link>
       </p>
