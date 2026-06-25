@@ -16,7 +16,7 @@ function shell(title: string, body: string): string {
       <h1 style="font-size:22px;color:#fff;margin:0 0 16px">${title}</h1>
       ${body}
     </div>
-    <p style="text-align:center;font-size:11px;color:#8a7c98;margin-top:24px">Améthyste · Rimouski, Québec · Fièrement canadien</p>
+    <p style="text-align:center;font-size:11px;color:#8a7c98;margin-top:24px">Améthyste · Fièrement canadien</p>
   </div></body></html>`;
 }
 

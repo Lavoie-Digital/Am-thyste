@@ -62,7 +62,7 @@ export function Footer() {
               <ArrowRight />
             </button>
           </form>
-          <p className="mt-4 text-sm text-ink/55">{dict.contact.location} · 581-525-7219</p>
+          <p className="mt-4 text-sm text-ink/55">514-691-1899</p>
         </div>
       </div>
 

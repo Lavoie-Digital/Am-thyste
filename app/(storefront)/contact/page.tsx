@@ -15,12 +15,8 @@ export default async function ContactPage() {
         <Container className="grid gap-12 lg:grid-cols-[1fr_1.3fr]">
           <div className="space-y-6 text-ink/70">
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-ink-mute">{dict.contact.location}</p>
-              <p className="mt-2 text-lg text-ink">Rimouski, Québec</p>
-            </div>
-            <div>
               <p className="text-xs uppercase tracking-[0.2em] text-ink-mute">{dict.common.phone}</p>
-              <a href="tel:+15815257219" className="mt-2 block text-lg text-ink hover:text-ink">581-525-7219</a>
+              <a href="tel:+15146911899" className="mt-2 block text-lg text-ink hover:text-ink">514-691-1899</a>
             </div>
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-ink-mute">{dict.footer.madeIn}</p>

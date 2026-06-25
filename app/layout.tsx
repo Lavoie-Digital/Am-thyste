@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   },
   description:
     "Améthyste — Hair Botox et soins capillaires haut de gamme. Réparation intense, brillance et nutrition profonde. Ce n'est pas simplement un soin, c'est un rituel.",
-  keywords: ["hair botox", "soin capillaire", "kératine", "Améthyste", "Rimouski", "Québec"],
+  keywords: ["hair botox", "soin capillaire", "kératine", "Améthyste", "Québec"],
   openGraph: {
     title: "Améthyste — Hair Botox",
     description: "Soins capillaires professionnels haut de gamme. Un rituel de transformation.",
