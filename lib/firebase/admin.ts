@@ -11,8 +11,27 @@ import { getFirestore, type Firestore } from "firebase-admin/firestore";
 
 const projectId = process.env.FIREBASE_PROJECT_ID;
 const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-// Private key arrives with escaped newlines in env — un-escape them.
-const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
+
+/**
+ * Normalize a service-account private key coming from an env var. Hosts (Render,
+ * Vercel, etc.) and copy/paste handle it inconsistently, so we defensively:
+ *  - strip surrounding single/double quotes that got included in the value,
+ *  - convert escaped "\n" sequences into real newlines,
+ *  - leave already-real newlines untouched.
+ */
+function normalizePrivateKey(raw: string | undefined): string | undefined {
+  if (!raw) return raw;
+  let key = raw.trim();
+  if (
+    (key.startsWith('"') && key.endsWith('"')) ||
+    (key.startsWith("'") && key.endsWith("'"))
+  ) {
+    key = key.slice(1, -1);
+  }
+  return key.replace(/\\n/g, "\n");
+}
+
+const privateKey = normalizePrivateKey(process.env.FIREBASE_PRIVATE_KEY);
 
 /** True when real Firebase Admin service-account credentials are present. */
 export const adminConfigured = Boolean(
