@@ -53,11 +53,12 @@ export function AmethystStarsHero() {
       />
 
       <div className="relative z-10 flex flex-col items-center px-6 text-center">
-        {/* Crest — logo mis en valeur, animé */}
+        {/* Crest — logo mis en valeur, animé (masqué sur mobile) */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.4, ease }}
+          className="hidden lg:block"
         >
           <motion.div
             animate={{ y: [0, -10, 0] }}
