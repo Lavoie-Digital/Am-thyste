@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/auth/AuthContext";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { Field, inputClass } from "./AuthShell";
 import { Button } from "@/components/ui/Button";
+import { GoogleButton } from "./GoogleButton";
 
 export function LoginForm() {
   const { dict } = useLocale();
@@ -59,6 +60,14 @@ export function LoginForm() {
       <Button type="submit" disabled={loading} className="w-full" size="lg">
         {loading ? dict.common.loading : dict.nav.login}
       </Button>
+
+      <div className="flex items-center gap-3 py-1">
+        <span className="h-px flex-1 bg-amethyst-300/15" />
+        <span className="text-[10px] uppercase tracking-[0.2em] text-amethyst-200/40">ou</span>
+        <span className="h-px flex-1 bg-amethyst-300/15" />
+      </div>
+      <GoogleButton />
+
       <p className="pt-2 text-center text-sm text-amethyst-200/70">
         {dict.auth.noAccount}{" "}
         <Link href="/pro/inscription" className="text-amethyst-200 underline-offset-4 hover:text-white hover:underline">

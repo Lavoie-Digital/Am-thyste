@@ -148,7 +148,7 @@
     "descEn": "Description (EN)",
     "marketPriceLabel": "Retail price (CAD)",
     "resellerPriceLabel": "Professional price (CAD)",
-    "imagesLabel": "Images (URLs, one per line)",
+    "imagesLabel": "Product images",
     "activeLabel": "Active product",
     "noOrders": "No orders yet.",
     "orderId": "Order",

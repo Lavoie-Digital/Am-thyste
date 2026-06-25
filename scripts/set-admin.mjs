@@ -26,12 +26,24 @@ if (!getApps().length) {
 const auth = getAuth();
 const db = getFirestore();
 
-const user = await auth.getUserByEmail(email);
+let user;
+try {
+  user = await auth.getUserByEmail(email);
+} catch (err) {
+  if (err?.code === "auth/user-not-found") {
+    user = await auth.createUser({ email, displayName: email.split("@")[0] });
+    console.log(`• Created auth user for ${email} (uid: ${user.uid}).`);
+  } else {
+    throw err;
+  }
+}
+
 await auth.setCustomUserClaims(user.uid, { role: "admin", proStatus: "none" });
 await db.collection("users").doc(user.uid).set(
-  { uid: user.uid, email, role: "admin", proStatus: "none" },
+  { uid: user.uid, email, displayName: user.displayName || email, role: "admin", proStatus: "none" },
   { merge: true },
 );
 
-console.log(`✓ ${email} is now an admin (uid: ${user.uid}). Sign out/in to refresh the token.`);
+console.log(`✓ ${email} is now an admin (uid: ${user.uid}).`);
+console.log("  Sign in with Google using this email, then reload to refresh the session token.");
 process.exit(0);

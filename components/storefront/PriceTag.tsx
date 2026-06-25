@@ -30,7 +30,7 @@ export function PriceTag({
   return (
     <div
       className={cn(
-        "flex items-baseline gap-2",
+        "flex flex-wrap items-baseline gap-x-2 gap-y-1",
         align === "right" && "justify-end",
         className,
       )}

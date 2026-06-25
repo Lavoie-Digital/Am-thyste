@@ -6,6 +6,13 @@ import { productsCol } from "../firebase/collections";
 import { SEED_PRODUCTS } from "./seed";
 import { pricingContextFor } from "../pricing";
 
+/** Firestore Timestamp → epoch ms (plain number, safe to serialize to client). */
+function toMs(v: unknown): number {
+  if (typeof v === "number") return v;
+  const ts = v as { toMillis?: () => number } | undefined;
+  return ts && typeof ts.toMillis === "function" ? ts.toMillis() : 0;
+}
+
 /** Raw product read: Firestore when configured, otherwise the seed catalog. */
 const getRawProducts = cache(async (): Promise<Product[]> => {
   const db = getAdminDb();
@@ -15,7 +22,11 @@ const getRawProducts = cache(async (): Promise<Product[]> => {
   try {
     const snap = await productsCol(db).orderBy("sortOrder").get();
     if (snap.empty) return [...SEED_PRODUCTS].sort((a, b) => a.sortOrder - b.sortOrder);
-    return snap.docs.map((d) => ({ id: d.id, ...(d.data() as Omit<Product, "id">) }));
+    return snap.docs.map((d) => {
+      const data = d.data() as Omit<Product, "id">;
+      // Normalize Firestore Timestamps to plain numbers for RSC serialization.
+      return { ...data, id: d.id, createdAt: toMs(data.createdAt), updatedAt: toMs(data.updatedAt) };
+    });
   } catch (err) {
     console.error("[products] Firestore read failed, falling back to seed:", err);
     return [...SEED_PRODUCTS].sort((a, b) => a.sortOrder - b.sortOrder);

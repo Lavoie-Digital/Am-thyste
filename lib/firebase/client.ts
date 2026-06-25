@@ -3,6 +3,7 @@
 import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
 import { getAuth, type Auth } from "firebase/auth";
 import { getFirestore, type Firestore } from "firebase/firestore";
+import { getStorage, type FirebaseStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -24,6 +25,7 @@ export const firebaseConfigured = Boolean(
 let app: FirebaseApp | null = null;
 let authInstance: Auth | null = null;
 let dbInstance: Firestore | null = null;
+let storageInstance: FirebaseStorage | null = null;
 
 function getClientApp(): FirebaseApp | null {
   if (!firebaseConfigured) return null;
@@ -47,4 +49,12 @@ export function getClientDb(): Firestore | null {
   if (!a) return null;
   if (!dbInstance) dbInstance = getFirestore(a);
   return dbInstance;
+}
+
+/** Returns the client Storage instance, or null if Firebase isn't configured. */
+export function getClientStorage(): FirebaseStorage | null {
+  const a = getClientApp();
+  if (!a) return null;
+  if (!storageInstance) storageInstance = getStorage(a);
+  return storageInstance;
 }

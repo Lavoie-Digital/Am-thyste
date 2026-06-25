@@ -6,6 +6,7 @@ import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { upsertProduct } from "@/lib/actions/products";
 import { Field, inputClass } from "@/components/auth/AuthShell";
 import { Button } from "@/components/ui/Button";
+import { ImageDropzone } from "./ImageDropzone";
 import type { Product } from "@/lib/types";
 
 const textarea = inputClass.replace("h-12", "min-h-24 py-3");
@@ -15,6 +16,7 @@ export function ProductEditorForm({ product }: { product: Product | null }) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [images, setImages] = useState<string[]>(product?.images ?? []);
 
   const [f, setF] = useState({
     nameFr: product?.name.fr ?? "",
@@ -29,7 +31,6 @@ export function ProductEditorForm({ product }: { product: Product | null }) {
     ingredientsEn: product?.ingredients?.en ?? "",
     marketPrice: product ? (product.marketPrice / 100).toString() : "",
     resellerPrice: product ? (product.resellerPrice / 100).toString() : "",
-    images: product?.images.join("\n") ?? "",
     sizeLabelFr: product?.sizes[0]?.label.fr ?? "",
     sizeLabelEn: product?.sizes[0]?.label.en ?? "",
     category: product?.category ?? "other",
@@ -61,7 +62,7 @@ export function ProductEditorForm({ product }: { product: Product | null }) {
         ingredientsEn: f.ingredientsEn,
         marketPrice: parseFloat(f.marketPrice) || 0,
         resellerPrice: parseFloat(f.resellerPrice) || 0,
-        images: f.images.split("\n").map((s) => s.trim()).filter(Boolean),
+        images,
         sizeLabelFr: f.sizeLabelFr,
         sizeLabelEn: f.sizeLabelEn,
         category: f.category,
@@ -108,9 +109,8 @@ export function ProductEditorForm({ product }: { product: Product | null }) {
       </div>
 
       <div className="rounded-2xl glass p-6">
-        <Field label={dict.dashboard.imagesLabel} hint="ex. /démo.jpeg ou URL Firebase Storage">
-          <textarea value={f.images} onChange={upd("images")} className={textarea} placeholder="/démo.jpeg" />
-        </Field>
+        <p className="mb-3 block text-xs uppercase tracking-[0.15em] text-amethyst-300/70">{dict.dashboard.imagesLabel}</p>
+        <ImageDropzone value={images} onChange={setImages} />
         <div className="mt-4 grid gap-4 sm:grid-cols-3">
           <Field label="Catégorie">
             <select value={f.category} onChange={upd("category")} className={inputClass}>

@@ -22,7 +22,8 @@ npm run dev                  # http://localhost:3000
 3. **Firestore Database** → créez la base (mode production).
 4. **Paramètres du projet → Vos applications (Web)** → copiez la config dans les variables `NEXT_PUBLIC_FIREBASE_*`.
 5. **Paramètres → Comptes de service → Générer une nouvelle clé privée** → renseignez `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, `FIREBASE_PRIVATE_KEY` (gardez les `\n` entre guillemets).
-6. Déployez les règles de sécurité du fichier `firestore.rules`.
+6. **Storage** → activez Firebase Storage (les images produits y sont téléversées depuis le tableau de bord ; seules les **URLs** sont stockées dans Firestore).
+7. Déployez les règles de sécurité : `firestore.rules` (Firestore) **et** `storage.rules` (Storage). Les uploads sont réservés à l'admin (claim `role == 'admin'`), lecture publique.
 
 ### Stripe (paiements — sans produits Stripe)
 - `STRIPE_SECRET_KEY` + `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` (Dashboard → Développeurs → Clés API).

@@ -73,7 +73,7 @@ export function CartDrawer() {
                     <div key={`${item.productId}-${item.sizeId ?? ""}`} className="flex gap-4">
                       <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl ring-1 ring-amethyst-300/20">
                         {item.image && (
-                          <Image src={item.image} alt={pick(item.name, locale)} fill sizes="80px" className="object-cover" />
+                          <Image src={item.image} alt={pick(item.name, locale)} fill sizes="80px" className="object-cover" unoptimized={item.image.startsWith("data:")} />
                         )}
                       </div>
                       <div className="flex flex-1 flex-col">

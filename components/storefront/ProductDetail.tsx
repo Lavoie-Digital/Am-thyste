@@ -34,7 +34,7 @@ export function ProductDetail({ product }: { product: ProductDTO }) {
           initial={{ opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6 }}
-          className="relative aspect-[4/5] overflow-hidden bg-night-800"
+          className="relative aspect-square overflow-hidden bg-night-800"
         >
           <AnimatePresence mode="wait">
             <motion.div
@@ -52,6 +52,7 @@ export function ProductDetail({ product }: { product: ProductDTO }) {
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
                 priority
+                unoptimized={product.images[activeImage]?.startsWith("data:")}
               />
             </motion.div>
           </AnimatePresence>
@@ -67,7 +68,7 @@ export function ProductDetail({ product }: { product: ProductDTO }) {
                   i === activeImage ? "opacity-100 ring-1 ring-amethyst-300/60" : "opacity-50 hover:opacity-90",
                 )}
               >
-                <Image src={img} alt="" fill sizes="80px" className="object-cover" />
+                <Image src={img} alt="" fill sizes="80px" className="object-cover" unoptimized={img.startsWith("data:")} />
               </button>
             ))}
           </div>

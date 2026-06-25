@@ -118,7 +118,7 @@ export function CheckoutForm() {
           {items.map((i) => (
             <div key={`${i.productId}-${i.sizeId ?? ""}`} className="flex gap-3">
               <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg ring-1 ring-amethyst-300/20">
-                {i.image && <Image src={i.image} alt={pick(i.name, locale)} fill sizes="56px" className="object-cover" />}
+                {i.image && <Image src={i.image} alt={pick(i.name, locale)} fill sizes="56px" className="object-cover" unoptimized={i.image.startsWith("data:")} />}
               </div>
               <div className="flex flex-1 justify-between text-sm">
                 <span className="text-amethyst-100/80">{pick(i.name, locale)} × {i.quantity}</span>

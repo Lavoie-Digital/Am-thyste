@@ -29,7 +29,7 @@ export function ProductList({ initial }: { initial: Product[] }) {
       {rows.map((p) => (
         <div key={p.id} className="flex items-center gap-4 rounded-2xl glass p-4">
           <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl ring-1 ring-amethyst-300/20">
-            {p.images[0] && <Image src={p.images[0]} alt="" fill sizes="64px" className="object-cover" />}
+            {p.images[0] && <Image src={p.images[0]} alt="" fill sizes="64px" className="object-cover" unoptimized={p.images[0].startsWith("data:")} />}
           </div>
           <div className="min-w-0 flex-1">
             <p className="flex items-center gap-2 font-medium text-amethyst-50">

@@ -1,0 +1,16 @@
+rules_version = '2';
+
+// Améthyste — Firebase Storage rules.
+// Product images are publicly readable (storefront) and writable only by the
+// admin/owner (custom claim role == 'admin'), limited to images under 5 MB.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /products/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null
+        && request.auth.token.role == 'admin'
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+  }
+}
