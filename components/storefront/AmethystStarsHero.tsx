@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
-import { Mark } from "@/components/ui/icons";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -53,49 +52,11 @@ export function AmethystStarsHero() {
       />
 
       <div className="relative z-10 flex flex-col items-center px-6 text-center">
-        {/* Crest — logo mis en valeur, animé (masqué sur mobile) */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.4, ease }}
-          className="hidden lg:block"
-        >
-          <motion.div
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="relative h-24 w-24 sm:h-28 sm:w-28"
-          >
-            <motion.span
-              aria-hidden
-              animate={{ opacity: [0.3, 0.65, 0.3], scale: [0.96, 1.04, 0.96] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -inset-3 rounded-full border border-ivory/40"
-            />
-            <motion.span
-              aria-hidden
-              animate={{ rotate: 360 }}
-              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-              className="absolute -inset-5 rounded-full border border-dashed border-ivory/30"
-            />
-            <span className="absolute inset-0 overflow-hidden rounded-full shadow-[0_24px_60px_-20px_rgba(0,0,0,0.6)] ring-1 ring-ivory/50">
-              <Image src="/logo.jpeg" alt="Améthyste" fill sizes="128px" className="object-cover" priority />
-            </span>
-            <motion.span
-              aria-hidden
-              animate={{ rotate: 360 }}
-              transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-              className="absolute -inset-5"
-            >
-              <Mark className="absolute -top-1 left-1/2 h-2.5 w-2.5 -translate-x-1/2 text-ivory/80" />
-            </motion.span>
-          </motion.div>
-        </motion.div>
-
         <motion.span
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.2, delay: 0.4, ease }}
-          className="mt-8 text-[0.6875rem] uppercase tracking-[0.34em] text-ivory/85"
+          className="text-[0.6875rem] uppercase tracking-[0.34em] text-ivory/85"
         >
           {dict.home.ritualBadge}
         </motion.span>
