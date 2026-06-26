@@ -30,6 +30,19 @@ export function Navbar() {
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMenuOpen(false), [pathname]);
 
+  // Lock body scroll while the full-screen menu is open, and allow Escape to close.
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
+
   const links = [
     { href: "/boutique", label: dict.nav.shop },
     { href: "/pro", label: dict.nav.pro },
@@ -41,7 +54,7 @@ export function Navbar() {
 
   // Over the photographic hero (home, not yet scrolled) the bar floats on a
   // dark scrim → ivory type. Everywhere else it sits on ivory → ink type.
-  const overHero = pathname === "/" && !scrolled;
+  const overHero = pathname === "/" && !scrolled && !menuOpen;
 
   return (
     <header
@@ -52,7 +65,7 @@ export function Navbar() {
           : "border-b border-transparent bg-transparent",
       )}
     >
-      <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8">
+      <nav className="relative z-50 mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8">
         {/* Logo */}
         <Link href="/" className="group flex items-center gap-3">
           <span className={cn("relative h-11 w-11 overflow-hidden rounded-full ring-1 transition-transform duration-500 group-hover:scale-105", overHero ? "ring-ivory/50" : "ring-ink/15")}>
@@ -152,29 +165,44 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Mobile menu — full-screen cream overlay */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="glass-strong overflow-hidden lg:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-40 flex flex-col bg-ivory lg:hidden"
           >
-            <div className="flex flex-col px-5 py-4">
-              {links.map((l) => (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  className="border-b border-ink/8 py-3 text-ink/70 transition-colors hover:text-ink"
-                >
-                  {l.label}
-                </Link>
-              ))}
-              <div className="pt-4">
-                <LanguageSwitcher />
-              </div>
+            <nav className="flex flex-1 flex-col px-6 pt-28">
+              {links.map((l, i) => {
+                const active = pathname === l.href || pathname.startsWith(l.href + "/");
+                return (
+                  <motion.div
+                    key={l.href}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 0.06 + i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <Link
+                      href={l.href}
+                      className={cn(
+                        "flex items-baseline justify-between border-b border-ink/8 py-5 font-display text-2xl tracking-wide transition-colors",
+                        active ? "text-ink" : "text-ink/70 hover:text-ink",
+                      )}
+                    >
+                      {l.label}
+                      <span className={cn("text-xs font-sans tracking-[0.2em]", active ? "text-gold" : "text-ink-mute/40")}>
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                    </Link>
+                  </motion.div>
+                );
+              })}
+            </nav>
+            <div className="px-6 pb-10">
+              <LanguageSwitcher />
             </div>
           </motion.div>
         )}

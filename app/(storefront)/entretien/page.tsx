@@ -42,7 +42,7 @@ export default async function EntretienPage() {
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <Reveal>
               <div className="relative aspect-[4/5] overflow-hidden rounded-3xl ring-1 ring-ink/10">
-                <Image src="/description.jpeg" alt="Rituel" fill sizes="(max-width:1024px) 100vw, 50vw" className="object-cover" />
+                <Image src="/shampoing.jpeg" alt="Rituel" fill sizes="(max-width:1024px) 100vw, 50vw" className="object-cover" />
               </div>
             </Reveal>
             <div className="space-y-6">

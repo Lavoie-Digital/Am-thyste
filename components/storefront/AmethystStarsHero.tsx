@@ -11,7 +11,7 @@ const ease = [0.22, 1, 0.36, 1] as const;
 /* Background images per breakpoint, slowly cross-fading with a gentle
    Ken-Burns drift, then dissolving into the ivory page below. Each set cycles
    by its own length, so mobile (3) and desktop (2) stay independent. */
-const DESKTOP_IMAGES = ["/description banner.jpeg", "/femmehero.jpeg", "/ChatGPT Image 19 janv_edited_edited.avif"];
+const DESKTOP_IMAGES = ["/description banner.jpeg", "/femmehero.jpeg"];
 const MOBILE_IMAGES = ["/femme2.jpeg", "/femmevertical.jpeg", "/femme.jpeg"];
 const SLIDE_MS = 6000;
 

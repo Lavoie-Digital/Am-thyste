@@ -121,7 +121,9 @@
     "rejectedDesc": "Your request was not approved. Contact us to learn more.",
     "approvedTitle": "Welcome, partner",
     "approvedDesc": "You now have access to Améthyste professional pricing.",
-    "viewCatalog": "View pro catalog"
+    "viewCatalog": "View pro catalog",
+    "badge": "By approval",
+    "trust": "Approval within 48 h · No commitment"
   },
   "admin": {
     "title": "Administration",
@@ -175,7 +177,11 @@
     "desc": "A question about our treatments or professional program? Write to us.",
     "message": "Message",
     "sent": "Thank you! Your message has been sent.",
-    "location": "Rimouski, Quebec"
+    "location": "Rimouski, Quebec",
+    "locationLabel": "Where to find us",
+    "infoTitle": "Get in touch",
+    "follow": "Follow us",
+    "facebook": "Facebook"
   },
   "footer": {
     "rights": "All rights reserved.",
