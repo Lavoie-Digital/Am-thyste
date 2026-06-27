@@ -20,7 +20,7 @@ export function ProductCard({ product, index = 0 }: { product: ProductDTO; index
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 1, delay: index * 0.07, ease }}
-      className="group flex flex-col"
+      className="group flex h-full flex-col"
     >
       <Link href={`/boutique/${product.slug}`} className="relative block aspect-square overflow-hidden rounded-sm bg-bone ring-1 ring-ink/[0.04]">
         <Image
@@ -51,7 +51,7 @@ export function ProductCard({ product, index = 0 }: { product: ProductDTO; index
           marketPrice={product.marketPrice}
           resellerPrice={product.resellerPrice}
           size="sm"
-          className="mt-4"
+          className="mt-auto pt-4"
         />
         <div className="mt-4">
           <AddToCartButton product={product} tone="line" fullWidth />
