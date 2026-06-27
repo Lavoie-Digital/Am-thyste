@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { useCart } from "@/lib/cart/CartContext";
 import { useAuth } from "@/lib/auth/AuthContext";
+import { Gem, Search } from "@/components/ui/icons";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { cn } from "@/lib/utils";
 
@@ -44,128 +44,129 @@ export function Navbar() {
   }, [menuOpen]);
 
   const links = [
+    { href: "/", label: dict.nav.home },
     { href: "/boutique", label: dict.nav.shop },
-    { href: "/pro", label: dict.nav.pro },
     { href: "/entretien", label: dict.nav.entretien },
     { href: "/formation", label: dict.nav.formation },
     { href: "/a-propos", label: dict.nav.about },
     { href: "/contact", label: dict.nav.contact },
   ];
 
-  // Over the photographic hero (home, not yet scrolled) the bar floats on a
-  // dark scrim → ivory type. Everywhere else it sits on ivory → ink type.
-  const overHero = pathname === "/" && !scrolled && !menuOpen;
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href + "/");
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-colors duration-500",
-        scrolled
-          ? "glass-strong border-b border-ink/8"
-          : "border-b border-transparent bg-transparent",
-      )}
-    >
-      <nav className="relative z-50 mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8">
-        {/* Logo */}
-        <Link href="/" className="group flex items-center gap-3">
-          <span className={cn("relative h-11 w-11 overflow-hidden rounded-full ring-1 transition-transform duration-500 group-hover:scale-105", overHero ? "ring-ivory/50" : "ring-ink/15")}>
-            <Image src="/logo.jpeg" alt="Améthyste" fill sizes="44px" className="object-cover" />
-          </span>
-          <span className="hidden flex-col leading-none sm:flex">
-            <span className={cn("font-display text-lg tracking-[0.25em]", overHero ? "text-ivory" : "text-ink")}>
-              AMÉTHYSTE
-            </span>
-            <span className={cn("text-[10px] uppercase tracking-[0.3em]", overHero ? "text-ivory/70" : "text-ink-mute")}>
-              Professional Haircare
-            </span>
-          </span>
-        </Link>
-
-        {/* Desktop links */}
-        <div className="hidden items-center gap-1 lg:flex">
-          {links.map((l) => {
-            const active = pathname === l.href || pathname.startsWith(l.href + "/");
-            return (
-              <Link
-                key={l.href}
-                href={l.href}
-                className={cn(
-                  "relative px-3.5 py-2 text-sm tracking-wide transition-colors",
-                  overHero
-                    ? active
-                      ? "text-ivory"
-                      : "text-ivory/70 hover:text-ivory"
-                    : active
-                      ? "text-ink"
-                      : "text-ink/55 hover:text-ink",
-                )}
-              >
-                {l.label}
-                {active && (
-                  <motion.span
-                    layoutId="nav-underline"
-                    className={cn("absolute inset-x-3 -bottom-0.5 h-px", overHero ? "bg-ivory/80" : "bg-amethyst-500")}
-                  />
-                )}
-              </Link>
-            );
-          })}
+    <header className="fixed inset-x-0 top-0 z-50">
+      {/* Announcement bar */}
+      <div className="bg-ink text-ivory">
+        <div className="mx-auto flex h-9 max-w-7xl items-center justify-between px-5 text-[10.5px] uppercase tracking-[0.2em] sm:px-8">
+          <span className="hidden text-ivory/70 sm:block">{dict.topbar.left}</span>
+          <span className="mx-auto text-center text-ivory/85 sm:mx-0">{dict.topbar.center}</span>
+          <span className="hidden text-ivory/70 sm:block">{dict.topbar.right}</span>
         </div>
+      </div>
 
-        {/* Right actions */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          <LanguageSwitcher className="hidden sm:inline-flex" onDark={overHero} />
-
+      {/* Main bar */}
+      <div
+        className={cn(
+          "border-b transition-shadow duration-500",
+          scrolled
+            ? "glass-strong border-ink/8 shadow-[0_18px_40px_-32px_rgba(10,7,12,0.5)]"
+            : "border-ink/[0.06] bg-ivory/90 backdrop-blur-md",
+        )}
+      >
+        <nav className="relative mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8">
+          {/* Center — logo (absolutely centered so the links keep their natural width) */}
           <Link
-            href={user ? (role === "admin" ? "/tableau-de-bord" : "/pro/espace") : "/pro/connexion"}
-            aria-label={dict.nav.account}
-            className={cn("rounded-full p-2 transition-colors", overHero ? "text-ivory/85 hover:bg-ivory/10 hover:text-ivory" : "text-ink/70 hover:bg-ink/[0.04] hover:text-ink")}
+            href="/"
+            className="group absolute left-1/2 flex -translate-x-1/2 flex-col items-center justify-center leading-none"
           >
-            <UserIcon />
+            <Gem className="h-9 w-auto text-amethyst-500 transition-transform duration-500 group-hover:scale-105" />
+            <span className="mt-1.5 font-display text-lg tracking-[0.3em] text-ink">AMÉTHYSTE</span>
+            <span className="mt-0.5 text-[9px] uppercase tracking-[0.42em] text-ink-mute">{dict.brand.logoSub}</span>
           </Link>
 
-          {role === "admin" && (
-            <Link
-              href="/admin"
-              className="hidden rounded-full border border-gold/40 px-3 py-1.5 text-xs text-gold transition-colors hover:bg-gold/10 sm:inline-block"
+          {/* Left — desktop links / mobile menu toggle */}
+          <div className="flex items-center">
+            <button
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label="Menu"
+              aria-expanded={menuOpen}
+              className="-ml-2 rounded-full p-2 text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink lg:hidden"
             >
-              {dict.nav.admin}
-            </Link>
-          )}
+              <MenuIcon open={menuOpen} />
+            </button>
 
-          <button
-            onClick={toggle}
-            aria-label={dict.nav.cart}
-            className={cn("relative rounded-full p-2 transition-colors", overHero ? "text-ivory/85 hover:bg-ivory/10 hover:text-ivory" : "text-ink/70 hover:bg-ink/[0.04] hover:text-ink")}
-          >
-            <CartIcon />
-            <AnimatePresence>
-              {count > 0 && (
-                <motion.span
-                  key={count}
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 0 }}
-                  className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-ink px-1 text-[10px] font-medium text-ivory"
+            <div className="hidden items-center overflow-hidden lg:flex lg:max-w-[calc(50vw-8.5rem)]">
+              {links.map((l) => (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  className={cn(
+                    "whitespace-nowrap px-2 py-2 text-[0.64rem] uppercase tracking-[0.05em] transition-colors xl:px-2.5 xl:text-[0.68rem] xl:tracking-[0.08em]",
+                    isActive(l.href) ? "text-ink" : "text-ink/55 hover:text-ink",
+                  )}
                 >
-                  {count}
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </button>
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+          </div>
 
-          <button
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-label="Menu"
-            aria-expanded={menuOpen}
-            className={cn("rounded-full p-2 lg:hidden", overHero ? "text-ivory/85 hover:bg-ivory/10 hover:text-ivory" : "text-ink/70 hover:bg-ink/[0.04] hover:text-ink")}
-          >
-            <MenuIcon open={menuOpen} />
-          </button>
-        </div>
-      </nav>
+          {/* Right — actions */}
+          <div className="flex items-center gap-1 sm:gap-2">
+            <Link
+              href="/boutique"
+              aria-label={dict.nav.shop}
+              className="rounded-full p-2 text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink"
+            >
+              <Search />
+            </Link>
 
-      {/* Mobile menu — full-screen cream overlay */}
+            <LanguageSwitcher className="hidden sm:inline-flex" />
+
+            <Link
+              href={user ? (role === "admin" ? "/tableau-de-bord" : "/pro/espace") : "/pro/connexion"}
+              aria-label={dict.nav.account}
+              className="rounded-full p-2 text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink"
+            >
+              <UserIcon />
+            </Link>
+
+            {role === "admin" && (
+              <Link
+                href="/admin"
+                className="hidden rounded-full border border-gold/40 px-3 py-1.5 text-xs text-gold transition-colors hover:bg-gold/10 sm:inline-block"
+              >
+                {dict.nav.admin}
+              </Link>
+            )}
+
+            <button
+              onClick={toggle}
+              aria-label={dict.nav.cart}
+              className="relative rounded-full p-2 text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink"
+            >
+              <CartIcon />
+              <AnimatePresence>
+                {count > 0 && (
+                  <motion.span
+                    key={count}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-ink px-1 text-[10px] font-medium text-ivory"
+                  >
+                    {count}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+          </div>
+        </nav>
+      </div>
+
+      {/* Mobile menu — full-screen pearl overlay */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -175,31 +176,28 @@ export function Navbar() {
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="fixed inset-0 z-40 flex flex-col bg-ivory lg:hidden"
           >
-            <nav className="flex flex-1 flex-col px-6 pt-28">
-              {links.map((l, i) => {
-                const active = pathname === l.href || pathname.startsWith(l.href + "/");
-                return (
-                  <motion.div
-                    key={l.href}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: 0.06 + i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+            <nav className="flex flex-1 flex-col px-6 pt-32">
+              {links.map((l, i) => (
+                <motion.div
+                  key={l.href}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.06 + i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <Link
+                    href={l.href}
+                    className={cn(
+                      "flex items-baseline justify-between border-b border-ink/8 py-5 font-display text-2xl tracking-wide transition-colors",
+                      isActive(l.href) ? "text-ink" : "text-ink/70 hover:text-ink",
+                    )}
                   >
-                    <Link
-                      href={l.href}
-                      className={cn(
-                        "flex items-baseline justify-between border-b border-ink/8 py-5 font-display text-2xl tracking-wide transition-colors",
-                        active ? "text-ink" : "text-ink/70 hover:text-ink",
-                      )}
-                    >
-                      {l.label}
-                      <span className={cn("text-xs font-sans tracking-[0.2em]", active ? "text-gold" : "text-ink-mute/40")}>
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                    </Link>
-                  </motion.div>
-                );
-              })}
+                    {l.label}
+                    <span className={cn("font-sans text-xs tracking-[0.2em]", isActive(l.href) ? "text-gold" : "text-ink-mute/40")}>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </Link>
+                </motion.div>
+              ))}
             </nav>
             <div className="px-6 pb-10">
               <LanguageSwitcher />

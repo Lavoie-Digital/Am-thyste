@@ -2,7 +2,13 @@
   "brand": {
     "name": "Améthyste",
     "tagline": "It's not just a treatment, it's a ritual.",
-    "subtitle": "Hair Botox · Professional Haircare"
+    "subtitle": "Hair Botox · Professional Haircare",
+    "logoSub": "Hair Botox"
+  },
+  "topbar": {
+    "left": "Fast shipping across Québec",
+    "center": "Professional formulas • Exceptional results",
+    "right": "Customer care 7/7"
   },
   "nav": {
     "home": "Home",
@@ -57,6 +63,22 @@
   "home": {
     "heroCta": "Discover the collection",
     "heroCtaSecondary": "The Améthyste world",
+    "heroEyebrow": "Transformation ritual",
+    "heroTitleLead": "The true beauty of your hair, finally",
+    "heroTitleAccent": "revealed",
+    "heroDesc": "Exceptional care for stronger, healthier and infinitely luminous hair.",
+    "heroCtaMain": "Explore the shop",
+    "features": [
+      { "t": "Premium ingredients", "d": "Rigorous selection for visible results" },
+      { "t": "Professional formulas", "d": "Developed with expertise, no compromise" },
+      { "t": "Exceptional results", "d": "Lasting transformation from the first use" },
+      { "t": "Made with passion", "d": "Designed and made in Québec" }
+    ],
+    "shopEyebrow": "Shop",
+    "shopHeading": "Care crafted to elevate every head of hair",
+    "shopAll": "View all products",
+    "ctaEyebrow": "Ready to reveal",
+    "ctaTitle": "The best version of your hair?",
     "ritualBadge": "Professional ritual care",
     "featured": "Our signature treatments",
     "featuredSub": "A transformation at the core of the fiber, no compromise.",

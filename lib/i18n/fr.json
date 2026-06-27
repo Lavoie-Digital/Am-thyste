@@ -2,7 +2,13 @@
   "brand": {
     "name": "Améthyste",
     "tagline": "Ce n'est pas simplement un soin, c'est un rituel.",
-    "subtitle": "Hair Botox · Soins capillaires professionnels"
+    "subtitle": "Hair Botox · Soins capillaires professionnels",
+    "logoSub": "Botox Capillaire"
+  },
+  "topbar": {
+    "left": "Livraison rapide au Québec",
+    "center": "Formules professionnelles • Résultats exceptionnels",
+    "right": "Service client 7j/7"
   },
   "nav": {
     "home": "Accueil",
@@ -57,6 +63,22 @@
   "home": {
     "heroCta": "Découvrir la collection",
     "heroCtaSecondary": "L'univers Améthyste",
+    "heroEyebrow": "Rituel de transformation",
+    "heroTitleLead": "La vraie beauté de vos cheveux enfin",
+    "heroTitleAccent": "révélée",
+    "heroDesc": "Des soins d'exception pour des cheveux plus forts, plus sains et infiniment lumineux.",
+    "heroCtaMain": "Découvrir la boutique",
+    "features": [
+      { "t": "Ingrédients haut de gamme", "d": "Sélection rigoureuse pour des résultats visibles" },
+      { "t": "Formules professionnelles", "d": "Développées avec expertise, sans compromis" },
+      { "t": "Résultats exceptionnels", "d": "Transformations durables dès la première utilisation" },
+      { "t": "Fait avec passion", "d": "Conçus et fabriqués au Québec" }
+    ],
+    "shopEyebrow": "Boutique",
+    "shopHeading": "Des soins conçus pour sublimer chaque chevelure",
+    "shopAll": "Voir tous les produits",
+    "ctaEyebrow": "Prête à révéler",
+    "ctaTitle": "La meilleure version de vos cheveux ?",
     "ritualBadge": "Soin rituel professionnel",
     "featured": "Nos soins signature",
     "featuredSub": "Une transformation au cœur de la fibre, sans compromis.",

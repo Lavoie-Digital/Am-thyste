@@ -10,7 +10,7 @@ export const metadata: Metadata = { title: "Entretien · Le rituel" };
 const STEPS = {
   fr: [
     { n: "01", t: "Préparer", d: "Lavez avec le Shampoing Lissant pour purifier la fibre et ouvrir l'écaille en douceur." },
-    { n: "02", t: "Transformer", d: "Appliquez le masque Hair Botox mèche par mèche. Laissez poser 20 à 40 minutes." },
+    { n: "02", t: "Transformer", d: "Appliquez le masque mèche par mèche. Laissez poser 20 à 40 minutes." },
     { n: "03", t: "Sceller", d: "Rincez, puis nourrissez avec le Revitalisant Lissant pour verrouiller l'hydratation." },
     { n: "04", t: "Sublimer", d: "Quelques gouttes d'Huile Prestige sur les longueurs pour une brillance miroir et une protection durable." },
   ],

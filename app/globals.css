@@ -8,32 +8,34 @@
    No dark sections, no neon, no AI-gradient. Restraint over effects.
    ============================================================ */
 @theme {
-  /* Amethyst — desaturated, sophisticated mauve (no neon) */
-  --color-amethyst-50: #f6f3f8;
-  --color-amethyst-100: #ebe4ef;
-  --color-amethyst-200: #d6c9de;
-  --color-amethyst-300: #bfaecb;
-  --color-amethyst-400: #a18cae;
-  --color-amethyst-500: #836d92;
-  --color-amethyst-600: #6a5677;
-  --color-amethyst-700: #51415d;
-  --color-amethyst-800: #382c42;
-  --color-amethyst-900: #241b2c;
-  --color-amethyst-950: #150f1b;
+  /* Amethyst — brand palette built around Améthyste (#65338E) and
+     Violet Lumière (#8D57AA), descending into Prune, Violet Nuit, Noir Onyx. */
+  --color-amethyst-50: #f6eef2;   /* Blanc Perlé */
+  --color-amethyst-100: #ecd9ec;
+  --color-amethyst-200: #d9b9e0;
+  --color-amethyst-300: #c096cf;
+  --color-amethyst-400: #8d57aa;  /* Violet Lumière */
+  --color-amethyst-500: #65338e;  /* Améthyste */
+  --color-amethyst-600: #57307c;
+  --color-amethyst-700: #4d2f5f;  /* Prune */
+  --color-amethyst-800: #36244a;  /* Violet Nuit */
+  --color-amethyst-900: #241730;
+  --color-amethyst-950: #0a070c;  /* Noir Onyx */
 
-  /* Ink — deep aubergine near-black for text & primary fills (never pure black) */
-  --color-ink: #211a2c;
-  --color-ink-soft: #4b4357;
-  --color-ink-mute: #786e83;
+  /* Ink — Noir Onyx for text & primary fills, Violet Nuit for soft text */
+  --color-ink: #0a070c;           /* Noir Onyx */
+  --color-ink-soft: #36244a;      /* Violet Nuit */
+  --color-ink-mute: #6f6377;
 
-  /* Warm ivory canvas family */
-  --color-ivory: #faf7f2;
-  --color-bone: #f3efe8;
+  /* Pearl canvas family */
+  --color-ivory: #f6eef2;         /* Blanc Perlé */
+  --color-bone: #efe1ea;
   --color-shell: #ffffff;
 
-  /* Champagne — restrained gold, deepened to read on a light ground */
-  --color-gold: #9c7c43;
-  --color-gold-soft: #b08f57;
+  /* Accent — kept under the legacy "gold" name for compatibility, now the
+     Améthyste purple so every accent stays on the brand palette. */
+  --color-gold: #65338e;
+  --color-gold-soft: #8d57aa;
   --color-silver: #8d8598;
 
   --font-display: var(--font-cinzel);
@@ -43,8 +45,8 @@
 }
 
 :root {
-  --background: #faf7f2;
-  --foreground: #211a2c;
+  --background: #f6eef2;
+  --foreground: #0a070c;
 }
 
 html {
@@ -68,8 +70,8 @@ body::before {
   inset: 0;
   z-index: -2;
   background:
-    radial-gradient(120% 80% at 50% -10%, rgba(131, 109, 146, 0.06), transparent 60%),
-    radial-gradient(100% 70% at 50% 120%, rgba(156, 124, 67, 0.04), transparent 55%);
+    radial-gradient(120% 80% at 50% -10%, rgba(101, 51, 142, 0.07), transparent 60%),
+    radial-gradient(100% 70% at 50% 120%, rgba(141, 87, 170, 0.05), transparent 55%);
   pointer-events: none;
 }
 
@@ -104,7 +106,7 @@ body::after {
     font-size: 0.6875rem;
     text-transform: uppercase;
     letter-spacing: 0.34em;
-    color: var(--color-amethyst-600);
+    color: var(--color-amethyst-500);
   }
 
   /* Kept for backwards compatibility — SOLID, no gradient. */
@@ -150,7 +152,7 @@ body::after {
 }
 
 ::selection {
-  background: rgba(131, 109, 146, 0.22);
+  background: rgba(141, 87, 170, 0.22);
   color: var(--color-ink);
 }
 

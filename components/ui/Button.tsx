@@ -8,12 +8,12 @@ const base =
   "group/btn inline-flex items-center justify-center gap-2.5 rounded-full text-xs uppercase tracking-[0.18em] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-[0.98] focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none";
 
 const variants: Record<Variant, string> = {
-  // Deep ink on ivory — the quiet, confident primary. Explicit values so the
-  // fill never depends on a theme variable resolving.
-  primary: "bg-[#211a2c] text-[#faf7f2] hover:bg-[#382c42]",
-  secondary: "border border-[#211a2c]/15 text-[#211a2c] hover:border-[#211a2c]/40 hover:bg-[#211a2c]/[0.03]",
-  ghost: "text-[#4b4357] hover:text-[#211a2c]",
-  gold: "bg-[#9c7c43] text-[#faf7f2] hover:bg-[#b08f57]",
+  // Noir Onyx on Blanc Perlé — the quiet, confident primary. Explicit values so
+  // the fill never depends on a theme variable resolving.
+  primary: "bg-[#0a070c] text-[#f6eef2] hover:bg-[#36244a]",
+  secondary: "border border-[#0a070c]/15 text-[#0a070c] hover:border-[#0a070c]/40 hover:bg-[#0a070c]/[0.03]",
+  ghost: "text-[#36244a] hover:text-[#0a070c]",
+  gold: "bg-[#65338e] text-[#f6eef2] hover:bg-[#8d57aa]",
 };
 
 const sizes: Record<Size, string> = {
