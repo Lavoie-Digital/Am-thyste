@@ -13,7 +13,8 @@ export type PricingContext = "market" | "reseller";
 
 export interface ProProfile {
   businessName: string;
-  businessNumber?: string;
+  /** URL to the uploaded hairdressing diploma proving professional status. */
+  diplomaUrl: string;
   phone: string;
   address: Address;
 }

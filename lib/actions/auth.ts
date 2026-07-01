@@ -12,7 +12,7 @@ import type { AppUser } from "../types";
 
 const proProfileSchema = z.object({
   businessName: z.string().min(1),
-  businessNumber: z.string().optional().default(""),
+  diplomaUrl: z.string().url(),
   phone: z.string().min(1),
   line1: z.string().min(1),
   city: z.string().min(1),
@@ -64,7 +64,7 @@ export async function createProfile(input: {
       proStatus: "pending",
       proProfile: {
         businessName: p.businessName,
-        businessNumber: p.businessNumber || undefined,
+        diplomaUrl: p.diplomaUrl,
         phone: p.phone,
         address: {
           line1: p.line1,

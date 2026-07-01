@@ -47,10 +47,15 @@ export function Navbar() {
     { href: "/", label: dict.nav.home },
     { href: "/boutique", label: dict.nav.shop },
     { href: "/entretien", label: dict.nav.entretien },
+    { href: "/pro", label: dict.nav.pro },
     { href: "/formation", label: dict.nav.formation },
     { href: "/a-propos", label: dict.nav.about },
     { href: "/contact", label: dict.nav.contact },
   ];
+
+  // Split the desktop links around the centered logo so they never overlap it.
+  const leftLinks = links.slice(0, 4);
+  const rightLinks = links.slice(4);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href + "/");
@@ -97,8 +102,8 @@ export function Navbar() {
               <MenuIcon open={menuOpen} />
             </button>
 
-            <div className="hidden items-center overflow-hidden lg:flex lg:max-w-[calc(50vw-8.5rem)]">
-              {links.map((l) => (
+            <div className="hidden items-center overflow-hidden lg:flex lg:max-w-[calc(50vw-9rem)]">
+              {leftLinks.map((l) => (
                 <Link
                   key={l.href}
                   href={l.href}
@@ -113,8 +118,23 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* Right — actions */}
+          {/* Right — desktop links (after the logo) + actions */}
           <div className="flex items-center gap-1 sm:gap-2">
+            <div className="hidden items-center overflow-hidden lg:flex lg:max-w-[calc(50vw-9rem)]">
+              {rightLinks.map((l) => (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  className={cn(
+                    "whitespace-nowrap px-2 py-2 text-[0.64rem] uppercase tracking-[0.05em] transition-colors xl:px-2.5 xl:text-[0.68rem] xl:tracking-[0.08em]",
+                    isActive(l.href) ? "text-ink" : "text-ink/55 hover:text-ink",
+                  )}
+                >
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+
             <Link
               href="/boutique"
               aria-label={dict.nav.shop}

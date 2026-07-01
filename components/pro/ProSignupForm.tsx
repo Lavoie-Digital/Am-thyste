@@ -3,10 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { createProfile } from "@/lib/actions/auth";
+import { getClientStorage, getClientAuth } from "@/lib/firebase/client";
 import { Field, inputClass } from "@/components/auth/AuthShell";
+import { DiplomaDropzone } from "@/components/pro/DiplomaDropzone";
 import { Button } from "@/components/ui/Button";
 
 export function ProSignupForm() {
@@ -15,12 +18,12 @@ export function ProSignupForm() {
   const router = useRouter();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [diploma, setDiploma] = useState<File | null>(null);
   const [form, setForm] = useState({
     displayName: "",
     email: "",
     password: "",
     businessName: "",
-    businessNumber: "",
     phone: "",
     line1: "",
     city: "",
@@ -39,15 +42,29 @@ export function ProSignupForm() {
       setError(dict.auth.errorGeneric);
       return;
     }
+    if (!diploma) {
+      setError(dict.pro.diplomaRequired);
+      return;
+    }
     setLoading(true);
     try {
       await signUp(form.email, form.password, form.displayName);
+
+      // Upload the diploma now that the account (and Storage auth) exists.
+      const storage = getClientStorage();
+      const uid = getClientAuth()?.currentUser?.uid;
+      if (!storage || !uid) throw new Error("not-configured");
+      const ext = diploma.type === "application/pdf" ? "pdf" : (diploma.name.split(".").pop() || "jpg");
+      const dest = storageRef(storage, `diplomas/${uid}/${Date.now()}.${ext}`);
+      await uploadBytes(dest, diploma, { contentType: diploma.type });
+      const diplomaUrl = await getDownloadURL(dest);
+
       const res = await createProfile({
         displayName: form.displayName,
         applyAsPro: true,
         pro: {
           businessName: form.businessName,
-          businessNumber: form.businessNumber,
+          diplomaUrl,
           phone: form.phone,
           line1: form.line1,
           city: form.city,
@@ -90,12 +107,12 @@ export function ProSignupForm() {
       </Field>
 
       <div className="border-t border-ink/10 pt-4">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label={dict.pro.businessName}>
-            <input required value={form.businessName} onChange={set("businessName")} className={inputClass} />
-          </Field>
-          <Field label={dict.pro.businessNumber} hint={dict.common.optional}>
-            <input value={form.businessNumber} onChange={set("businessNumber")} className={inputClass} />
+        <Field label={dict.pro.businessName}>
+          <input required value={form.businessName} onChange={set("businessName")} className={inputClass} />
+        </Field>
+        <div className="mt-4">
+          <Field label={dict.pro.diploma} hint={dict.pro.diplomaHint}>
+            <DiplomaDropzone value={diploma} onChange={setDiploma} />
           </Field>
         </div>
         <div className="mt-4">

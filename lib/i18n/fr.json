@@ -134,7 +134,12 @@
     "signupTitle": "Demande d'accès professionnel",
     "signupDesc": "Remplissez ce formulaire. Votre demande sera examinée par notre équipe avant l'approbation.",
     "businessName": "Nom de l'entreprise / salon",
-    "businessNumber": "Numéro d'entreprise (NEQ)",
+    "diploma": "Diplôme de coiffure",
+    "diplomaHint": "Obligatoire — pour confirmer votre statut de coiffeur",
+    "diplomaDrop": "Glissez votre diplôme ici",
+    "diplomaBrowse": "ou cliquez pour parcourir · PDF, JPEG ou PNG",
+    "diplomaRequired": "Veuillez téléverser votre diplôme de coiffure.",
+    "diplomaUploading": "Téléversement du diplôme…",
     "submitApplication": "Soumettre ma demande",
     "loginTitle": "Connexion partenaire",
     "pendingTitle": "Demande en cours d'examen",
@@ -155,7 +160,8 @@
     "reject": "Refuser",
     "status": "Statut",
     "business": "Entreprise",
-    "appliedOn": "Demande reçue le"
+    "appliedOn": "Demande reçue le",
+    "viewDiploma": "Voir le diplôme"
   },
   "dashboard": {
     "title": "Tableau de bord",

@@ -134,7 +134,12 @@
     "signupTitle": "Professional access request",
     "signupDesc": "Fill out this form. Your request will be reviewed by our team before approval.",
     "businessName": "Business / salon name",
-    "businessNumber": "Business number",
+    "diploma": "Hairdressing diploma",
+    "diplomaHint": "Required — to confirm your status as a hairdresser",
+    "diplomaDrop": "Drop your diploma here",
+    "diplomaBrowse": "or click to browse · PDF, JPEG or PNG",
+    "diplomaRequired": "Please upload your hairdressing diploma.",
+    "diplomaUploading": "Uploading diploma…",
     "submitApplication": "Submit my request",
     "loginTitle": "Partner sign in",
     "pendingTitle": "Request under review",
@@ -155,7 +160,8 @@
     "reject": "Reject",
     "status": "Status",
     "business": "Business",
-    "appliedOn": "Applied on"
+    "appliedOn": "Applied on",
+    "viewDiploma": "View diploma"
   },
   "dashboard": {
     "title": "Dashboard",

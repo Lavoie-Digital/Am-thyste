@@ -53,6 +53,16 @@ export function ProApprovalTable({ initial }: { initial: AppUser[] }) {
             <p className="font-medium text-ink">{u.proProfile?.businessName || u.displayName}</p>
             <p className="text-xs text-ink/45">{u.proProfile?.phone}</p>
             <p className="text-xs text-ink/35">{dict.admin.appliedOn} {fmtDate(u.createdAt)}</p>
+            {u.proProfile?.diplomaUrl && (
+              <a
+                href={u.proProfile.diplomaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-gold underline-offset-4 hover:underline"
+              >
+                {dict.admin.viewDiploma}
+              </a>
+            )}
           </div>
           <span className="truncate text-ink/70">{u.email}</span>
           <span>
