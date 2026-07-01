@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { useCart } from "@/lib/cart/CartContext";
 import { useAuth } from "@/lib/auth/AuthContext";
-import { Gem, Search } from "@/components/ui/icons";
+import { Gem } from "@/components/ui/icons";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { cn } from "@/lib/utils";
 
@@ -47,15 +47,15 @@ export function Navbar() {
     { href: "/", label: dict.nav.home },
     { href: "/boutique", label: dict.nav.shop },
     { href: "/entretien", label: dict.nav.entretien },
-    { href: "/pro", label: dict.nav.pro },
     { href: "/formation", label: dict.nav.formation },
+    { href: "/pro", label: dict.nav.pro },
     { href: "/a-propos", label: dict.nav.about },
     { href: "/contact", label: dict.nav.contact },
   ];
 
   // Split the desktop links around the centered logo so they never overlap it.
-  const leftLinks = links.slice(0, 4);
-  const rightLinks = links.slice(4);
+  const leftLinks = links.slice(0, 5);
+  const rightLinks = links.slice(5);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href + "/");
@@ -134,14 +134,6 @@ export function Navbar() {
                 </Link>
               ))}
             </div>
-
-            <Link
-              href="/boutique"
-              aria-label={dict.nav.shop}
-              className="rounded-full p-2 text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink"
-            >
-              <Search />
-            </Link>
 
             <LanguageSwitcher className="hidden sm:inline-flex" />
 
