@@ -42,6 +42,7 @@
     "subtotal": "Subtotal",
     "shipping": "Shipping",
     "free": "Free",
+    "tax": "Tax (GST/QST)",
     "total": "Total",
     "continue": "Continue",
     "back": "Back",
@@ -112,7 +113,9 @@
     "checkout": "Checkout",
     "remove": "Remove",
     "freeShippingProgress": "Only {amount} away from free shipping!",
-    "freeShippingReached": "You've unlocked free shipping ✨"
+    "freeShippingReached": "You've unlocked free shipping ✨",
+    "usePoints": "Use my points",
+    "pointsAvailable": "{points} points · up to {amount} off"
   },
   "checkout": {
     "title": "Complete your order",
@@ -123,7 +126,10 @@
     "successDesc": "A confirmation email is on its way. Your Améthyste ritual is coming.",
     "cancelTitle": "Payment cancelled",
     "cancelDesc": "Your order was not completed. Your cart has been saved.",
-    "backToShop": "Back to the shop"
+    "backToShop": "Back to the shop",
+    "payTitle": "Secure payment",
+    "loadError": "Couldn't load payment. Please try again.",
+    "notConfigured": "Payments aren't configured yet."
   },
   "pro": {
     "title": "Professional space",
@@ -133,6 +139,9 @@
     "alreadyMember": "Already a partner?",
     "signupTitle": "Professional access request",
     "signupDesc": "Fill out this form. Your request will be reviewed by our team before approval.",
+    "thanksTitle": "Thank you, your application was received!",
+    "thanksDesc": "Our team will review it within 48h and you'll get a confirmation email. Redirecting to the shop…",
+    "thanksCta": "Go to the shop",
     "businessName": "Business / salon name",
     "diploma": "Hairdressing diploma",
     "diplomaHint": "Required — to confirm your status as a hairdresser",

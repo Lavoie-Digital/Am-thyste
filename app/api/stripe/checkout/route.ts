@@ -7,6 +7,7 @@ import { getSettings, computeShipping } from "@/lib/data/settings";
 import { pricingContextFor, resolveUnitAmount } from "@/lib/pricing";
 import { getLocale } from "@/lib/i18n/server";
 import { pick } from "@/lib/utils";
+import { redeemableCents, pointsForCents } from "@/lib/points";
 import type { Locale } from "@/lib/types";
 
 const bodySchema = z.object({
@@ -19,17 +20,18 @@ const bodySchema = z.object({
       }),
     )
     .min(1),
-  email: z.string().email(),
-  shippingAddress: z.object({
-    name: z.string().min(1),
-    line1: z.string().min(1),
-    line2: z.string().optional().default(""),
-    city: z.string().min(1),
-    province: z.string().min(1),
-    postalCode: z.string().min(1),
-    country: z.string().min(1).default("Canada"),
-  }),
+  // Optional prefill; Stripe's embedded form collects the authoritative email + address.
+  email: z.string().email().optional(),
+  // Opt-in: apply the member's loyalty points as a discount.
+  redeemPoints: z.boolean().optional(),
 });
+
+/** Quebec sales tax rate IDs (GST/QST). Created once in Stripe, referenced by env. */
+function quebecTaxRates(): string[] {
+  return [process.env.STRIPE_TAX_RATE_GST, process.env.STRIPE_TAX_RATE_QST].filter(
+    (id): id is string => Boolean(id && id.startsWith("txr_")),
+  );
+}
 
 export async function POST(request: NextRequest) {
   if (!stripeConfigured) {
@@ -51,6 +53,7 @@ export async function POST(request: NextRequest) {
   const locale = (await getLocale()) as Locale;
   const settings = await getSettings();
   const origin = process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin;
+  const taxRates = quebecTaxRates();
 
   // Recompute every price from Firestore — client prices are ignored.
   const lineItems = [];
@@ -62,6 +65,7 @@ export async function POST(request: NextRequest) {
     subtotal += unitAmount * item.quantity;
     lineItems.push({
       quantity: item.quantity,
+      tax_rates: taxRates.length ? taxRates : undefined,
       price_data: {
         currency: "cad",
         unit_amount: unitAmount,
@@ -79,12 +83,35 @@ export async function POST(request: NextRequest) {
 
   const shipping = computeShipping(subtotal, settings);
 
+  // Points redemption (server-validated against the verified viewer's balance).
+  let discountCents = 0;
+  let redeemedPoints = 0;
+  const discounts: { coupon: string }[] = [];
+  const isPro = viewer?.role === "pro" && viewer.proStatus === "approved";
+  if (parsed.redeemPoints && isPro && viewer && viewer.points > 0) {
+    discountCents = redeemableCents(viewer.points, subtotal);
+    if (discountCents > 0) {
+      redeemedPoints = pointsForCents(discountCents);
+      const coupon = await stripe.coupons.create({
+        amount_off: discountCents,
+        currency: "cad",
+        duration: "once",
+        name: locale === "fr" ? "Points fidélité" : "Loyalty points",
+      });
+      discounts.push({ coupon: coupon.id });
+    }
+  }
+
   try {
     const session = await stripe.checkout.sessions.create({
+      ui_mode: "embedded_page",
       mode: "payment",
       payment_method_types: ["card"],
       line_items: lineItems,
-      customer_email: parsed.email,
+      customer_email: parsed.email || undefined,
+      discounts: discounts.length ? discounts : undefined,
+      // Stripe's embedded form collects the shipping address (Canada only).
+      shipping_address_collection: { allowed_countries: ["CA"] },
       shipping_options:
         shipping > 0
           ? [
@@ -101,18 +128,12 @@ export async function POST(request: NextRequest) {
         pricingContext: context,
         userId: viewer?.uid ?? "",
         locale,
-        shippingName: parsed.shippingAddress.name,
-        shippingLine1: parsed.shippingAddress.line1,
-        shippingCity: parsed.shippingAddress.city,
-        shippingProvince: parsed.shippingAddress.province,
-        shippingPostal: parsed.shippingAddress.postalCode,
-        shippingCountry: parsed.shippingAddress.country,
+        redeemedPoints: String(redeemedPoints),
       },
-      success_url: `${origin}/checkout/succes?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/checkout/annule`,
+      return_url: `${origin}/checkout/succes?session_id={CHECKOUT_SESSION_ID}`,
     });
 
-    return NextResponse.json({ ok: true, url: session.url });
+    return NextResponse.json({ ok: true, clientSecret: session.client_secret });
   } catch (err) {
     console.error("[stripe] checkout session failed:", err);
     return NextResponse.json({ ok: false, error: "stripe-error" }, { status: 500 });

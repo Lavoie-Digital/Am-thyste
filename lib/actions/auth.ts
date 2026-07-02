@@ -6,8 +6,13 @@ import { getAdminDb, adminConfigured } from "../firebase/admin";
 import { usersCol } from "../firebase/collections";
 import { verifySession } from "../auth/dal";
 import { getLocale } from "../i18n/server";
+import { getOwnerEmail } from "../data/settings";
 import { sendEmail } from "../email/sendgrid";
-import { welcomeEmail } from "../email/templates";
+import {
+  welcomeEmail,
+  proApplicationAckEmail,
+  proApplicationOwnerEmail,
+} from "../email/templates";
 import type { AppUser } from "../types";
 
 const proProfileSchema = z.object({
@@ -91,8 +96,25 @@ export async function createProfile(input: {
 
   if (!existing.exists) {
     const locale = await getLocale();
-    const mail = welcomeEmail(input.displayName || viewer.email, locale);
-    await sendEmail({ to: viewer.email, subject: mail.subject, html: mail.html });
+    const name = input.displayName || viewer.email;
+
+    if (proFields.proProfile) {
+      // Acknowledge the pro applicant (48h) and notify the owner of the new request.
+      const ack = proApplicationAckEmail(name, locale);
+      const owner = proApplicationOwnerEmail({
+        name,
+        email: viewer.email,
+        profile: proFields.proProfile,
+      });
+      const ownerEmail = await getOwnerEmail();
+      await Promise.all([
+        sendEmail({ to: viewer.email, subject: ack.subject, html: ack.html }),
+        sendEmail({ to: ownerEmail, subject: owner.subject, html: owner.html, replyTo: viewer.email }),
+      ]);
+    } else {
+      const mail = welcomeEmail(name, locale);
+      await sendEmail({ to: viewer.email, subject: mail.subject, html: mail.html });
+    }
   }
 
   return { ok: true };

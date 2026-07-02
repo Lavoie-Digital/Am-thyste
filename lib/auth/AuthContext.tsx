@@ -4,9 +4,11 @@ import {
   createContext,
   useContext,
   useEffect,
+  useRef,
   useState,
   useCallback,
 } from "react";
+import { useRouter } from "next/navigation";
 import {
   onIdTokenChanged,
   signInWithEmailAndPassword,
@@ -30,6 +32,7 @@ interface AuthContextValue {
   configured: boolean;
   role: UserRole;
   proStatus: ProStatus;
+  points: number;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, displayName: string) => Promise<FirebaseUser>;
   signInWithGoogle: () => Promise<FirebaseUser>;
@@ -58,9 +61,12 @@ async function syncSession(fbUser: FirebaseUser | null) {
 }
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [profile, setProfile] = useState<AppUser | null>(null);
   const [loading, setLoading] = useState(firebaseConfigured);
+  // Tracks the last-seen role/proStatus so an admin approval propagates live.
+  const gatingRef = useRef<string | null>(null);
 
   useEffect(() => {
     const auth = getClientAuth();
@@ -95,6 +101,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     );
     return () => unsub();
   }, [user]);
+
+  // When the viewer's role/proStatus changes (e.g. an admin just approved this
+  // pro account), refresh the ID token so claims are current and re-render
+  // server components so professional pricing shows without a manual reload.
+  useEffect(() => {
+    if (!profile) {
+      gatingRef.current = null;
+      return;
+    }
+    const key = `${profile.role}:${profile.proStatus}`;
+    if (gatingRef.current === null) {
+      // First profile snapshot — capture the baseline, don't refresh.
+      gatingRef.current = key;
+      return;
+    }
+    if (gatingRef.current !== key) {
+      gatingRef.current = key;
+      (async () => {
+        const auth = getClientAuth();
+        if (auth?.currentUser) {
+          await auth.currentUser.getIdToken(true);
+          await syncSession(auth.currentUser);
+        }
+        router.refresh();
+      })();
+    }
+  }, [profile, router]);
 
   const signIn = useCallback(async (email: string, password: string) => {
     const auth = getClientAuth();
@@ -152,6 +185,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     configured: firebaseConfigured,
     role: profile?.role ?? "customer",
     proStatus: profile?.proStatus ?? "none",
+    points: profile?.points ?? 0,
     signIn,
     signUp,
     signInWithGoogle,

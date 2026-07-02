@@ -20,6 +20,11 @@ interface CartContextValue {
   open: () => void;
   close: () => void;
   toggle: () => void;
+  checkoutOpen: boolean;
+  openCheckout: () => void;
+  closeCheckout: () => void;
+  redeemPoints: boolean;
+  setRedeemPoints: (v: boolean) => void;
   add: (item: CartItem) => void;
   remove: (productId: string, sizeId?: string) => void;
   setQuantity: (productId: string, sizeId: string | undefined, quantity: number) => void;
@@ -35,6 +40,8 @@ function sameLine(a: CartItem, productId: string, sizeId?: string) {
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [redeemPoints, setRedeemPoints] = useState(false);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -110,6 +117,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     open: () => setIsOpen(true),
     close: () => setIsOpen(false),
     toggle: () => setIsOpen((v) => !v),
+    checkoutOpen,
+    // Opening checkout closes the drawer so the payment modal takes over.
+    openCheckout: () => {
+      setIsOpen(false);
+      setCheckoutOpen(true);
+    },
+    closeCheckout: () => setCheckoutOpen(false),
+    redeemPoints,
+    setRedeemPoints,
     add,
     remove,
     setQuantity,

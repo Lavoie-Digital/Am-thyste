@@ -3,9 +3,11 @@ import type Stripe from "stripe";
 import { FieldValue } from "firebase-admin/firestore";
 import { getStripe, stripeConfigured } from "@/lib/stripe";
 import { getAdminDb } from "@/lib/firebase/admin";
-import { ordersCol } from "@/lib/firebase/collections";
+import { ordersCol, usersCol } from "@/lib/firebase/collections";
 import { sendEmail } from "@/lib/email/sendgrid";
-import { orderConfirmationEmail } from "@/lib/email/templates";
+import { orderConfirmationEmail, orderOwnerEmail } from "@/lib/email/templates";
+import { getOwnerEmail } from "@/lib/data/settings";
+import { pointsEarned } from "@/lib/points";
 import type { Locale, Order, OrderLineItem, PricingContext } from "@/lib/types";
 
 // Stripe webhooks must read the RAW body to verify the signature.
@@ -58,28 +60,59 @@ async function fulfillOrder(stripe: Stripe, session: Stripe.Checkout.Session) {
     };
   });
 
-  const subtotal = lineItems.reduce((s, li) => s + li.unitAmount * li.quantity, 0);
-  const total = session.amount_total ?? subtotal;
-  const shipping = Math.max(0, total - subtotal);
+  // Trust Stripe's authoritative totals (products + tax + shipping computed by Checkout).
+  const subtotal = session.amount_subtotal ?? lineItems.reduce((s, li) => s + li.unitAmount * li.quantity, 0);
+  const tax = session.total_details?.amount_tax ?? 0;
+  const discount = session.total_details?.amount_discount ?? 0;
+  const shipping =
+    session.shipping_cost?.amount_total ?? session.total_details?.amount_shipping ?? 0;
+  const total = session.amount_total ?? subtotal - discount + tax + shipping;
   const email = session.customer_details?.email || session.customer_email || "";
 
+  // Loyalty is PRO-ONLY: earn on net product spend; settle any points redeemed.
+  const userId = m.userId || null;
+  let isPro = false;
+  if (userId) {
+    try {
+      const uSnap = await usersCol(db).doc(userId).get();
+      const u = uSnap.data();
+      isPro = uSnap.exists && u?.role === "pro" && u?.proStatus === "approved";
+    } catch {
+      /* treat as non-pro on read failure */
+    }
+  }
+  const earnedPts = isPro ? pointsEarned(Math.max(0, subtotal - discount)) : 0;
+  const redeemedPts = isPro ? Math.max(0, Math.round(Number(m.redeemedPoints) || 0)) : 0;
+
+  // Stripe's embedded form collects the shipping address; read whichever shape the API returns.
+  const collected = (session as unknown as {
+    collected_information?: { shipping_details?: { name?: string; address?: Stripe.Address } };
+    shipping_details?: { name?: string; address?: Stripe.Address };
+  });
+  const ship = collected.collected_information?.shipping_details ?? collected.shipping_details;
+  const addr = ship?.address ?? session.customer_details?.address ?? null;
+
   const order = {
-    userId: m.userId || null,
+    userId,
     email,
     pricingContext: (m.pricingContext as PricingContext) || "market",
     status: "paid",
     lineItems,
     subtotal,
     shipping,
+    tax,
+    discount,
     total,
+    pointsEarned: earnedPts,
+    pointsRedeemed: redeemedPts,
     currency: "cad",
     shippingAddress: {
-      name: m.shippingName || session.customer_details?.name || "",
-      line1: m.shippingLine1 || "",
-      city: m.shippingCity || "",
-      province: m.shippingProvince || "",
-      postalCode: m.shippingPostal || "",
-      country: m.shippingCountry || "Canada",
+      name: ship?.name || session.customer_details?.name || "",
+      line1: addr?.line1 || "",
+      city: addr?.city || "",
+      province: addr?.state || "",
+      postalCode: addr?.postal_code || "",
+      country: addr?.country || "CA",
     },
     stripe: {
       checkoutSessionId: session.id,
@@ -91,14 +124,36 @@ async function fulfillOrder(stripe: Stripe, session: Stripe.Checkout.Session) {
 
   const ref = await ordersCol(db).add(order);
 
-  // Send confirmation email (no-op if SendGrid unconfigured).
+  // Apply the net balance change atomically (already gated to approved pros above).
+  const netPts = earnedPts - redeemedPts;
+  if (userId && isPro && netPts !== 0) {
+    try {
+      await usersCol(db).doc(userId).update({ points: FieldValue.increment(netPts) });
+    } catch (err) {
+      console.error("[stripe] points update failed:", err);
+    }
+  }
+
+  const orderForEmail: Order = {
+    ...(order as unknown as Order),
+    id: ref.id,
+    createdAt: Date.now(),
+  };
+
+  // Confirmation to the customer (no-op if SendGrid unconfigured).
   if (email) {
-    const orderForEmail: Order = {
-      ...(order as unknown as Order),
-      id: ref.id,
-      createdAt: Date.now(),
-    };
     const mail = orderConfirmationEmail(orderForEmail, locale);
     await sendEmail({ to: email, subject: mail.subject, html: mail.html });
+  }
+
+  // Notify the store owner of the new order.
+  try {
+    const ownerEmail = await getOwnerEmail();
+    if (ownerEmail) {
+      const ownerMail = orderOwnerEmail(orderForEmail, locale);
+      await sendEmail({ to: ownerEmail, subject: ownerMail.subject, html: ownerMail.html });
+    }
+  } catch (err) {
+    console.error("[stripe] owner order notification failed:", err);
   }
 }

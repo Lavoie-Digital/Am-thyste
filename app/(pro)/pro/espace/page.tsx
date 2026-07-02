@@ -11,6 +11,9 @@ export default async function ProEspacePage() {
 
   // Owner/admin manage everything from the dashboard.
   if (viewer.role === "admin") redirect("/tableau-de-bord");
+  // Only actual pro applicants belong here — everyone else goes to the join page
+  // (prevents a customer / orphaned account from seeing a false "pending" state).
+  if (viewer.role !== "pro") redirect("/pro");
 
   const approved = isApprovedPro(viewer);
   const state =

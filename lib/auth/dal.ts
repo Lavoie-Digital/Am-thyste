@@ -30,6 +30,7 @@ export const verifySession = cache(async (): Promise<Viewer | null> => {
 
     let role = (decoded.role as UserRole) ?? "customer";
     let proStatus = (decoded.proStatus as ProStatus) ?? "none";
+    let points = 0;
 
     // Firestore profile is the source of truth if claims are stale/missing.
     const db = getAdminDb();
@@ -40,6 +41,7 @@ export const verifySession = cache(async (): Promise<Viewer | null> => {
           const data = snap.data() as AppUser;
           role = data.role ?? role;
           proStatus = data.proStatus ?? proStatus;
+          points = data.points ?? 0;
         }
       } catch {
         /* fall back to claims */
@@ -51,6 +53,7 @@ export const verifySession = cache(async (): Promise<Viewer | null> => {
       email: decoded.email ?? "",
       role,
       proStatus,
+      points,
     };
   } catch {
     return null;

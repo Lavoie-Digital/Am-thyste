@@ -16,6 +16,8 @@ export interface EmailMessage {
   subject: string;
   html: string;
   text?: string;
+  /** Where replies should go — e.g. the customer's address on an owner notice. */
+  replyTo?: string;
 }
 
 /**
@@ -38,6 +40,7 @@ export async function sendEmail(msg: EmailMessage): Promise<void> {
       subject: msg.subject,
       html: msg.html,
       text: msg.text || msg.html.replace(/<[^>]+>/g, " "),
+      ...(msg.replyTo ? { replyTo: msg.replyTo } : {}),
     });
   } catch (err) {
     // Never let email failures break the core flow (order creation, approval…).

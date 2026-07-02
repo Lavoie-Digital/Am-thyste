@@ -14,7 +14,8 @@ import { cn } from "@/lib/utils";
 export function Navbar() {
   const { dict } = useLocale();
   const { count, toggle } = useCart();
-  const { user, role } = useAuth();
+  const { user, role, proStatus, points } = useAuth();
+  const isApprovedPro = role === "pro" && proStatus === "approved";
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -136,6 +137,16 @@ export function Navbar() {
             </div>
 
             <LanguageSwitcher className="hidden sm:inline-flex" />
+
+            {isApprovedPro && (
+              <span
+                title={dict.nav.pro}
+                className="hidden items-center gap-1.5 rounded-full border border-amethyst-400/40 bg-amethyst-500/10 px-3 py-1.5 text-[11px] font-medium tracking-wide text-amethyst-600 sm:inline-flex"
+              >
+                <Gem className="h-3 w-3" />
+                Pro · {points} pts
+              </span>
+            )}
 
             <Link
               href={user ? (role === "admin" ? "/tableau-de-bord" : "/pro/espace") : "/pro/connexion"}

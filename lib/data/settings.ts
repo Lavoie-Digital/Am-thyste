@@ -19,6 +19,17 @@ export const getSettings = cache(async (): Promise<Settings> => {
   }
 });
 
+/**
+ * Recipient for owner-facing notifications (new pro request, contact message).
+ * Prefers SENDGRID_OWNER_EMAIL (handy for testing), else the store contactEmail.
+ */
+export async function getOwnerEmail(): Promise<string> {
+  const override = process.env.SENDGRID_OWNER_EMAIL?.trim();
+  if (override) return override;
+  const settings = await getSettings();
+  return settings.contactEmail;
+}
+
 /** Compute shipping (cents) from a subtotal against the configured threshold. */
 export function computeShipping(subtotal: number, settings: Settings): number {
   if (subtotal <= 0) return 0;

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import { deleteUser, type User as FirebaseUser } from "firebase/auth";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { createProfile } from "@/lib/actions/auth";
@@ -14,10 +15,11 @@ import { Button } from "@/components/ui/Button";
 
 export function ProSignupForm() {
   const { dict } = useLocale();
-  const { signUp, configured } = useAuth();
+  const { signUp, signOut, configured } = useAuth();
   const router = useRouter();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [diploma, setDiploma] = useState<File | null>(null);
   const [form, setForm] = useState({
     displayName: "",
@@ -47,8 +49,10 @@ export function ProSignupForm() {
       return;
     }
     setLoading(true);
+    let createdUser: FirebaseUser | null = null;
+    let profileCreated = false;
     try {
-      await signUp(form.email, form.password, form.displayName);
+      createdUser = await signUp(form.email, form.password, form.displayName);
 
       // Upload the diploma now that the account (and Storage auth) exists.
       const storage = getClientStorage();
@@ -74,15 +78,50 @@ export function ProSignupForm() {
         },
       });
       if (!res.ok) throw new Error(res.error);
-      router.push("/pro/espace");
+
+      // Profile is saved and emails sent — from here the application is committed,
+      // so a hiccup below must NOT roll the account back.
+      profileCreated = true;
+
+      // The application is pending approval — sign the applicant out so they are
+      // NOT logged in, thank them, then send them to the shop.
+      await signOut();
       router.refresh();
+      setSubmitted(true);
+      setTimeout(() => router.push("/boutique"), 4000);
     } catch (err: unknown) {
+      // If the account was created this attempt but a later step failed (diploma
+      // upload, profile write…), roll it back so the email can be reused on retry.
+      if (createdUser && !profileCreated) {
+        try {
+          await deleteUser(createdUser);
+        } catch {
+          /* deletion may need a recent login; ignore and fall through to sign-out */
+        }
+        await signOut();
+      }
       const code = (err as { code?: string })?.code ?? "";
       setError(code.includes("email-already") ? dict.auth.errorEmailInUse : dict.auth.errorGeneric);
     } finally {
       setLoading(false);
     }
   };
+
+  if (submitted) {
+    return (
+      <div className="space-y-5 py-6 text-center">
+        <span className="text-3xl text-gold">✦</span>
+        <h2 className="font-display text-2xl tracking-wide text-ink">{dict.pro.thanksTitle}</h2>
+        <p className="mx-auto max-w-md text-sm leading-relaxed text-ink/65">{dict.pro.thanksDesc}</p>
+        <Link
+          href="/boutique"
+          className="inline-flex h-12 items-center rounded-full bg-[#211a2c] px-7 text-xs uppercase tracking-[0.16em] text-[#faf7f2] transition-colors hover:bg-[#382c42]"
+        >
+          {dict.pro.thanksCta}
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={submit} className="space-y-4 text-left">
