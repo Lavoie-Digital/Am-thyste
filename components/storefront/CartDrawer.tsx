@@ -5,21 +5,14 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
 import { useCart } from "@/lib/cart/CartContext";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
-import { useAuth } from "@/lib/auth/AuthContext";
 import { formatPrice, pick } from "@/lib/utils";
-import { redeemableCents, REDEEM_BLOCK_POINTS } from "@/lib/points";
 import { CheckoutModal } from "./CheckoutModal";
 
 const FREE_SHIPPING_THRESHOLD = 10000; // display-only; server is authoritative
 
 export function CartDrawer() {
-  const { items, isOpen, close, subtotal, setQuantity, remove, openCheckout, redeemPoints, setRedeemPoints } = useCart();
+  const { items, isOpen, close, subtotal, setQuantity, remove, openCheckout } = useCart();
   const { dict, locale } = useLocale();
-  const { points, role, proStatus } = useAuth();
-
-  const isApprovedPro = role === "pro" && proStatus === "approved";
-  const canRedeem = isApprovedPro && points >= REDEEM_BLOCK_POINTS && subtotal > 0;
-  const pointsDiscount = canRedeem ? redeemableCents(points, subtotal) : 0;
 
   const remaining = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
   const progress = Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100);
@@ -108,25 +101,6 @@ export function CartDrawer() {
                     <span className="text-ink/65">{dict.common.subtotal}</span>
                     <span className="font-medium text-ink">{formatPrice(subtotal, locale)}</span>
                   </div>
-
-                  {canRedeem && (
-                    <label className="mt-3 flex cursor-pointer items-start gap-3 rounded-xl border border-amethyst-400/30 bg-amethyst-500/[0.06] px-4 py-3">
-                      <input
-                        type="checkbox"
-                        checked={redeemPoints}
-                        onChange={(e) => setRedeemPoints(e.target.checked)}
-                        className="mt-0.5 h-4 w-4 accent-amethyst-500"
-                      />
-                      <span className="text-sm">
-                        <span className="font-medium text-ink">{dict.cart.usePoints}</span>
-                        <span className="block text-xs text-ink/55">
-                          {dict.cart.pointsAvailable
-                            .replace("{points}", String(points))
-                            .replace("{amount}", formatPrice(pointsDiscount, locale))}
-                        </span>
-                      </span>
-                    </label>
-                  )}
 
                   <button
                     onClick={openCheckout}

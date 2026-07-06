@@ -7,7 +7,6 @@ import { getSettings, computeShipping } from "@/lib/data/settings";
 import { pricingContextFor, resolveUnitAmount } from "@/lib/pricing";
 import { getLocale } from "@/lib/i18n/server";
 import { pick } from "@/lib/utils";
-import { redeemableCents, pointsForCents } from "@/lib/points";
 import type { Locale } from "@/lib/types";
 
 const bodySchema = z.object({
@@ -22,8 +21,6 @@ const bodySchema = z.object({
     .min(1),
   // Optional prefill; Stripe's embedded form collects the authoritative email + address.
   email: z.string().email().optional(),
-  // Opt-in: apply the member's loyalty points as a discount.
-  redeemPoints: z.boolean().optional(),
 });
 
 /** Quebec sales tax rate IDs (GST/QST). Created once in Stripe, referenced by env. */
@@ -83,25 +80,6 @@ export async function POST(request: NextRequest) {
 
   const shipping = computeShipping(subtotal, settings);
 
-  // Points redemption (server-validated against the verified viewer's balance).
-  let discountCents = 0;
-  let redeemedPoints = 0;
-  const discounts: { coupon: string }[] = [];
-  const isPro = viewer?.role === "pro" && viewer.proStatus === "approved";
-  if (parsed.redeemPoints && isPro && viewer && viewer.points > 0) {
-    discountCents = redeemableCents(viewer.points, subtotal);
-    if (discountCents > 0) {
-      redeemedPoints = pointsForCents(discountCents);
-      const coupon = await stripe.coupons.create({
-        amount_off: discountCents,
-        currency: "cad",
-        duration: "once",
-        name: locale === "fr" ? "Points fidélité" : "Loyalty points",
-      });
-      discounts.push({ coupon: coupon.id });
-    }
-  }
-
   try {
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded_page",
@@ -109,7 +87,6 @@ export async function POST(request: NextRequest) {
       payment_method_types: ["card"],
       line_items: lineItems,
       customer_email: parsed.email || undefined,
-      discounts: discounts.length ? discounts : undefined,
       // Stripe's embedded form collects the shipping address (Canada only).
       shipping_address_collection: { allowed_countries: ["CA"] },
       shipping_options:
@@ -128,7 +105,6 @@ export async function POST(request: NextRequest) {
         pricingContext: context,
         userId: viewer?.uid ?? "",
         locale,
-        redeemedPoints: String(redeemedPoints),
       },
       return_url: `${origin}/checkout/succes?session_id={CHECKOUT_SESSION_ID}`,
     });

@@ -32,7 +32,6 @@ interface AuthContextValue {
   configured: boolean;
   role: UserRole;
   proStatus: ProStatus;
-  points: number;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, displayName: string) => Promise<FirebaseUser>;
   signInWithGoogle: () => Promise<FirebaseUser>;
@@ -185,7 +184,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     configured: firebaseConfigured,
     role: profile?.role ?? "customer",
     proStatus: profile?.proStatus ?? "none",
-    points: profile?.points ?? 0,
     signIn,
     signUp,
     signInWithGoogle,

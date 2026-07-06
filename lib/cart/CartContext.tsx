@@ -23,8 +23,6 @@ interface CartContextValue {
   checkoutOpen: boolean;
   openCheckout: () => void;
   closeCheckout: () => void;
-  redeemPoints: boolean;
-  setRedeemPoints: (v: boolean) => void;
   add: (item: CartItem) => void;
   remove: (productId: string, sizeId?: string) => void;
   setQuantity: (productId: string, sizeId: string | undefined, quantity: number) => void;
@@ -41,7 +39,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
-  const [redeemPoints, setRedeemPoints] = useState(false);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -124,8 +121,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       setCheckoutOpen(true);
     },
     closeCheckout: () => setCheckoutOpen(false),
-    redeemPoints,
-    setRedeemPoints,
     add,
     remove,
     setQuantity,

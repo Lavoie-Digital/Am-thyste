@@ -90,13 +90,10 @@ export function OrdersTable({ initial }: { initial: Order[] }) {
                     <div className="flex justify-between text-ink/55"><span>{dict.common.subtotal}</span><span>{formatPrice(o.subtotal, locale)}</span></div>
                     <div className="flex justify-between text-ink/55"><span>{dict.common.shipping}</span><span>{o.shipping === 0 ? dict.common.free : formatPrice(o.shipping, locale)}</span></div>
                     {(o.discount ?? 0) > 0 && (
-                      <div className="flex justify-between text-amethyst-600"><span>{locale === "fr" ? "Points" : "Points"}{o.pointsRedeemed ? ` (−${o.pointsRedeemed} pts)` : ""}</span><span>−{formatPrice(o.discount ?? 0, locale)}</span></div>
+                      <div className="flex justify-between text-amethyst-600"><span>{locale === "fr" ? "Rabais" : "Discount"}</span><span>−{formatPrice(o.discount ?? 0, locale)}</span></div>
                     )}
                     <div className="flex justify-between text-ink/55"><span>{dict.common.tax}</span><span>{formatPrice(o.tax ?? 0, locale)}</span></div>
                     <div className="flex justify-between border-t border-ink/10 pt-1 font-medium text-ink"><span>{dict.common.total}</span><span className="text-gold">{formatPrice(o.total, locale)}</span></div>
-                    {(o.pointsEarned ?? 0) > 0 && (
-                      <div className="flex justify-between pt-1 text-xs text-ink/45"><span>{locale === "fr" ? "Points gagnés" : "Points earned"}</span><span>+{o.pointsEarned} pts</span></div>
-                    )}
                   </div>
                 </div>
 

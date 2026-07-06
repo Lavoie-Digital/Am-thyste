@@ -113,9 +113,7 @@
     "checkout": "Passer à la caisse",
     "remove": "Retirer",
     "freeShippingProgress": "Plus que {amount} pour la livraison gratuite !",
-    "freeShippingReached": "Vous bénéficiez de la livraison gratuite ✨",
-    "usePoints": "Utiliser mes points",
-    "pointsAvailable": "{points} points · jusqu'à {amount} de rabais"
+    "freeShippingReached": "Vous bénéficiez de la livraison gratuite ✨"
   },
   "checkout": {
     "title": "Finaliser la commande",

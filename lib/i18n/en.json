@@ -113,9 +113,7 @@
     "checkout": "Checkout",
     "remove": "Remove",
     "freeShippingProgress": "Only {amount} away from free shipping!",
-    "freeShippingReached": "You've unlocked free shipping ✨",
-    "usePoints": "Use my points",
-    "pointsAvailable": "{points} points · up to {amount} off"
+    "freeShippingReached": "You've unlocked free shipping ✨"
   },
   "checkout": {
     "title": "Complete your order",

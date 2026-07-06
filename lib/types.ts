@@ -36,7 +36,6 @@ export interface AppUser {
   role: UserRole;
   proStatus: ProStatus;
   proProfile?: ProProfile;
-  points?: number; // loyalty points — 1 point per $1 spent, 100 pts = $10 off
   createdAt: number; // epoch ms
   approvedAt?: number;
   approvedBy?: string;
@@ -121,10 +120,8 @@ export interface Order {
   subtotal: number;
   shipping: number;
   tax: number; // cents — GST/QST collected by Stripe
-  discount?: number; // cents — points redemption discount
+  discount?: number; // cents — order-level discount (e.g. Stripe coupon)
   total: number;
-  pointsEarned?: number;
-  pointsRedeemed?: number;
   currency: "cad";
   shippingAddress: Address;
   stripe: { checkoutSessionId: string; paymentIntentId?: string };
@@ -146,7 +143,6 @@ export interface Viewer {
   email: string;
   role: UserRole;
   proStatus: ProStatus;
-  points: number;
 }
 
 /** A client cart line — only IDs + quantity. Prices are NEVER trusted from the client. */

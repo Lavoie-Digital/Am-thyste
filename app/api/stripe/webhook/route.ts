@@ -3,11 +3,10 @@ import type Stripe from "stripe";
 import { FieldValue } from "firebase-admin/firestore";
 import { getStripe, stripeConfigured } from "@/lib/stripe";
 import { getAdminDb } from "@/lib/firebase/admin";
-import { ordersCol, usersCol } from "@/lib/firebase/collections";
+import { ordersCol } from "@/lib/firebase/collections";
 import { sendEmail } from "@/lib/email/sendgrid";
 import { orderConfirmationEmail, orderOwnerEmail } from "@/lib/email/templates";
 import { getOwnerEmail } from "@/lib/data/settings";
-import { pointsEarned } from "@/lib/points";
 import type { Locale, Order, OrderLineItem, PricingContext } from "@/lib/types";
 
 // Stripe webhooks must read the RAW body to verify the signature.
@@ -69,20 +68,7 @@ async function fulfillOrder(stripe: Stripe, session: Stripe.Checkout.Session) {
   const total = session.amount_total ?? subtotal - discount + tax + shipping;
   const email = session.customer_details?.email || session.customer_email || "";
 
-  // Loyalty is PRO-ONLY: earn on net product spend; settle any points redeemed.
   const userId = m.userId || null;
-  let isPro = false;
-  if (userId) {
-    try {
-      const uSnap = await usersCol(db).doc(userId).get();
-      const u = uSnap.data();
-      isPro = uSnap.exists && u?.role === "pro" && u?.proStatus === "approved";
-    } catch {
-      /* treat as non-pro on read failure */
-    }
-  }
-  const earnedPts = isPro ? pointsEarned(Math.max(0, subtotal - discount)) : 0;
-  const redeemedPts = isPro ? Math.max(0, Math.round(Number(m.redeemedPoints) || 0)) : 0;
 
   // Stripe's embedded form collects the shipping address; read whichever shape the API returns.
   const collected = (session as unknown as {
@@ -103,8 +89,6 @@ async function fulfillOrder(stripe: Stripe, session: Stripe.Checkout.Session) {
     tax,
     discount,
     total,
-    pointsEarned: earnedPts,
-    pointsRedeemed: redeemedPts,
     currency: "cad",
     shippingAddress: {
       name: ship?.name || session.customer_details?.name || "",
@@ -123,16 +107,6 @@ async function fulfillOrder(stripe: Stripe, session: Stripe.Checkout.Session) {
   };
 
   const ref = await ordersCol(db).add(order);
-
-  // Apply the net balance change atomically (already gated to approved pros above).
-  const netPts = earnedPts - redeemedPts;
-  if (userId && isPro && netPts !== 0) {
-    try {
-      await usersCol(db).doc(userId).update({ points: FieldValue.increment(netPts) });
-    } catch (err) {
-      console.error("[stripe] points update failed:", err);
-    }
-  }
 
   const orderForEmail: Order = {
     ...(order as unknown as Order),

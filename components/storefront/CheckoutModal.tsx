@@ -18,7 +18,7 @@ function getStripePromise() {
 }
 
 export function CheckoutModal() {
-  const { checkoutOpen, closeCheckout, items, redeemPoints } = useCart();
+  const { checkoutOpen, closeCheckout, items } = useCart();
   const { dict } = useLocale();
   const { user } = useAuth();
   const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -39,7 +39,6 @@ export function CheckoutModal() {
           body: JSON.stringify({
             items: items.map((i) => ({ productId: i.productId, sizeId: i.sizeId, quantity: i.quantity })),
             email: user?.email || undefined,
-            redeemPoints,
           }),
         });
         const data = await res.json();
@@ -62,7 +61,7 @@ export function CheckoutModal() {
       setClientSecret(null);
       setError(null);
     };
-  }, [checkoutOpen, items, user?.email, dict, redeemPoints]);
+  }, [checkoutOpen, items, user?.email, dict]);
 
   const stripe = getStripePromise();
 

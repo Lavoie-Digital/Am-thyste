@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
@@ -14,7 +15,7 @@ import { cn } from "@/lib/utils";
 export function Navbar() {
   const { dict } = useLocale();
   const { count, toggle } = useCart();
-  const { user, role, proStatus, points } = useAuth();
+  const { user, role, proStatus } = useAuth();
   const isApprovedPro = role === "pro" && proStatus === "approved";
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
@@ -81,13 +82,15 @@ export function Navbar() {
             : "border-ink/[0.06] bg-ivory/90 backdrop-blur-md",
         )}
       >
-        <nav className="relative mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8">
+        <nav className="relative mx-auto flex h-24 max-w-7xl items-center justify-between px-5 sm:px-8">
           {/* Center — logo (absolutely centered so the links keep their natural width) */}
           <Link
             href="/"
             className="group absolute left-1/2 flex -translate-x-1/2 flex-col items-center justify-center leading-none"
           >
-            <Gem className="h-9 w-auto text-amethyst-500 transition-transform duration-500 group-hover:scale-105" />
+            <span className="relative h-10 w-10 overflow-hidden rounded-full ring-1 ring-ink/10 transition-transform duration-500 group-hover:scale-105">
+              <Image src="/logo.jpeg" alt="Améthyste" fill sizes="40px" className="object-cover" priority />
+            </span>
             <span className="mt-1.5 font-display text-lg tracking-[0.3em] text-ink">AMÉTHYSTE</span>
             <span className="mt-0.5 text-[9px] uppercase tracking-[0.42em] text-ink-mute">{dict.brand.logoSub}</span>
           </Link>
@@ -144,7 +147,7 @@ export function Navbar() {
                 className="hidden items-center gap-1.5 rounded-full border border-amethyst-400/40 bg-amethyst-500/10 px-3 py-1.5 text-[11px] font-medium tracking-wide text-amethyst-600 sm:inline-flex"
               >
                 <Gem className="h-3 w-3" />
-                Pro · {points} pts
+                Pro
               </span>
             )}
 

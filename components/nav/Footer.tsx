@@ -22,7 +22,7 @@ export function Footer() {
             </span>
           </div>
           <p className="mt-5 max-w-xs font-serif-lux text-lg italic leading-relaxed text-ink/70">
-            « {dict.brand.tagline} »
+            «&nbsp;{dict.brand.tagline}&nbsp;»
           </p>
         </div>
 
