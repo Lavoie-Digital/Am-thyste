@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { createProfile } from "@/lib/actions/auth";
+import { isInAppBrowser } from "@/lib/utils/inAppBrowser";
 
 export function GoogleButton() {
   const { signInWithGoogle, refresh, configured } = useAuth();
@@ -13,8 +14,21 @@ export function GoogleButton() {
   const params = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  // Detect after mount to keep SSR/CSR markup identical (avoids hydration mismatch).
+  const [inApp, setInApp] = useState(false);
+  useEffect(() => setInApp(isInAppBrowser()), []);
 
   if (!configured) return null;
+
+  // Google blocks OAuth in embedded browsers (Messenger, Instagram…).
+  // Show guidance instead of a button that lands the user on a 403 page.
+  if (inApp) {
+    return (
+      <p className="rounded-xl border border-gold/30 bg-gold/10 px-4 py-3 text-xs leading-relaxed text-gold">
+        {dict.auth.inAppBrowserWarning}
+      </p>
+    );
+  }
 
   const handle = async () => {
     setError("");

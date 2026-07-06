@@ -207,7 +207,8 @@
     "loginLink": "Connectez-vous",
     "errorInvalid": "Courriel ou mot de passe invalide.",
     "errorGeneric": "Une erreur est survenue. Réessayez.",
-    "errorEmailInUse": "Ce courriel est déjà utilisé."
+    "errorEmailInUse": "Ce courriel est déjà utilisé.",
+    "inAppBrowserWarning": "La connexion Google n'est pas disponible dans ce navigateur intégré (Messenger, Instagram…). Ouvrez plutôt la page dans Safari ou Chrome (menu « ••• » → « Ouvrir dans le navigateur »), ou connectez-vous avec votre courriel et mot de passe ci-dessus."
   },
   "contact": {
     "title": "Contactez-nous",

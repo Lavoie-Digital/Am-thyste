@@ -207,7 +207,8 @@
     "loginLink": "Sign in",
     "errorInvalid": "Invalid email or password.",
     "errorGeneric": "Something went wrong. Please try again.",
-    "errorEmailInUse": "This email is already in use."
+    "errorEmailInUse": "This email is already in use.",
+    "inAppBrowserWarning": "Google sign-in isn't available in this in-app browser (Messenger, Instagram…). Open the page in Safari or Chrome instead (\"•••\" menu → \"Open in browser\"), or sign in with your email and password above."
   },
   "contact": {
     "title": "Contact us",
