@@ -136,23 +136,41 @@ export function ImageDropzone({
       {value.length > 0 && (
         <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-4">
           {value.map((src, i) => (
-            <div key={src + i} className="group relative aspect-square overflow-hidden rounded-xl ring-1 ring-ink/10">
+            <div key={src + i} className="relative aspect-square overflow-hidden rounded-xl ring-1 ring-ink/10">
               <Image src={src} alt="" fill sizes="120px" className="object-cover" unoptimized={src.startsWith("data:")} />
               {i === 0 && (
-                <span className="absolute left-1.5 top-1.5 rounded-full bg-ivory/85 px-2 py-0.5 text-[9px] uppercase tracking-wider text-gold">
+                <span className="absolute left-1.5 top-1.5 rounded-full bg-ivory/90 px-2 py-0.5 text-[9px] uppercase tracking-wider text-gold shadow-sm">
                   Principale
                 </span>
               )}
-              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-1 bg-ivory/85 px-2 py-1 opacity-0 transition-opacity group-hover:opacity-100">
-                {i !== 0 && (
-                  <button type="button" onClick={() => makePrimary(i)} title="Définir comme principale" className="text-[11px] text-ink hover:text-ink">
-                    ★
-                  </button>
-                )}
-                <button type="button" onClick={() => remove(i)} title="Retirer" className="ml-auto text-[11px] text-red-300 hover:text-red-200">
-                  ✕
+
+              {/* Retirer — toujours visible (fonctionne au toucher sur mobile) */}
+              <button
+                type="button"
+                onClick={() => remove(i)}
+                aria-label="Retirer l'image"
+                title="Retirer l'image"
+                className="absolute right-1.5 top-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-ivory/90 text-red-500 shadow-sm ring-1 ring-ink/10 transition-colors hover:bg-red-500 hover:text-white"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6M10 11v6M14 11v6" />
+                </svg>
+              </button>
+
+              {/* Définir comme image principale — toujours visible */}
+              {i !== 0 && (
+                <button
+                  type="button"
+                  onClick={() => makePrimary(i)}
+                  aria-label="Définir comme image principale"
+                  title="Définir comme image principale"
+                  className="absolute bottom-1.5 left-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-ivory/90 text-ink shadow-sm ring-1 ring-ink/10 transition-colors hover:bg-ink hover:text-ivory"
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                    <path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.5 9.7l5.9-.9L12 3.5Z" />
+                  </svg>
                 </button>
-              </div>
+              )}
             </div>
           ))}
         </div>
