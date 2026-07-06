@@ -91,8 +91,14 @@ export function Navbar() {
             <span className="relative h-10 w-10 overflow-hidden rounded-full ring-1 ring-ink/10 transition-transform duration-500 group-hover:scale-105">
               <Image src="/logo.jpeg" alt="Améthyste" fill sizes="40px" className="object-cover" priority />
             </span>
-            <span className="mt-1.5 font-display text-lg tracking-[0.3em] text-ink">AMÉTHYSTE</span>
-            <span className="mt-0.5 text-[9px] uppercase tracking-[0.42em] text-ink-mute">{dict.brand.logoSub}</span>
+            <Image
+              src="/amethyste-wordmark.png"
+              alt="Améthyste"
+              width={344}
+              height={119}
+              priority
+              className="mt-1.5 h-9 w-auto"
+            />
           </Link>
 
           {/* Left — desktop links / mobile menu toggle */}
