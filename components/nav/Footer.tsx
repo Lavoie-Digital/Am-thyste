@@ -69,7 +69,17 @@ export function Footer() {
       <div className="border-t border-ink/8">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-5 py-6 text-xs text-ink/45 sm:flex-row sm:px-8">
           <p>© {year} Améthyste. {dict.footer.rights}</p>
-          <p className="tracking-wide">{dict.footer.madeIn}</p>
+          <p className="tracking-wide">
+            Création de{" "}
+            <a
+              href="https://lavoiedigital.ca"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-colors hover:text-ink"
+            >
+              Lavoie Digital
+            </a>
+          </p>
           <div className="flex gap-4">
             <Link href="/confidentialite" className="transition-colors hover:text-ink">{dict.footer.privacy}</Link>
             <Link href="/conditions" className="transition-colors hover:text-ink">{dict.footer.terms}</Link>

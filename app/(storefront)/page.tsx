@@ -45,35 +45,6 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* Featured products */}
-      <section className="pb-28 pt-24">
-        <Container>
-          <Reveal className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <div className="max-w-2xl">
-              <p className="eyebrow">{h.shopEyebrow}</p>
-              <h2 className="mt-4 heading text-3xl sm:text-4xl lg:text-5xl">{h.shopHeading}</h2>
-            </div>
-            <Link
-              href="/boutique"
-              className="group/btn inline-flex items-center gap-2 whitespace-nowrap border-b border-ink/20 pb-1 text-xs uppercase tracking-[0.18em] text-ink/70 transition-colors hover:border-ink hover:text-ink"
-            >
-              {h.shopAll}
-              <ArrowRight className="h-4 w-4 transition-transform duration-500 group-hover/btn:translate-x-1" />
-            </Link>
-          </Reveal>
-
-          {featured.length === 0 ? (
-            <p className="mt-16 text-center text-ink/55">{dict.shop.empty}</p>
-          ) : (
-            <div className="mt-14 grid grid-cols-2 gap-x-6 gap-y-14 lg:grid-cols-4 lg:gap-x-10">
-              {featured.map((p, i) => (
-                <ProductCard key={p.id} product={p} index={i} />
-              ))}
-            </div>
-          )}
-        </Container>
-      </section>
-
       {/* Partners — authorized distributor & certified salon */}
       <section className="border-y border-ink/[0.06] bg-shell/60">
         <Container>
@@ -132,6 +103,35 @@ export default async function HomePage() {
               ))}
             </div>
           </div>
+        </Container>
+      </section>
+
+      {/* Featured products */}
+      <section className="pb-28 pt-24">
+        <Container>
+          <Reveal className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-2xl">
+              <p className="eyebrow">{h.shopEyebrow}</p>
+              <h2 className="mt-4 heading text-3xl sm:text-4xl lg:text-5xl">{h.shopHeading}</h2>
+            </div>
+            <Link
+              href="/boutique"
+              className="group/btn inline-flex items-center gap-2 whitespace-nowrap border-b border-ink/20 pb-1 text-xs uppercase tracking-[0.18em] text-ink/70 transition-colors hover:border-ink hover:text-ink"
+            >
+              {h.shopAll}
+              <ArrowRight className="h-4 w-4 transition-transform duration-500 group-hover/btn:translate-x-1" />
+            </Link>
+          </Reveal>
+
+          {featured.length === 0 ? (
+            <p className="mt-16 text-center text-ink/55">{dict.shop.empty}</p>
+          ) : (
+            <div className="mt-14 grid grid-cols-2 gap-x-6 gap-y-14 lg:grid-cols-4 lg:gap-x-10">
+              {featured.map((p, i) => (
+                <ProductCard key={p.id} product={p} index={i} />
+              ))}
+            </div>
+          )}
         </Container>
       </section>
 
