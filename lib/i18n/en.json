@@ -94,7 +94,15 @@
     "freeShipping": "Free shipping over $100",
     "proTitle": "Are you a professional?",
     "proDesc": "Access our reseller pricing and bring Améthyste to your salon.",
-    "proCta": "Join the pro space"
+    "proCta": "Join the pro space",
+    "partnersEyebrow": "Our partners",
+    "partnersTitle": "Where to find Améthyste",
+    "salonCentricRole": "Authorized distributor",
+    "salonCentricDesc": "Available in store.",
+    "salonCentricCta": "Find a location",
+    "certifiedSalonRole": "Certified salon",
+    "certifiedSalonDesc": "Améthyste expertise in the chair.",
+    "certifiedSalonCta": "Visit the salon"
   },
   "shop": {
     "title": "The shop",

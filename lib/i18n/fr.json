@@ -94,7 +94,15 @@
     "freeShipping": "Livraison gratuite dès 100 $",
     "proTitle": "Vous êtes professionnel ?",
     "proDesc": "Accédez à nos tarifs de revente et faites rayonner Améthyste dans votre salon.",
-    "proCta": "Rejoindre l'espace pro"
+    "proCta": "Rejoindre l'espace pro",
+    "partnersEyebrow": "Nos partenaires",
+    "partnersTitle": "Où retrouver Améthyste",
+    "salonCentricRole": "Distributeur autorisé",
+    "salonCentricDesc": "Disponible en succursale.",
+    "salonCentricCta": "Trouver une succursale",
+    "certifiedSalonRole": "Salon certifié",
+    "certifiedSalonDesc": "Un savoir-faire Améthyste en cabine.",
+    "certifiedSalonCta": "Visiter le salon"
   },
   "shop": {
     "title": "La boutique",
