@@ -23,13 +23,6 @@ const bodySchema = z.object({
   email: z.string().email().optional(),
 });
 
-/** Quebec sales tax rate IDs (GST/QST). Created once in Stripe, referenced by env. */
-function quebecTaxRates(): string[] {
-  return [process.env.STRIPE_TAX_RATE_GST, process.env.STRIPE_TAX_RATE_QST].filter(
-    (id): id is string => Boolean(id && id.startsWith("txr_")),
-  );
-}
-
 export async function POST(request: NextRequest) {
   if (!stripeConfigured) {
     return NextResponse.json({ ok: false, reason: "stripe-not-configured" }, { status: 200 });
@@ -50,7 +43,6 @@ export async function POST(request: NextRequest) {
   const locale = (await getLocale()) as Locale;
   const settings = await getSettings();
   const origin = process.env.NEXT_PUBLIC_SITE_URL || request.nextUrl.origin;
-  const taxRates = quebecTaxRates();
 
   // Recompute every price from Firestore — client prices are ignored.
   const lineItems = [];
@@ -62,10 +54,11 @@ export async function POST(request: NextRequest) {
     subtotal += unitAmount * item.quantity;
     lineItems.push({
       quantity: item.quantity,
-      tax_rates: taxRates.length ? taxRates : undefined,
       price_data: {
         currency: "cad",
         unit_amount: unitAmount,
+        // Prices are tax-exclusive; Stripe Tax adds GST/QST on top per the customer address.
+        tax_behavior: "exclusive" as const,
         product_data: {
           name: pick(product.name, locale),
           images: product.images[0]?.startsWith("http") ? [product.images[0]] : undefined,
@@ -87,6 +80,8 @@ export async function POST(request: NextRequest) {
       payment_method_types: ["card"],
       line_items: lineItems,
       customer_email: parsed.email || undefined,
+      // Stripe Tax computes GST/QST (and other provinces) from the collected address.
+      automatic_tax: { enabled: true },
       // Stripe's embedded form collects the shipping address (Canada only).
       shipping_address_collection: { allowed_countries: ["CA"] },
       shipping_options:
@@ -97,6 +92,8 @@ export async function POST(request: NextRequest) {
                   type: "fixed_amount",
                   fixed_amount: { amount: shipping, currency: "cad" },
                   display_name: locale === "fr" ? "Livraison" : "Shipping",
+                  // Tax the shipping fee too, exclusive of the displayed amount.
+                  tax_behavior: "exclusive",
                 },
               },
             ]

@@ -105,7 +105,7 @@ export function Navbar() {
           <div className="flex items-center">
             <button
               onClick={() => setMenuOpen((v) => !v)}
-              aria-label="Menu"
+              aria-label={menuOpen ? dict.nav.closeMenu : dict.nav.openMenu}
               aria-expanded={menuOpen}
               className="-ml-2 rounded-full p-2 text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink lg:hidden"
             >
@@ -208,6 +208,14 @@ export function Navbar() {
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="fixed inset-0 z-40 flex flex-col bg-ivory lg:hidden"
           >
+            {/* Dedicated close button, top-right where users expect it. */}
+            <button
+              onClick={() => setMenuOpen(false)}
+              aria-label={dict.nav.closeMenu}
+              className="absolute right-5 top-16 z-10 rounded-full p-2 text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink sm:right-8"
+            >
+              <MenuIcon open />
+            </button>
             <nav className="flex flex-1 flex-col px-6 pt-32">
               {links.map((l, i) => (
                 <motion.div

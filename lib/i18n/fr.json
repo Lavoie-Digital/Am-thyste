@@ -23,7 +23,9 @@
     "logout": "Déconnexion",
     "cart": "Panier",
     "admin": "Admin",
-    "dashboard": "Tableau de bord"
+    "dashboard": "Tableau de bord",
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu"
   },
   "common": {
     "loading": "Chargement…",
@@ -100,8 +102,8 @@
     "salonCentricRole": "Distributeur autorisé",
     "salonCentricDesc": "Disponible en succursale.",
     "salonCentricCta": "Trouver une succursale",
-    "certifiedSalonRole": "Salon certifié",
-    "certifiedSalonDesc": "Un savoir-faire Améthyste en cabine.",
+    "certifiedSalonRole": "Salon certifié · Distributrice",
+    "certifiedSalonDesc": "Un savoir-faire Améthyste en cabine et la distribution au Nouveau-Brunswick.",
     "certifiedSalonCta": "Visiter le salon"
   },
   "shop": {

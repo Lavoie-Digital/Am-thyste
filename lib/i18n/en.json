@@ -23,7 +23,9 @@
     "logout": "Sign out",
     "cart": "Cart",
     "admin": "Admin",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "common": {
     "loading": "Loading…",
@@ -100,8 +102,8 @@
     "salonCentricRole": "Authorized distributor",
     "salonCentricDesc": "Available in store.",
     "salonCentricCta": "Find a location",
-    "certifiedSalonRole": "Certified salon",
-    "certifiedSalonDesc": "Améthyste expertise in the chair.",
+    "certifiedSalonRole": "Certified salon · Distributor",
+    "certifiedSalonDesc": "Améthyste expertise in the chair, and distribution across New Brunswick.",
     "certifiedSalonCta": "Visit the salon"
   },
   "shop": {
