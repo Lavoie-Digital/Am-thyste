@@ -2,7 +2,22 @@ import type { Metadata } from "next";
 import { FormationView, type FormationContent } from "@/components/storefront/FormationView";
 import { getLocale } from "@/lib/i18n/server";
 
-export const metadata: Metadata = { title: "Formation" };
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const c = CONTENT[locale];
+  const description = `${c.subtitle}. ${c.intro[0]}`;
+  return {
+    title: c.title,
+    description,
+    alternates: { canonical: "/formation" },
+    openGraph: {
+      title: `${c.title} · Améthyste`,
+      description: c.subtitle,
+      url: "/formation",
+      type: "website",
+    },
+  };
+}
 
 const CONTENT: Record<"fr" | "en", FormationContent> = {
   fr: {

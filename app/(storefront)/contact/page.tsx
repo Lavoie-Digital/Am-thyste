@@ -4,7 +4,20 @@ import { Container } from "@/components/ui/Container";
 import { ContactForm } from "@/components/storefront/ContactForm";
 import { getI18n } from "@/lib/i18n/server";
 
-export const metadata: Metadata = { title: "Contact" };
+export async function generateMetadata(): Promise<Metadata> {
+  const { dict } = await getI18n();
+  return {
+    title: dict.contact.title,
+    description: dict.contact.desc,
+    alternates: { canonical: "/contact" },
+    openGraph: {
+      title: `${dict.contact.title} · Améthyste`,
+      description: dict.contact.desc,
+      url: "/contact",
+      type: "website",
+    },
+  };
+}
 
 const FACEBOOK_URL = "https://www.facebook.com/AmethysteHairProducts";
 

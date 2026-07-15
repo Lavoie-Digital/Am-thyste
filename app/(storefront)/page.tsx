@@ -6,21 +6,90 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/Button";
 import { ArrowRight, Leaf, Flask, Mark, Heart } from "@/components/ui/icons";
-import { getI18n } from "@/lib/i18n/server";
+import { getI18n, getLocale } from "@/lib/i18n/server";
 import { verifySession } from "@/lib/auth/dal";
 import { getProducts } from "@/lib/data/products";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { faqJsonLd } from "@/lib/seo/jsonld";
 
 const FEATURE_ICONS = [Leaf, Flask, Mark, Heart];
 
+/** Visible FAQ content, mirrored into FAQPage JSON-LD for answer engines. */
+const FAQ: Record<"fr" | "en", { eyebrow: string; heading: string; items: Array<{ q: string; a: string }> }> = {
+  fr: {
+    eyebrow: "Questions fréquentes",
+    heading: "Tout savoir sur le rituel",
+    items: [
+      {
+        q: "Qu'est-ce que le Hair Botox d'Améthyste ?",
+        a: "Le Hair Botox Améthyste est un masque capillaire reconstructeur qui agit au cœur de la fibre. Enrichi de kératine et d'extrait de bambou, il répare les cheveux en profondeur, discipline les frisottis et ravive la brillance dès la première application.",
+      },
+      {
+        q: "Pour quels types de cheveux le Hair Botox est-il conçu ?",
+        a: "Il convient aux cheveux fins, ondulés, abîmés ou frisés. C'est un soin haut de gamme pensé pour réparer, lisser et sublimer tout en respectant l'intégrité du cheveu.",
+      },
+      {
+        q: "Comment appliquer le soin Hair Botox ?",
+        a: "Appliquez sur cheveux propres et essorés, mèche par mèche. Laissez poser de 20 à 40 minutes, puis rincez abondamment. Pour des résultats durables, utilisez le rituel une fois par semaine.",
+      },
+      {
+        q: "Puis-je utiliser Améthyste à la maison ou seulement en salon ?",
+        a: "Les soins Améthyste sont pensés autant pour la maison que pour le salon. Vous obtenez des résultats professionnels chez vous, et les coiffeurs peuvent l'intégrer à leurs services.",
+      },
+      {
+        q: "Où acheter les produits Améthyste ?",
+        a: "Commandez directement en ligne sur notre boutique, ou retrouvez Améthyste chez notre distributeur autorisé Salon Centric et au salon certifié Bella Extensions.",
+      },
+      {
+        q: "Quels sont les frais de livraison ?",
+        a: "Nous livrons partout au Québec. La livraison est gratuite pour toute commande de 100 $ CAD et plus.",
+      },
+    ],
+  },
+  en: {
+    eyebrow: "Frequently asked questions",
+    heading: "Everything about the ritual",
+    items: [
+      {
+        q: "What is Améthyste Hair Botox?",
+        a: "Améthyste Hair Botox is a rebuilding hair mask that works at the core of the fiber. Enriched with keratin and bamboo extract, it repairs hair deeply, tames frizz and revives shine from the very first application.",
+      },
+      {
+        q: "Which hair types is Hair Botox designed for?",
+        a: "It suits fine, wavy, damaged or frizzy hair. It is a premium treatment made to repair, smooth and sublimate while respecting the hair's integrity.",
+      },
+      {
+        q: "How do I apply the Hair Botox treatment?",
+        a: "Apply to clean, towel-dried hair, section by section. Leave on for 20 to 40 minutes, then rinse thoroughly. For lasting results, use the ritual once a week.",
+      },
+      {
+        q: "Can I use Améthyste at home or only in a salon?",
+        a: "Améthyste treatments are designed for both home and salon. You get professional results at home, and hairdressers can add it to their services.",
+      },
+      {
+        q: "Where can I buy Améthyste products?",
+        a: "Order directly online from our shop, or find Améthyste at our authorized distributor Salon Centric and at the certified salon Bella Extensions.",
+      },
+      {
+        q: "What are the shipping fees?",
+        a: "We ship across Québec. Shipping is free on every order of $100 CAD or more.",
+      },
+    ],
+  },
+};
+
 export default async function HomePage() {
   const { dict } = await getI18n();
+  const locale = await getLocale();
   const h = dict.home;
+  const faq = FAQ[locale];
   const viewer = await verifySession();
   const products = await getProducts(viewer);
   const featured = products.slice(0, 4);
 
   return (
     <>
+      <JsonLd data={faqJsonLd(faq.items)} />
       <AmethystStarsHero />
 
       {/* Feature strip */}
@@ -132,6 +201,30 @@ export default async function HomePage() {
               ))}
             </div>
           )}
+        </Container>
+      </section>
+
+      {/* FAQ — answer-engine (AEO) content, mirrored in FAQPage JSON-LD */}
+      <section className="border-t border-ink/[0.06] pb-24 pt-20">
+        <Container>
+          <Reveal className="mx-auto max-w-2xl text-center">
+            <p className="eyebrow text-amethyst-500">{faq.eyebrow}</p>
+            <h2 className="mt-4 heading text-3xl sm:text-4xl">{faq.heading}</h2>
+          </Reveal>
+
+          <div className="mx-auto mt-12 max-w-3xl divide-y divide-ink/[0.08]">
+            {faq.items.map((item, i) => (
+              <Reveal key={item.q} delay={i * 0.05}>
+                <details className="group py-6">
+                  <summary className="flex cursor-pointer list-none items-start justify-between gap-6">
+                    <h3 className="font-display text-lg text-ink">{item.q}</h3>
+                    <ArrowRight className="mt-1 h-4 w-4 shrink-0 rotate-90 text-amethyst-500 transition-transform duration-300 group-open:rotate-[270deg]" />
+                  </summary>
+                  <p className="mt-4 max-w-2xl text-sm leading-relaxed text-ink/60">{item.a}</p>
+                </details>
+              </Reveal>
+            ))}
+          </div>
         </Container>
       </section>
 

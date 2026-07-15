@@ -2,7 +2,17 @@ import { PageHeader } from "@/components/storefront/PageHeader";
 import { Container } from "@/components/ui/Container";
 import { getLocale } from "@/lib/i18n/server";
 
-export const metadata = { title: "Conditions d'utilisation" };
+export async function generateMetadata() {
+  const locale = await getLocale();
+  const fr = locale === "fr";
+  return {
+    title: fr ? "Conditions d'utilisation" : "Terms of use",
+    description: fr
+      ? "Conditions d'utilisation de la boutique Améthyste : prix en dollars canadiens, livraison et accès aux tarifs professionnels."
+      : "Améthyste shop terms of use: prices in Canadian dollars, shipping and professional pricing access.",
+    alternates: { canonical: "/conditions" },
+  };
+}
 
 export default async function TermsPage() {
   const locale = await getLocale();

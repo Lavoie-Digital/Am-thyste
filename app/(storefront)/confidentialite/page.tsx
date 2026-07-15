@@ -2,7 +2,17 @@ import { PageHeader } from "@/components/storefront/PageHeader";
 import { Container } from "@/components/ui/Container";
 import { getLocale } from "@/lib/i18n/server";
 
-export const metadata = { title: "Politique de confidentialité" };
+export async function generateMetadata() {
+  const locale = await getLocale();
+  const fr = locale === "fr";
+  return {
+    title: fr ? "Politique de confidentialité" : "Privacy policy",
+    description: fr
+      ? "Politique de confidentialité d'Améthyste : comment vos données sont utilisées et protégées. Paiements sécurisés par Stripe, aucune revente de données."
+      : "Améthyste privacy policy: how your data is used and protected. Payments secured by Stripe, no data resale.",
+    alternates: { canonical: "/confidentialite" },
+  };
+}
 
 export default async function PrivacyPage() {
   const locale = await getLocale();

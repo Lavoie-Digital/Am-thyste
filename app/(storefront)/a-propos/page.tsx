@@ -5,7 +5,24 @@ import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { getI18n } from "@/lib/i18n/server";
 
-export const metadata: Metadata = { title: "À propos" };
+export async function generateMetadata(): Promise<Metadata> {
+  const { locale } = await getI18n();
+  const description =
+    locale === "fr"
+      ? "Née à Rimouski au Québec, Améthyste conçoit des soins capillaires Hair Botox à la kératine et à l'extrait de bambou. Découvrez notre histoire et notre promesse."
+      : "Born in Rimouski, Québec, Améthyste crafts Hair Botox hair care with keratin and bamboo extract. Discover our story and our promise.";
+  return {
+    title: locale === "fr" ? "À propos" : "About",
+    description,
+    alternates: { canonical: "/a-propos" },
+    openGraph: {
+      title: "À propos · Améthyste",
+      description,
+      url: "/a-propos",
+      type: "website",
+    },
+  };
+}
 
 export default async function AProposPage() {
   const { dict, locale } = await getI18n();

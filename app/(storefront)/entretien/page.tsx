@@ -5,7 +5,24 @@ import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { getLocale } from "@/lib/i18n/server";
 
-export const metadata: Metadata = { title: "Entretien · Le rituel" };
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const fr = locale === "fr";
+  const description = fr
+    ? "Le rituel Améthyste en quatre gestes : préparer, transformer, sceller, sublimer. Prolongez les résultats du Hair Botox bien au-delà du salon."
+    : "The Améthyste ritual in four steps: prepare, transform, seal, sublimate. Extend Hair Botox results well beyond the salon.";
+  return {
+    title: fr ? "Entretien · Le rituel" : "Care · The ritual",
+    description,
+    alternates: { canonical: "/entretien" },
+    openGraph: {
+      title: fr ? "L'entretien · Améthyste" : "The care ritual · Améthyste",
+      description,
+      url: "/entretien",
+      type: "website",
+    },
+  };
+}
 
 const STEPS = {
   fr: [
