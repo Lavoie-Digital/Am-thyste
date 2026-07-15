@@ -9,6 +9,8 @@ import { ArrowRight, Leaf, Flask, Mark, Heart } from "@/components/ui/icons";
 import { getI18n, getLocale } from "@/lib/i18n/server";
 import { verifySession } from "@/lib/auth/dal";
 import { getProducts } from "@/lib/data/products";
+import { getPartners } from "@/lib/data/partners";
+import { pick } from "@/lib/utils";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { faqJsonLd } from "@/lib/seo/jsonld";
 
@@ -86,6 +88,7 @@ export default async function HomePage() {
   const viewer = await verifySession();
   const products = await getProducts(viewer);
   const featured = products.slice(0, 4);
+  const partners = await getPartners();
 
   return (
     <>
@@ -114,66 +117,63 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      {/* Partners — authorized distributor & certified salon */}
-      <section className="border-y border-ink/[0.06] bg-shell/60">
-        <Container>
-          <div className="py-16">
-            <Reveal className="mx-auto max-w-2xl text-center">
-              <p className="eyebrow text-amethyst-500">{h.partnersEyebrow}</p>
-              <h2 className="mt-4 heading text-2xl sm:text-3xl">{h.partnersTitle}</h2>
-            </Reveal>
+      {/* Partners — managed from the admin, rendered from the database */}
+      {partners.length > 0 && (
+        <section className="border-y border-ink/[0.06] bg-shell/60">
+          <Container>
+            <div className="py-16">
+              <Reveal className="mx-auto max-w-2xl text-center">
+                <p className="eyebrow text-amethyst-500">{h.partnersEyebrow}</p>
+                <h2 className="mt-4 heading text-2xl sm:text-3xl">{h.partnersTitle}</h2>
+              </Reveal>
 
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 sm:gap-8">
-              {[
-                {
-                  href: "https://www.saloncentricqc.ca/",
-                  name: "Salon Centric",
-                  role: h.salonCentricRole,
-                  desc: h.salonCentricDesc,
-                  cta: h.salonCentricCta,
-                  src: "/salon-centric-logo.png",
-                },
-                {
-                  href: "https://www.bellaextensions.ca/accueil",
-                  name: "Bella Extensions",
-                  role: h.certifiedSalonRole,
-                  desc: h.certifiedSalonDesc,
-                  cta: h.certifiedSalonCta,
-                  src: "/bella-extensions-logo.avif",
-                },
-              ].map((p, i) => (
-                <Reveal key={p.name} delay={i * 0.1}>
-                  <Link
-                    href={p.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={p.name}
-                    className="group/pt flex h-full flex-col items-center gap-6 rounded-3xl border border-ink/8 bg-bone/70 px-8 py-10 text-center transition-all duration-500 hover:-translate-y-1 hover:border-ink/15 hover:shadow-lg"
-                  >
-                    <span className="flex h-24 items-center justify-center">
-                      <Image
-                        src={p.src}
-                        alt={p.name}
-                        width={240}
-                        height={80}
-                        className="h-auto max-h-20 w-auto max-w-[200px] object-contain"
-                      />
-                    </span>
-                    <div>
-                      <p className="font-display text-xs uppercase tracking-[0.16em] text-amethyst-500">{p.role}</p>
-                      <p className="mt-2 text-sm leading-relaxed text-ink/55">{p.desc}</p>
-                    </div>
-                    <span className="mt-auto inline-flex items-center gap-2 border-b border-ink/20 pb-1 text-xs uppercase tracking-[0.18em] text-ink/70 transition-colors group-hover/pt:border-ink group-hover/pt:text-ink">
-                      {p.cta}
-                      <ArrowRight className="h-4 w-4 transition-transform duration-500 group-hover/pt:translate-x-1" />
-                    </span>
-                  </Link>
-                </Reveal>
-              ))}
+              <div className="mt-12 grid gap-6 sm:grid-cols-2 sm:gap-8">
+                {partners.map((p, i) => {
+                  const role = pick(p.role, locale);
+                  const desc = pick(p.desc, locale);
+                  const cta = pick(p.cta, locale);
+                  return (
+                    <Reveal key={p.id} delay={i * 0.1}>
+                      <Link
+                        href={p.href || "#"}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={p.name}
+                        className="group/pt flex h-full flex-col items-center gap-6 rounded-3xl border border-ink/8 bg-bone/70 px-8 py-10 text-center transition-all duration-500 hover:-translate-y-1 hover:border-ink/15 hover:shadow-lg"
+                      >
+                        {p.logo && (
+                          <span className="flex h-24 items-center justify-center">
+                            <Image
+                              src={p.logo}
+                              alt={p.name}
+                              width={240}
+                              height={80}
+                              className="h-auto max-h-20 w-auto max-w-[200px] object-contain"
+                              unoptimized={p.logo.startsWith("data:")}
+                            />
+                          </span>
+                        )}
+                        <div>
+                          {role && (
+                            <p className="font-display text-xs uppercase tracking-[0.16em] text-amethyst-500">{role}</p>
+                          )}
+                          {desc && <p className="mt-2 text-sm leading-relaxed text-ink/55">{desc}</p>}
+                        </div>
+                        {cta && (
+                          <span className="mt-auto inline-flex items-center gap-2 border-b border-ink/20 pb-1 text-xs uppercase tracking-[0.18em] text-ink/70 transition-colors group-hover/pt:border-ink group-hover/pt:text-ink">
+                            {cta}
+                            <ArrowRight className="h-4 w-4 transition-transform duration-500 group-hover/pt:translate-x-1" />
+                          </span>
+                        )}
+                      </Link>
+                    </Reveal>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </Container>
-      </section>
+          </Container>
+        </section>
+      )}
 
       {/* Featured products */}
       <section className="pb-28 pt-24">

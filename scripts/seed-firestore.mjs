@@ -37,6 +37,15 @@ for (const p of seed.products) {
   console.log(`✓ product ${id}`);
 }
 
+for (const p of seed.partners ?? []) {
+  const { id, ...data } = p;
+  await db.collection("partners").doc(id).set(
+    { ...data, createdAt: FieldValue.serverTimestamp(), updatedAt: FieldValue.serverTimestamp() },
+    { merge: true },
+  );
+  console.log(`✓ partner ${id}`);
+}
+
 await db.collection("settings").doc("global").set(seed.settings, { merge: true });
 console.log("✓ settings/global");
 console.log("Done.");

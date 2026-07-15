@@ -34,15 +34,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // Public catalogue (no viewer → market prices only, all active products).
+  // Note: no <image:image> entries — Firebase Storage URLs carry an unescaped
+  // "&" (?alt=media&token=…) that Next's sitemap serializer does not XML-escape,
+  // which breaks parsing. Product images are already exposed via Product JSON-LD.
   const products = await getProducts(null);
   const productEntries: MetadataRoute.Sitemap = products.map((p) => ({
     url: `${SITE_URL}/boutique/${p.slug}`,
     lastModified: now,
     changeFrequency: "weekly",
     priority: 0.8,
-    images: p.images
-      .filter((src) => src.startsWith("http"))
-      .slice(0, 1),
   }));
 
   return [...staticEntries, ...productEntries];

@@ -16,6 +16,7 @@ export function DashboardSidebar() {
     { href: "/tableau-de-bord/produits", label: dict.dashboard.products },
     { href: "/tableau-de-bord/commandes", label: dict.dashboard.orders },
     { href: "/admin/pros", label: dict.admin.pros },
+    { href: "/admin/partenaires", label: dict.admin.partners },
     { href: "/tableau-de-bord/parametres", label: dict.dashboard.settings },
   ];
 

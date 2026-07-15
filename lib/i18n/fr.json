@@ -178,7 +178,9 @@
     "status": "Statut",
     "business": "Entreprise",
     "appliedOn": "Demande reçue le",
-    "viewDiploma": "Voir le diplôme"
+    "viewDiploma": "Voir le diplôme",
+    "partners": "Partenaires",
+    "partnersHint": "Gérez les partenaires affichés dans la section « Où retrouver Améthyste » de la page d'accueil."
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -204,7 +206,17 @@
     "orderStatus": "Statut",
     "freeShippingThreshold": "Seuil livraison gratuite (CAD)",
     "flatShippingRate": "Frais de livraison (CAD)",
-    "contactEmail": "Courriel de contact"
+    "contactEmail": "Courriel de contact",
+    "newPartner": "Nouveau partenaire",
+    "editPartner": "Modifier le partenaire",
+    "partnerName": "Nom du partenaire",
+    "partnerLink": "Lien (URL)",
+    "partnerLogo": "Logo",
+    "partnerRole": "Rôle",
+    "partnerDesc": "Description",
+    "partnerCta": "Libellé du lien",
+    "partnerOrder": "Ordre d'affichage",
+    "partnerActive": "Partenaire actif"
   },
   "auth": {
     "loginTitle": "Connexion",

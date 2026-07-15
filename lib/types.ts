@@ -129,6 +129,25 @@ export interface Order {
   paidAt?: number;
 }
 
+/**
+ * A landing-page partner (authorized distributor, certified salon, …).
+ * Rendered in the "Où retrouver Améthyste" section and managed from the admin.
+ * No sensitive data, so this is shipped to the client as-is.
+ */
+export interface Partner {
+  id: string;
+  name: string;
+  logo: string; // image URL (Firebase Storage or /public asset)
+  href: string; // external destination
+  role: Localized; // e.g. "Distributeur autorisé"
+  desc: Localized;
+  cta: Localized; // link label, e.g. "Trouver une succursale"
+  active: boolean;
+  sortOrder: number;
+  createdAt: number;
+  updatedAt: number;
+}
+
 export interface Settings {
   freeShippingThreshold: number; // cents, e.g. 10000 = $100
   flatShippingRate: number; // cents

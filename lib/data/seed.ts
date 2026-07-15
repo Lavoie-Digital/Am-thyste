@@ -1,4 +1,4 @@
-import type { Product, Settings } from "../types";
+import type { Partner, Product, Settings } from "../types";
 
 const now = 1_700_000_000_000;
 
@@ -123,6 +123,43 @@ export const SEED_PRODUCTS: Product[] = [
     sizes: [{ id: "300ml", label: { fr: "300 ml / 10,4 oz", en: "300 ml / 10.4 oz" } }],
     category: "conditioner",
     sortOrder: 4,
+    createdAt: now,
+    updatedAt: now,
+  },
+];
+
+/**
+ * Landing-page partners shown when Firestore isn't configured, and the initial
+ * dataset to import into the `partners` collection. Mirrors what used to be
+ * hard-coded on the home page.
+ */
+export const SEED_PARTNERS: Partner[] = [
+  {
+    id: "salon-centric",
+    name: "Salon Centric",
+    logo: "/salon-centric-logo.png",
+    href: "https://www.saloncentricqc.ca/",
+    role: { fr: "Distributeur autorisé", en: "Authorized distributor" },
+    desc: { fr: "Disponible en succursale.", en: "Available in store." },
+    cta: { fr: "Trouver une succursale", en: "Find a location" },
+    active: true,
+    sortOrder: 1,
+    createdAt: now,
+    updatedAt: now,
+  },
+  {
+    id: "bella-extensions",
+    name: "Bella Extensions",
+    logo: "/bella-extensions-logo.avif",
+    href: "https://www.bellaextensions.ca/accueil",
+    role: { fr: "Salon certifié · Distributrice", en: "Certified salon · Distributor" },
+    desc: {
+      fr: "Un savoir-faire Améthyste en cabine et la distribution au Nouveau-Brunswick.",
+      en: "Améthyste expertise in the chair, and distribution across New Brunswick.",
+    },
+    cta: { fr: "Visiter le salon", en: "Visit the salon" },
+    active: true,
+    sortOrder: 2,
     createdAt: now,
     updatedAt: now,
   },

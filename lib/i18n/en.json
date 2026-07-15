@@ -178,7 +178,9 @@
     "status": "Status",
     "business": "Business",
     "appliedOn": "Applied on",
-    "viewDiploma": "View diploma"
+    "viewDiploma": "View diploma",
+    "partners": "Partners",
+    "partnersHint": "Manage the partners shown in the \"Where to find Améthyste\" section of the home page."
   },
   "dashboard": {
     "title": "Dashboard",
@@ -204,7 +206,17 @@
     "orderStatus": "Status",
     "freeShippingThreshold": "Free shipping threshold (CAD)",
     "flatShippingRate": "Shipping fee (CAD)",
-    "contactEmail": "Contact email"
+    "contactEmail": "Contact email",
+    "newPartner": "New partner",
+    "editPartner": "Edit partner",
+    "partnerName": "Partner name",
+    "partnerLink": "Link (URL)",
+    "partnerLogo": "Logo",
+    "partnerRole": "Role",
+    "partnerDesc": "Description",
+    "partnerCta": "Link label",
+    "partnerOrder": "Display order",
+    "partnerActive": "Active partner"
   },
   "auth": {
     "loginTitle": "Sign in",

@@ -6,7 +6,7 @@ import type { Locale } from "../types";
  * server components, and JSON-LD builders alike.
  */
 
-export const SITE_URL = "https://www.amethystehairproducts.com";
+export const SITE_URL = "https://amethystehairproducts.com";
 
 export const BRAND = {
   name: "Améthyste",
