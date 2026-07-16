@@ -3,14 +3,11 @@
 import {
   createContext,
   useContext,
-  useEffect,
   useState,
   useCallback,
   useMemo,
 } from "react";
 import type { CartItem } from "../types";
-
-const STORAGE_KEY = "amethyste_cart_v1";
 
 interface CartContextValue {
   items: CartItem[];
@@ -36,31 +33,12 @@ function sameLine(a: CartItem, productId: string, sizeId?: string) {
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
+  // Cart lives in memory only — intentionally NOT persisted to localStorage /
+  // sessionStorage / cookies. It resets on refresh so the site sets no
+  // client-side storage that would require cookie consent.
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      // Hydrate cart from localStorage post-mount to avoid SSR mismatch.
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      if (raw) setItems(JSON.parse(raw));
-    } catch {
-      /* ignore */
-    }
-    setHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (!hydrated) return;
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    } catch {
-      /* ignore */
-    }
-  }, [items, hydrated]);
 
   const add = useCallback((item: CartItem) => {
     setItems((prev) => {

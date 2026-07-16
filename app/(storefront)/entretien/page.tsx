@@ -28,7 +28,7 @@ const STEPS = {
   fr: [
     { n: "01", t: "Préparer", d: "Lavez avec le Shampoing Lissant pour purifier la fibre et ouvrir l'écaille en douceur." },
     { n: "02", t: "Transformer", d: "Appliquez le masque mèche par mèche. Laissez poser 20 à 40 minutes." },
-    { n: "03", t: "Sceller", d: "Rincez, puis nourrissez avec le Revitalisant Lissant pour verrouiller l'hydratation." },
+    { n: "03", t: "Sceller", d: "Rincez, puis nourrissez avec le Revitalisant Lissant pour sceller l'hydratation." },
     { n: "04", t: "Sublimer", d: "Quelques gouttes d'Huile Prestige sur les longueurs pour une brillance miroir et une protection durable." },
   ],
   en: [
@@ -50,7 +50,7 @@ export default async function EntretienPage() {
         title={locale === "fr" ? "L'entretien" : "The care ritual"}
         subtitle={
           locale === "fr"
-            ? "Quatre gestes pour prolonger la transformation bien au-delà du salon. La durabilité se cultive."
+            ? "Quatre gestes pour prolonger la transformation bien au-delà du salon. La durabilité se cultive."
             : "Four gestures to extend the transformation well beyond the salon. Longevity is cultivated."
         }
       />

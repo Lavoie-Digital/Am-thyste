@@ -66,10 +66,22 @@ export function toDTO(product: Product, viewer: Viewer | null): ProductDTO {
   };
 }
 
-/** Active products as client-safe DTOs for the given viewer. */
+/** True when the viewer may see pro-only products (approved pros / admins). */
+function canSeePro(viewer: Viewer | null): boolean {
+  return pricingContextFor(viewer) === "reseller";
+}
+
+/**
+ * Active products as client-safe DTOs for the given viewer. Pro-only products
+ * are hidden entirely from non-pros — no public preview: they are never listed,
+ * never served in the sitemap, and unreachable by direct URL.
+ */
 export async function getProducts(viewer: Viewer | null): Promise<ProductDTO[]> {
   const products = await getRawProducts();
-  return products.filter((p) => p.active).map((p) => toDTO(p, viewer));
+  const showPro = canSeePro(viewer);
+  return products
+    .filter((p) => p.active && (showPro || !p.proOnly))
+    .map((p) => toDTO(p, viewer));
 }
 
 /** A single product by slug as a client-safe DTO, or null. */
@@ -79,7 +91,9 @@ export async function getProduct(
 ): Promise<ProductDTO | null> {
   const products = await getRawProducts();
   const product = products.find((p) => p.slug === slug && p.active);
-  return product ? toDTO(product, viewer) : null;
+  // Pro-only products are invisible to non-pros — treat as not found.
+  if (!product || (product.proOnly && !canSeePro(viewer))) return null;
+  return toDTO(product, viewer);
 }
 
 /** Raw products including inactive — admin/dashboard only. Caller must gate. */
