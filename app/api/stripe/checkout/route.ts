@@ -50,6 +50,12 @@ export async function POST(request: NextRequest) {
   for (const item of parsed.items) {
     const product = await getProductByIdRaw(item.productId);
     if (!product || !product.active) continue;
+    // Pro-only products can only be purchased under the reseller context
+    // (approved pros / admins). Reject rather than silently drop so the buyer
+    // isn't charged for a partial order.
+    if (product.proOnly && context !== "reseller") {
+      return NextResponse.json({ ok: false, error: "pro-only" }, { status: 403 });
+    }
     const unitAmount = resolveUnitAmount(product, context, item.sizeId);
     subtotal += unitAmount * item.quantity;
     lineItems.push({

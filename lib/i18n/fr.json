@@ -114,7 +114,8 @@
     "details": "Détails",
     "ingredients": "Ingrédients",
     "ritual": "Le rituel",
-    "sizeLabel": "Format"
+    "sizeLabel": "Format",
+    "proOnlyCta": "Réservé aux pros"
   },
   "cart": {
     "title": "Votre panier",
@@ -137,7 +138,8 @@
     "backToShop": "Retour à la boutique",
     "payTitle": "Paiement sécurisé",
     "loadError": "Impossible de charger le paiement. Réessayez.",
-    "notConfigured": "Le paiement n'est pas encore configuré."
+    "notConfigured": "Le paiement n'est pas encore configuré.",
+    "proOnlyError": "Votre panier contient un produit réservé aux professionnels approuvés. Retirez-le ou connectez-vous à un compte pro pour continuer."
   },
   "pro": {
     "title": "Espace professionnel",
@@ -199,6 +201,9 @@
     "resellerPriceLabel": "Prix professionnel (CAD)",
     "imagesLabel": "Images du produit",
     "activeLabel": "Produit actif",
+    "proOnlyLabel": "Réservé aux professionnels",
+    "proOnlyHint": "Le produit reste visible par tous, mais seuls les comptes pro approuvés peuvent l'acheter.",
+    "conflictError": "Ce produit a été modifié par un autre administrateur pendant votre édition. Rechargez la page pour voir les dernières valeurs, puis réappliquez vos changements.",
     "noOrders": "Aucune commande pour le moment.",
     "orderId": "Commande",
     "orderDate": "Date",

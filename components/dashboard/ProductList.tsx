@@ -35,6 +35,7 @@ export function ProductList({ initial }: { initial: Product[] }) {
             <p className="flex items-center gap-2 font-medium text-ink">
               {pick(p.name, locale)}
               {!p.active && <span className="rounded-full bg-ink/[0.06] px-2 py-0.5 text-[10px] text-ink/55">inactif</span>}
+              {p.proOnly && <span className="rounded-full bg-amethyst-500/15 px-2 py-0.5 text-[10px] uppercase tracking-wide text-amethyst-700">pro</span>}
             </p>
             <p className="text-sm text-ink/55">
               {dict.common.marketPrice}: {formatPrice(p.marketPrice, locale)} · {dict.common.resellerPrice}: {formatPrice(p.resellerPrice, locale)}

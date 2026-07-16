@@ -31,11 +31,15 @@ const productSchema = z.object({
   // Prices arrive in dollars from the form; stored as integer cents.
   marketPrice: z.number().nonnegative(),
   resellerPrice: z.number().nonnegative(),
+  proOnly: z.boolean().default(false),
   images: z.array(z.string()).default([]),
   sizeLabelFr: z.string().default(""),
   sizeLabelEn: z.string().default(""),
   category: z.string().default("other"),
   sortOrder: z.number().default(99),
+  // The document version the editor loaded — used for optimistic-locking so two
+  // admins saving at once can't silently clobber each other's changes.
+  version: z.number().int().nonnegative().optional(),
 });
 
 export type ProductFormInput = z.input<typeof productSchema>;
@@ -62,6 +66,7 @@ export async function upsertProduct(input: ProductFormInput) {
       : {}),
     marketPrice: Math.round(p.marketPrice * 100),
     resellerPrice: Math.round(p.resellerPrice * 100),
+    proOnly: p.proOnly,
     currency: "cad" as const,
     images: p.images.filter(Boolean),
     sizes:
@@ -73,10 +78,39 @@ export async function upsertProduct(input: ProductFormInput) {
     updatedAt: FieldValue.serverTimestamp(),
   };
 
-  if (p.id) {
-    await productsCol(db).doc(p.id).set(doc, { merge: true });
-  } else {
-    await productsCol(db).add({ ...doc, createdAt: FieldValue.serverTimestamp() });
+  // New products are simply created with version 1.
+  if (!p.id) {
+    const created = await productsCol(db)
+      .add({ ...doc, version: 1, createdAt: FieldValue.serverTimestamp() });
+    revalidatePath("/tableau-de-bord/produits");
+    revalidatePath("/boutique");
+    revalidatePath("/");
+    return { ok: true, slug, id: created.id };
+  }
+
+  // Existing products: run inside a transaction with optimistic locking so two
+  // admins editing simultaneously can never silently overwrite (or wipe) each
+  // other's changes. The second save fails cleanly and is asked to reload.
+  const ref = productsCol(db).doc(p.id);
+  const expected = p.version ?? 0;
+  try {
+    await db.runTransaction(async (tx) => {
+      const snap = await tx.get(ref);
+      if (!snap.exists) {
+        // First-time persistence of a seed/legacy product — create it fresh.
+        tx.set(ref, { ...doc, version: 1, createdAt: FieldValue.serverTimestamp() });
+        return;
+      }
+      const current = (snap.data()?.version as number | undefined) ?? 0;
+      if (current !== expected) {
+        // Someone else saved after this editor loaded the product.
+        throw new Error("conflict");
+      }
+      tx.set(ref, { ...doc, version: current + 1 }, { merge: true });
+    });
+  } catch (err) {
+    if ((err as Error).message === "conflict") return { ok: false, error: "conflict" };
+    throw err;
   }
 
   revalidatePath("/tableau-de-bord/produits");

@@ -51,6 +51,7 @@ export function toDTO(product: Product, viewer: Viewer | null): ProductDTO {
     ingredients: product.ingredients,
     marketPrice: product.marketPrice,
     ...(canSeeReseller ? { resellerPrice: product.resellerPrice } : {}),
+    proOnly: product.proOnly ?? false,
     currency: product.currency,
     images: product.images,
     sizes: product.sizes.map((s) => ({

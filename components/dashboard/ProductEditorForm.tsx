@@ -36,6 +36,7 @@ export function ProductEditorForm({ product }: { product: Product | null }) {
     category: product?.category ?? "other",
     sortOrder: product?.sortOrder?.toString() ?? "99",
     active: product?.active ?? true,
+    proOnly: product?.proOnly ?? false,
   });
 
   const upd = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
@@ -49,7 +50,9 @@ export function ProductEditorForm({ product }: { product: Product | null }) {
       const res = await upsertProduct({
         id: product?.id,
         slug: product?.slug,
+        version: product?.version,
         active: f.active,
+        proOnly: f.proOnly,
         nameFr: f.nameFr,
         nameEn: f.nameEn,
         shortDescFr: f.shortDescFr,
@@ -72,7 +75,14 @@ export function ProductEditorForm({ product }: { product: Product | null }) {
       router.push("/tableau-de-bord/produits");
       router.refresh();
     } catch (err: unknown) {
-      setError((err as Error).message === "not-configured" ? "Firebase non configuré." : dict.auth.errorGeneric);
+      const msg = (err as Error).message;
+      setError(
+        msg === "not-configured"
+          ? "Firebase non configuré."
+          : msg === "conflict"
+            ? dict.dashboard.conflictError
+            : dict.auth.errorGeneric,
+      );
     } finally {
       setSaving(false);
     }
@@ -127,6 +137,13 @@ export function ProductEditorForm({ product }: { product: Product | null }) {
             <span className="text-sm text-ink">{dict.dashboard.activeLabel}</span>
           </label>
         </div>
+        <label className="mt-4 flex items-start gap-3 rounded-xl border border-ink/10 bg-ink/[0.02] p-4">
+          <input type="checkbox" checked={f.proOnly} onChange={upd("proOnly")} className="mt-0.5 h-5 w-5 rounded" />
+          <span>
+            <span className="block text-sm text-ink">{dict.dashboard.proOnlyLabel}</span>
+            <span className="mt-0.5 block text-xs text-ink/55">{dict.dashboard.proOnlyHint}</span>
+          </span>
+        </label>
       </div>
 
       {error && <p className="text-sm text-red-300">{error}</p>}

@@ -62,6 +62,8 @@ export interface Product {
   ingredients?: Localized;
   marketPrice: number; // cents
   resellerPrice: number; // cents — NEVER serialized to unauthorized viewers
+  /** When true, the product is shown to everyone but only approved pros / admins can buy it. */
+  proOnly?: boolean;
   currency: "cad";
   images: string[];
   sizes: ProductSize[];
@@ -69,6 +71,8 @@ export interface Product {
   sortOrder: number;
   createdAt: number;
   updatedAt: number;
+  /** Optimistic-locking counter, incremented on every admin save. Missing == 0 (legacy/seed). */
+  version?: number;
 }
 
 /**
@@ -87,6 +91,8 @@ export interface ProductDTO {
   ingredients?: Localized;
   marketPrice: number;
   resellerPrice?: number; // present only for approved pros / admin
+  /** When true, everyone sees it but only approved pros / admins may purchase. */
+  proOnly?: boolean;
   currency: "cad";
   images: string[];
   sizes: Array<{

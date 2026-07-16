@@ -114,7 +114,8 @@
     "details": "Details",
     "ingredients": "Ingredients",
     "ritual": "The ritual",
-    "sizeLabel": "Size"
+    "sizeLabel": "Size",
+    "proOnlyCta": "Pros only"
   },
   "cart": {
     "title": "Your cart",
@@ -137,7 +138,8 @@
     "backToShop": "Back to the shop",
     "payTitle": "Secure payment",
     "loadError": "Couldn't load payment. Please try again.",
-    "notConfigured": "Payments aren't configured yet."
+    "notConfigured": "Payments aren't configured yet.",
+    "proOnlyError": "Your cart contains a product reserved for approved professionals. Remove it or sign in with a pro account to continue."
   },
   "pro": {
     "title": "Professional space",
@@ -199,6 +201,9 @@
     "resellerPriceLabel": "Professional price (CAD)",
     "imagesLabel": "Product images",
     "activeLabel": "Active product",
+    "proOnlyLabel": "Professionals only",
+    "proOnlyHint": "The product stays visible to everyone, but only approved pro accounts can purchase it.",
+    "conflictError": "This product was changed by another administrator while you were editing. Reload the page to see the latest values, then re-apply your changes.",
     "noOrders": "No orders yet.",
     "orderId": "Order",
     "orderDate": "Date",

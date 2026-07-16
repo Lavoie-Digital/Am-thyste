@@ -47,6 +47,8 @@ export function CheckoutModal() {
           setClientSecret(data.clientSecret);
         } else if (data.reason === "stripe-not-configured") {
           setError(dict.checkout.notConfigured);
+        } else if (data.error === "pro-only") {
+          setError(dict.checkout.proOnlyError);
         } else {
           setError(dict.checkout.loadError);
         }
