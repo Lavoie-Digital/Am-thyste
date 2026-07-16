@@ -50,6 +50,7 @@ export function ProductCard({ product, index = 0 }: { product: ProductDTO; index
         <PriceTag
           marketPrice={product.marketPrice}
           resellerPrice={product.resellerPrice}
+          proOnly={product.proOnly}
           size="sm"
           className="mt-auto pt-4"
         />

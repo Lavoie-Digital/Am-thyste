@@ -7,16 +7,21 @@ import { formatPrice, cn } from "@/lib/utils";
  * Renders a product price. A reseller price (only present for approved pros —
  * the server strips it otherwise) becomes primary, with the market price shown
  * struck through and a discreet "Pro" marker.
+ *
+ * For pro-only products we show the professional price alone — no struck-through
+ * market price, since these items are never sold at market rate.
  */
 export function PriceTag({
   marketPrice,
   resellerPrice,
+  proOnly = false,
   size = "md",
   align = "left",
   className,
 }: {
   marketPrice: number;
   resellerPrice?: number;
+  proOnly?: boolean;
   size?: "sm" | "md" | "lg";
   align?: "left" | "right";
   className?: string;
@@ -24,6 +29,8 @@ export function PriceTag({
   const { locale, dict } = useLocale();
   const hasReseller = typeof resellerPrice === "number";
   const primary = hasReseller ? resellerPrice! : marketPrice;
+  // Pro-only items: display just the professional price, no market comparison.
+  const showMarketCompare = hasReseller && !proOnly;
 
   const sizes = { sm: "text-sm", md: "text-lg", lg: "text-2xl" };
 
@@ -38,7 +45,7 @@ export function PriceTag({
       <span className={cn("font-serif-lux tracking-wide", hasReseller ? "text-gold" : "text-ink", sizes[size])}>
         {formatPrice(primary, locale)}
       </span>
-      {hasReseller && (
+      {showMarketCompare && (
         <>
           <span className="text-xs text-ink/35 line-through">{formatPrice(marketPrice, locale)}</span>
           <span className="text-[10px] uppercase tracking-[0.2em] text-gold">{dict.common.resellerPrice}</span>

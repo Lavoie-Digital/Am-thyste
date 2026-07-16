@@ -84,7 +84,7 @@ export function ProductDetail({ product }: { product: ProductDTO }) {
         </p>
 
         <div className="mt-6">
-          <PriceTag marketPrice={product.marketPrice} resellerPrice={product.resellerPrice} size="lg" />
+          <PriceTag marketPrice={product.marketPrice} resellerPrice={product.resellerPrice} proOnly={product.proOnly} size="lg" />
         </div>
 
         {/* Sizes */}
