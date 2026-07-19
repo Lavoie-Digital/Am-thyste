@@ -12,7 +12,28 @@ const schema = z.object({
   message: z.string().min(1).max(4000),
 });
 
-export async function submitContact(input: z.input<typeof schema>) {
+type ContactInput = z.input<typeof schema> & {
+  /** Honeypot: hidden field only bots fill in. */
+  company?: string;
+  /** Client timestamp (ms) captured when the form was shown. */
+  startedAt?: number;
+};
+
+/** Minimum time (ms) a real person needs to fill the form; faster = bot. */
+const MIN_FILL_MS = 3000;
+
+export async function submitContact(input: ContactInput) {
+  // Anti-spam gate. Both checks silently return ok so bots get no signal to
+  // adapt, and — crucially — no email is sent, saving SendGrid credits and
+  // protecting sender reputation from bounces on fake addresses.
+  const honeypot = typeof input?.company === "string" ? input.company.trim() : "";
+  if (honeypot !== "") return { ok: true };
+
+  const startedAt = Number(input?.startedAt);
+  if (Number.isFinite(startedAt) && startedAt > 0 && Date.now() - startedAt < MIN_FILL_MS) {
+    return { ok: true };
+  }
+
   const parsed = schema.safeParse(input);
   if (!parsed.success) return { ok: false, error: "invalid" };
   const { name, email, message } = parsed.data;
