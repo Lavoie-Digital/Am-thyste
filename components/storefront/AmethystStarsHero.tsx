@@ -20,7 +20,7 @@ export function AmethystStarsHero() {
 
   return (
     <section className="relative pt-[116px]">
-      <div className="relative min-h-[60vh] w-full overflow-hidden lg:min-h-[74vh]">
+      <div className="relative min-h-[calc(100svh-116px)] w-full overflow-hidden lg:min-h-[74vh]">
         {/* Banner */}
         <Image
           src={BANNER}
@@ -37,7 +37,7 @@ export function AmethystStarsHero() {
         {/* Dissolve into the page below */}
         <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-ivory" />
 
-        <Container className="relative z-10 flex min-h-[60vh] items-center lg:min-h-[74vh]">
+        <Container className="relative z-10 flex min-h-[calc(100svh-116px)] items-center lg:min-h-[74vh]">
           <div className="max-w-xl py-16 text-center lg:text-left">
             <motion.p
               initial={{ opacity: 0, y: 10 }}
@@ -62,10 +62,9 @@ export function AmethystStarsHero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 0.35, ease }}
-              className="mt-7 flex items-center justify-center gap-3 lg:justify-start"
+              className="mt-7 flex items-center justify-center lg:justify-start"
             >
-              <span className="h-px w-12 bg-ink/25" />
-              <ArrowRight className="h-4 w-4 text-ink/40" />
+              <span className="h-px w-16 bg-ink/25" />
             </motion.div>
 
             <motion.p
