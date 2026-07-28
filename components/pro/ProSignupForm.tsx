@@ -150,9 +150,13 @@ export function ProSignupForm() {
           <input required value={form.businessName} onChange={set("businessName")} className={inputClass} />
         </Field>
         <div className="mt-4">
-          <Field label={dict.pro.diploma} hint={dict.pro.diplomaHint}>
-            <DiplomaDropzone value={diploma} onChange={setDiploma} />
-          </Field>
+          <span className="mb-1.5 block text-xs uppercase tracking-[0.15em] text-ink-mute">
+            {dict.pro.diploma}
+          </span>
+          <DiplomaDropzone value={diploma} onChange={setDiploma} />
+          {dict.pro.diplomaHint && (
+            <span className="mt-1 block text-xs text-ink/45">{dict.pro.diplomaHint}</span>
+          )}
         </div>
         <div className="mt-4">
           <Field label="Adresse">
