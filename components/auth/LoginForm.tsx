@@ -56,6 +56,11 @@ export function LoginForm() {
       <Field label={dict.common.password}>
         <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className={inputClass} autoComplete="current-password" />
       </Field>
+      <p className="text-right text-sm">
+        <Link href="/pro/mot-de-passe-oublie" className="text-ink/60 underline-offset-4 hover:text-ink hover:underline">
+          {dict.auth.forgotPassword}
+        </Link>
+      </p>
       {error && <p className="text-sm text-red-300">{error}</p>}
       <Button type="submit" disabled={loading} className="w-full" size="lg">
         {loading ? dict.common.loading : dict.nav.login}

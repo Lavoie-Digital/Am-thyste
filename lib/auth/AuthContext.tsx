@@ -13,6 +13,7 @@ import {
   onIdTokenChanged,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   GoogleAuthProvider,
   signInWithPopup,
   signOut as fbSignOut,
@@ -36,6 +37,7 @@ interface AuthContextValue {
   signUp: (email: string, password: string, displayName: string) => Promise<FirebaseUser>;
   signInWithGoogle: () => Promise<FirebaseUser>;
   signOut: () => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
   refresh: () => Promise<void>;
 }
 
@@ -164,6 +166,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setProfile(null);
   }, []);
 
+  const resetPassword = useCallback(async (email: string) => {
+    const auth = getClientAuth();
+    if (!auth) throw new Error("not-configured");
+    await sendPasswordResetEmail(auth, email);
+  }, []);
+
   const refresh = useCallback(async () => {
     const auth = getClientAuth();
     const db = getClientDb();
@@ -188,6 +196,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signUp,
     signInWithGoogle,
     signOut,
+    resetPassword,
     refresh,
   };
 

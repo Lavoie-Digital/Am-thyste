@@ -15,15 +15,16 @@ import { Button } from "@/components/ui/Button";
 
 export function ProSignupForm() {
   const { dict } = useLocale();
-  const { signUp, signOut, configured } = useAuth();
+  const { user, signUp, signOut, configured } = useAuth();
   const router = useRouter();
+  const isLoggedIn = !!user;
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [diploma, setDiploma] = useState<File | null>(null);
   const [form, setForm] = useState({
-    displayName: "",
-    email: "",
+    displayName: user?.displayName || "",
+    email: user?.email || "",
     password: "",
     businessName: "",
     phone: "",
@@ -52,7 +53,13 @@ export function ProSignupForm() {
     let createdUser: FirebaseUser | null = null;
     let profileCreated = false;
     try {
-      createdUser = await signUp(form.email, form.password, form.displayName);
+      if (isLoggedIn) {
+        // Already authenticated (e.g. signed in as a customer): reuse the
+        // existing session instead of creating a new Firebase account, which
+        // would fail with email-already-in-use since that email is taken.
+      } else {
+        createdUser = await signUp(form.email, form.password, form.displayName);
+      }
 
       // Upload the diploma now that the account (and Storage auth) exists.
       const storage = getClientStorage();
@@ -83,12 +90,20 @@ export function ProSignupForm() {
       // so a hiccup below must NOT roll the account back.
       profileCreated = true;
 
-      // The application is pending approval — sign the applicant out so they are
-      // NOT logged in, thank them, then send them to the shop.
-      await signOut();
-      router.refresh();
-      setSubmitted(true);
-      setTimeout(() => router.push("/boutique"), 4000);
+      if (isLoggedIn) {
+        // Already had a session before this application — keep them signed in
+        // and send them to their account, where the pending status now shows.
+        router.refresh();
+        setSubmitted(true);
+        setTimeout(() => router.push("/pro/espace"), 4000);
+      } else {
+        // Newly created account, pending approval — sign the applicant out so
+        // they are NOT logged in, thank them, then send them to the shop.
+        await signOut();
+        router.refresh();
+        setSubmitted(true);
+        setTimeout(() => router.push("/boutique"), 4000);
+      }
     } catch (err: unknown) {
       // If the account was created this attempt but a later step failed (diploma
       // upload, profile write…), roll it back so the email can be reused on retry.
@@ -114,10 +129,10 @@ export function ProSignupForm() {
         <h2 className="font-display text-2xl tracking-wide text-ink">{dict.pro.thanksTitle}</h2>
         <p className="mx-auto max-w-md text-sm leading-relaxed text-ink/65">{dict.pro.thanksDesc}</p>
         <Link
-          href="/boutique"
+          href={isLoggedIn ? "/pro/espace" : "/boutique"}
           className="inline-flex h-12 items-center rounded-full bg-[#211a2c] px-7 text-xs uppercase tracking-[0.16em] text-[#faf7f2] transition-colors hover:bg-[#382c42]"
         >
-          {dict.pro.thanksCta}
+          {isLoggedIn ? dict.pro.thanksCtaAccount : dict.pro.thanksCta}
         </Link>
       </div>
     );
@@ -130,6 +145,11 @@ export function ProSignupForm() {
           Firebase n&apos;est pas encore configuré. Ajoutez vos clés dans .env.local.
         </p>
       )}
+      {isLoggedIn && (
+        <p className="rounded-xl border border-ink/10 bg-ink/5 px-4 py-3 text-xs text-ink/65">
+          {dict.pro.loggedInAs.replace("{email}", user?.email || "")}
+        </p>
+      )}
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label={dict.common.name}>
           <input required value={form.displayName} onChange={set("displayName")} className={inputClass} />
@@ -138,12 +158,16 @@ export function ProSignupForm() {
           <input required value={form.phone} onChange={set("phone")} className={inputClass} />
         </Field>
       </div>
-      <Field label={dict.common.email}>
-        <input type="email" required value={form.email} onChange={set("email")} className={inputClass} autoComplete="email" />
-      </Field>
-      <Field label={dict.common.password}>
-        <input type="password" required minLength={6} value={form.password} onChange={set("password")} className={inputClass} autoComplete="new-password" />
-      </Field>
+      {!isLoggedIn && (
+        <>
+          <Field label={dict.common.email}>
+            <input type="email" required value={form.email} onChange={set("email")} className={inputClass} autoComplete="email" />
+          </Field>
+          <Field label={dict.common.password}>
+            <input type="password" required minLength={6} value={form.password} onChange={set("password")} className={inputClass} autoComplete="new-password" />
+          </Field>
+        </>
+      )}
 
       <div className="border-t border-ink/10 pt-4">
         <Field label={dict.pro.businessName}>
@@ -180,12 +204,14 @@ export function ProSignupForm() {
       <Button type="submit" disabled={loading} className="w-full" size="lg">
         {loading ? dict.common.loading : dict.pro.submitApplication}
       </Button>
-      <p className="pt-2 text-center text-sm text-ink/65">
-        {dict.pro.alreadyMember}{" "}
-        <Link href="/pro/connexion" className="text-ink/70 underline-offset-4 hover:text-ink hover:underline">
-          {dict.nav.login}
-        </Link>
-      </p>
+      {!isLoggedIn && (
+        <p className="pt-2 text-center text-sm text-ink/65">
+          {dict.pro.alreadyMember}{" "}
+          <Link href="/pro/connexion" className="text-ink/70 underline-offset-4 hover:text-ink hover:underline">
+            {dict.nav.login}
+          </Link>
+        </p>
+      )}
     </form>
   );
 }

@@ -152,6 +152,8 @@
     "thanksTitle": "Merci, votre demande a été reçue !",
     "thanksDesc": "Notre équipe l'examinera sous 48 h et vous recevrez un courriel de confirmation. Redirection vers la boutique…",
     "thanksCta": "Aller à la boutique",
+    "thanksCtaAccount": "Voir mon espace pro",
+    "loggedInAs": "Connecté comme {email}. Complétez le formulaire ci-dessous pour demander l'accès professionnel.",
     "businessName": "Nom de l'entreprise / salon",
     "diploma": "Diplôme de coiffure",
     "diplomaHint": "Obligatoire — pour confirmer votre statut de coiffeur",
@@ -233,7 +235,13 @@
     "errorInvalid": "Courriel ou mot de passe invalide.",
     "errorGeneric": "Une erreur est survenue. Réessayez.",
     "errorEmailInUse": "Ce courriel est déjà utilisé.",
-    "inAppBrowserWarning": "La connexion Google n'est pas disponible dans ce navigateur intégré (Messenger, Instagram…). Ouvrez plutôt la page dans Safari ou Chrome (menu « ••• » → « Ouvrir dans le navigateur »), ou connectez-vous avec votre courriel et mot de passe ci-dessus."
+    "inAppBrowserWarning": "La connexion Google n'est pas disponible dans ce navigateur intégré (Messenger, Instagram…). Ouvrez plutôt la page dans Safari ou Chrome (menu « ••• » → « Ouvrir dans le navigateur »), ou connectez-vous avec votre courriel et mot de passe ci-dessus.",
+    "forgotPassword": "Mot de passe oublié ?",
+    "forgotPasswordTitle": "Mot de passe oublié",
+    "forgotPasswordDesc": "Entrez votre courriel et nous vous envoyons un lien pour réinitialiser votre mot de passe.",
+    "sendResetLink": "Envoyer le lien",
+    "resetLinkSent": "Si un compte existe pour ce courriel, un lien de réinitialisation vient d'être envoyé. Vérifiez votre boîte de réception (et vos courriels indésirables).",
+    "backToLogin": "Retour à la connexion"
   },
   "contact": {
     "title": "Contactez-nous",
