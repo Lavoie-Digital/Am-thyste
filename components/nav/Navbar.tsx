@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { useCart } from "@/lib/cart/CartContext";
@@ -15,11 +15,19 @@ import { cn } from "@/lib/utils";
 export function Navbar() {
   const { dict } = useLocale();
   const { count, toggle } = useCart();
-  const { user, role, proStatus } = useAuth();
+  const { user, role, proStatus, signOut } = useAuth();
   const isApprovedPro = role === "pro" && proStatus === "approved";
+  const canBecomePro = !!user && role === "customer";
   const pathname = usePathname();
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const handleLogout = async () => {
+    await signOut();
+    router.push("/");
+    router.refresh();
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -157,6 +165,16 @@ export function Navbar() {
               </span>
             )}
 
+            {canBecomePro && (
+              <Link
+                href="/pro/inscription"
+                className="hidden items-center gap-1.5 rounded-full border border-amethyst-400/40 bg-amethyst-500/10 px-3 py-1.5 text-[11px] font-medium tracking-wide text-amethyst-600 transition-colors hover:bg-amethyst-500/20 sm:inline-flex"
+              >
+                <Gem className="h-3 w-3" />
+                {dict.pro.becomeProBadge}
+              </Link>
+            )}
+
             <Link
               href={user ? (role === "admin" ? "/tableau-de-bord" : "/pro/espace") : "/pro/connexion"}
               aria-label={dict.nav.account}
@@ -164,6 +182,17 @@ export function Navbar() {
             >
               <UserIcon />
             </Link>
+
+            {user && (
+              <button
+                onClick={handleLogout}
+                aria-label={dict.nav.logout}
+                title={dict.nav.logout}
+                className="hidden rounded-full border border-ink/10 px-3 py-1.5 text-xs text-ink/60 transition-colors hover:bg-ink/[0.04] hover:text-ink sm:inline-block"
+              >
+                {dict.nav.logout}
+              </button>
+            )}
 
             {role === "admin" && (
               <Link
@@ -239,8 +268,25 @@ export function Navbar() {
                 </motion.div>
               ))}
             </nav>
-            <div className="px-6 pb-10">
+            <div className="space-y-4 px-6 pb-10">
+              {canBecomePro && (
+                <Link
+                  href="/pro/inscription"
+                  className="flex items-center justify-center gap-1.5 rounded-full border border-amethyst-400/40 bg-amethyst-500/10 px-4 py-3 text-xs font-medium uppercase tracking-[0.15em] text-amethyst-600"
+                >
+                  <Gem className="h-3.5 w-3.5" />
+                  {dict.pro.becomeProBadge}
+                </Link>
+              )}
               <LanguageSwitcher />
+              {user && (
+                <button
+                  onClick={handleLogout}
+                  className="w-full rounded-full border border-ink/10 py-3 text-xs uppercase tracking-[0.15em] text-ink/60 transition-colors hover:bg-ink/[0.04] hover:text-ink"
+                >
+                  {dict.nav.logout}
+                </button>
+              )}
             </div>
           </motion.div>
         )}
