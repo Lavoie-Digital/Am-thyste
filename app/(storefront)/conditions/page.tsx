@@ -28,8 +28,8 @@ export default async function TermsPage() {
           </p>
           <p>
             {locale === "fr"
-              ? "L'accès aux tarifs professionnels est réservé aux partenaires approuvés par Améthyste. Toute demande est soumise à validation."
-              : "Access to professional pricing is reserved for partners approved by Améthyste. Each request is subject to validation."}
+              ? "L'accès aux tarifs professionnels est réservé aux comptes pro approuvés par Améthyste. Toute demande est soumise à validation."
+              : "Access to professional pricing is reserved for pro accounts approved by Améthyste. Each request is subject to validation."}
           </p>
         </Container>
       </section>
