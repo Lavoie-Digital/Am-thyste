@@ -44,7 +44,7 @@
     "subtotal": "Subtotal",
     "shipping": "Shipping",
     "free": "Free",
-    "tax": "Tax (GST/QST)",
+    "tax": "Tax",
     "total": "Total",
     "continue": "Continue",
     "back": "Back",
@@ -139,7 +139,16 @@
     "payTitle": "Secure payment",
     "loadError": "Couldn't load payment. Please try again.",
     "notConfigured": "Payments aren't configured yet.",
-    "proOnlyError": "Your cart contains a product reserved for approved professionals. Remove it or sign in with a pro account to continue."
+    "proOnlyError": "Your cart contains a product reserved for approved professionals. Remove it or sign in with a pro account to continue.",
+    "taxNote": "Tax calculated at the next step, based on your province.",
+    "fullName": "Full name",
+    "addressLine1": "Address",
+    "addressLine2": "Apartment, suite, etc. (optional)",
+    "city": "City",
+    "postalCode": "Postal code",
+    "cardInfo": "Credit card",
+    "paying": "Processing payment…",
+    "cardError": "Payment couldn't be completed. Check your card and try again."
   },
   "pro": {
     "title": "Professional space",
