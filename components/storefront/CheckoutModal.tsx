@@ -57,6 +57,7 @@ export function CheckoutModal() {
 
   const [step, setStep] = useState<Step>("loading");
   const [error, setError] = useState<string | null>(null);
+  const [retryKey, setRetryKey] = useState(0);
   const [preview, setPreview] = useState<{ subtotal: number; shipping: number } | null>(null);
   const [address, setAddress] = useState({
     name: "",
@@ -102,11 +103,24 @@ export function CheckoutModal() {
           return;
         }
         setPreview({ subtotal: data.subtotal, shipping: data.shipping });
+      } catch {
+        if (!cancelled) {
+          setError(dict.checkout.loadError);
+          setStep("error");
+        }
+        return;
+      }
 
+      // Separate try/catch: failures here are almost always the Square SDK
+      // itself being blocked (ad blockers/privacy extensions commonly block
+      // its telemetry beacons), so they get a distinct, actionable message.
+      try {
         await loadSquareScript();
         if (cancelled || !window.Square || !appId || !locationId) {
-          setError(dict.checkout.notConfigured);
-          setStep("error");
+          if (!cancelled) {
+            setError(dict.checkout.notConfigured);
+            setStep("error");
+          }
           return;
         }
         const payments = window.Square.payments(appId, locationId);
@@ -120,7 +134,7 @@ export function CheckoutModal() {
         setStep("form");
       } catch {
         if (!cancelled) {
-          setError(dict.checkout.loadError);
+          setError(dict.checkout.initError);
           setStep("error");
         }
       }
@@ -132,7 +146,7 @@ export function CheckoutModal() {
       cardRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkoutOpen]);
+  }, [checkoutOpen, retryKey]);
 
   async function handlePay(e: React.FormEvent) {
     e.preventDefault();
@@ -215,9 +229,17 @@ export function CheckoutModal() {
               )}
 
               {step === "error" && (
-                <p className="rounded-xl border border-gold/30 bg-gold/10 px-4 py-3 text-center text-sm text-gold">
-                  {error}
-                </p>
+                <div className="flex flex-col items-center gap-4 py-10">
+                  <p className="rounded-xl border border-gold/30 bg-gold/10 px-4 py-3 text-center text-sm text-gold">
+                    {error}
+                  </p>
+                  <button
+                    onClick={() => setRetryKey((k) => k + 1)}
+                    className="inline-flex h-11 items-center rounded-full bg-ink px-8 text-xs uppercase tracking-[0.18em] text-ivory transition-colors hover:bg-amethyst-800"
+                  >
+                    {dict.checkout.retry}
+                  </button>
+                </div>
               )}
 
               {step === "success" && (

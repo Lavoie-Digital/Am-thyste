@@ -138,6 +138,8 @@
     "backToShop": "Retour à la boutique",
     "payTitle": "Paiement sécurisé",
     "loadError": "Impossible de charger le paiement. Réessayez.",
+    "initError": "Le module de paiement n'a pas pu s'initialiser. Si vous utilisez un bloqueur de publicités ou une extension de confidentialité, essayez de le désactiver pour ce site, puis réessayez.",
+    "retry": "Réessayer",
     "notConfigured": "Le paiement n'est pas encore configuré.",
     "proOnlyError": "Votre panier contient un produit réservé aux professionnels approuvés. Retirez-le ou connectez-vous à un compte pro pour continuer.",
     "taxNote": "Taxes calculées à l'étape suivante, selon votre province.",
