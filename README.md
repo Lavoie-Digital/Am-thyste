@@ -1,8 +1,8 @@
 # Améthyste — Boutique e-commerce haut de gamme
 
-Vitrine bilingue (FR/EN) pour la marque de soins capillaires **Améthyste** : boutique grand public (prix marché), **espace professionnel** avec prix de revente protégés par authentification + approbation, **panneau admin** d'approbation des pros, **tableau de bord propriétaire** (gestion produits/prix/commandes), paiements **Square**, courriels **SendGrid**, base de données **Firebase/Firestore**.
+Vitrine bilingue (FR/EN) pour la marque de soins capillaires **Améthyste** : boutique grand public (prix marché), **espace professionnel** avec prix de revente protégés par authentification + approbation, **panneau admin** d'approbation des pros, **tableau de bord propriétaire** (gestion produits/prix/commandes), paiements **Stripe**, courriels **SendGrid**, base de données **Firebase/Firestore**.
 
-> Stack : Next.js 16 (App Router, Turbopack) · React 19 · Tailwind v4 · Framer Motion (`motion`) · Firebase · Square · SendGrid.
+> Stack : Next.js 16 (App Router, Turbopack) · React 19 · Tailwind v4 · Framer Motion (`motion`) · Firebase · Stripe · SendGrid.
 
 L'application **fonctionne immédiatement** avec des clés placeholder (mode démo : catalogue seed, prix marché, aucune écriture). Branchez vos vraies clés pour activer l'auth, les paiements et les courriels.
 
@@ -25,12 +25,10 @@ npm run dev                  # http://localhost:3000
 6. **Storage** → activez Firebase Storage (les images produits y sont téléversées depuis le tableau de bord ; seules les **URLs** sont stockées dans Firestore).
 7. Déployez les règles de sécurité : `firestore.rules` (Firestore) **et** `storage.rules` (Storage). Les uploads sont réservés à l'admin (claim `role == 'admin'`), lecture publique.
 
-### Square (paiements — formulaire de carte intégré, sans SDK npm serveur)
-- `SQUARE_ACCESS_TOKEN`, `SQUARE_LOCATION_ID`, `NEXT_PUBLIC_SQUARE_APP_ID`, `NEXT_PUBLIC_SQUARE_LOCATION_ID` (Dashboard Square → Developer → Credentials). `SQUARE_ENV=sandbox` pour tester sans facturer de vraie carte, `production` pour le compte live.
-- Les prix viennent **de Firestore**, jamais du client (`lib/orders/priceCart.ts`, réutilisé par `/api/square/checkout` et `/api/square/pay`).
-- Le paiement carte est **synchrone** : `/api/square/pay` appelle directement l'API Payments de Square (`fetch`, aucun SDK npm) et crée la commande dès que le paiement est `COMPLETED`. Le webhook n'est qu'un filet de sécurité idempotent.
-- La taxe (GST/HST/PST/QST) n'est **pas** calculée automatiquement par Square comme l'était Stripe Tax — voir `lib/tax/canada.ts` (table best-effort, à valider avec un comptable).
-- Webhook : URL fixe `https://amethystehairproducts.com/api/square/webhook`, à enregistrer dans Dashboard Square → Developer → Webhooks (événements `payment.updated`, `refund.updated`). Square affiche la "Signature Key" après création de la souscription → copiez-la dans `SQUARE_WEBHOOK_SIGNATURE_KEY`.
+### Stripe (paiements — sans produits Stripe)
+- `STRIPE_SECRET_KEY` + `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` (Dashboard → Développeurs → Clés API).
+- Les prix viennent **de Firestore**, pas de produits Stripe : on crée des Checkout Sessions avec `price_data` dynamique.
+- Webhook en local : `stripe listen --forward-to localhost:3000/api/stripe/webhook` → copiez le `whsec_…` dans `STRIPE_WEBHOOK_SECRET`. En prod, créez un endpoint webhook vers `/api/stripe/webhook` (événement `checkout.session.completed`).
 
 ### SendGrid (courriels — optionnel)
 - `SENDGRID_API_KEY` + `SENDGRID_FROM_EMAIL` (expéditeur vérifié). Sans clé, les envois sont ignorés proprement.
@@ -51,7 +49,7 @@ node --env-file=.env.local scripts/set-admin.mjs proprietaire@email.com
 | --- | --- | --- |
 | Accueil (hero animé) | `/` | public |
 | Boutique (prix marché) | `/boutique`, `/boutique/[slug]` | public |
-| Checkout (modale Square) | panier → `CheckoutModal` | public |
+| Checkout Stripe | `/checkout` → `/checkout/succes` | public |
 | Programme pro | `/pro` | public |
 | Inscription / connexion pro | `/pro/inscription`, `/pro/connexion` | public |
 | Espace pro (statut) | `/pro/espace` | authentifié |
@@ -69,7 +67,7 @@ Les prix de revente ne sont **jamais** envoyés au client tant qu'il n'est pas u
 - `app/api/session/route.ts` — échange ID token Firebase → cookie de session HttpOnly.
 - `lib/data/*` — lecture Firestore (fallback seed si non configuré).
 - `lib/actions/*` — server actions (auth, pro, produits, settings, contact).
-- `app/api/square/*` — checkout (aperçu de prix) + pay (charge la carte, crée la commande) + webhook (filet de sécurité idempotent).
+- `app/api/stripe/*` — checkout (price_data dynamique) + webhook (création commande + courriel).
 - `proxy.ts` — redirection optimiste des routes protégées (Next 16 renomme `middleware` en `proxy`).
 - `components/storefront/AmethystStarsHero.tsx` + `StarField.tsx` — hero « étoiles améthyste ».
 

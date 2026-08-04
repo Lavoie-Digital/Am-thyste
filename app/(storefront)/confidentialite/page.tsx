@@ -8,8 +8,8 @@ export async function generateMetadata() {
   return {
     title: fr ? "Politique de confidentialité" : "Privacy policy",
     description: fr
-      ? "Politique de confidentialité d'Améthyste : données collectées, paiements sécurisés par Square, cookies strictement nécessaires seulement, aucune revente de données."
-      : "Améthyste privacy policy: data we collect, payments secured by Square, strictly necessary cookies only, no data resale.",
+      ? "Politique de confidentialité d'Améthyste : données collectées, paiements sécurisés par Stripe, cookies strictement nécessaires seulement, aucune revente de données."
+      : "Améthyste privacy policy: data we collect, payments secured by Stripe, strictly necessary cookies only, no data resale.",
     alternates: { canonical: "/confidentialite" },
   };
 }
@@ -37,7 +37,7 @@ const CONTENT: Record<"fr" | "en", { intro: string; sections: Section[] }> = {
       {
         heading: "Paiements",
         body: [
-          "Les paiements sont traités de façon sécurisée par Square. Nous ne stockons jamais vos numéros de carte : ils sont transmis directement à Square, qui agit à titre de sous-traitant de paiement.",
+          "Les paiements sont traités de façon sécurisée par Stripe. Nous ne stockons jamais vos numéros de carte : ils sont transmis directement à Stripe, qui agit à titre de sous-traitant de paiement.",
         ],
       },
       {
@@ -81,7 +81,7 @@ const CONTENT: Record<"fr" | "en", { intro: string; sections: Section[] }> = {
       {
         heading: "Payments",
         body: [
-          "Payments are securely processed by Square. We never store your card numbers: they are sent directly to Square, which acts as our payment processor.",
+          "Payments are securely processed by Stripe. We never store your card numbers: they are sent directly to Stripe, which acts as our payment processor.",
         ],
       },
       {
