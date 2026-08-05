@@ -1,5 +1,5 @@
 // Shared domain types for Améthyste.
-// Prices are always stored as integer cents in CAD to feed Stripe `unit_amount` directly.
+// Prices are always stored as integer cents in CAD.
 
 export type Locale = "fr" | "en";
 
@@ -125,12 +125,18 @@ export interface Order {
   lineItems: OrderLineItem[];
   subtotal: number;
   shipping: number;
-  tax: number; // cents — GST/QST collected by Stripe
-  discount?: number; // cents — order-level discount (e.g. Stripe coupon)
+  tax: number; // cents — GST/HST/PST/QST, see lib/tax/canada.ts
+  discount?: number; // cents — order-level discount
   total: number;
   currency: "cad";
   shippingAddress: Address;
-  stripe: { checkoutSessionId: string; paymentIntentId?: string };
+  square: {
+    paymentId: string;
+    /** True if this order was reconstructed from the webhook fallback path
+     * (server crashed between Square confirming payment and our own write) —
+     * itemization may be a best-effort placeholder; verify with the customer. */
+    reconstructed?: boolean;
+  };
   createdAt: number;
   paidAt?: number;
 }
