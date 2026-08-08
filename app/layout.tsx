@@ -33,6 +33,14 @@ const script = Great_Vibes({
   display: "swap",
 });
 
+/**
+ * Preview/branch deployments (*.vercel.app) serve the same HTML as production.
+ * Left indexable they become duplicate content that competes with the canonical
+ * domain, so only `VERCEL_ENV=production` (or a plain local/self-hosted run,
+ * where the var is absent) is allowed to be indexed.
+ */
+const INDEXABLE = process.env.VERCEL_ENV !== "preview" && process.env.VERCEL_ENV !== "development";
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -78,15 +86,25 @@ export const metadata: Metadata = {
     images: ["/logo.jpeg"],
   },
   robots: {
-    index: true,
-    follow: true,
+    index: INDEXABLE,
+    follow: INDEXABLE,
     googleBot: {
-      index: true,
-      follow: true,
+      index: INDEXABLE,
+      follow: INDEXABLE,
       "max-image-preview": "large",
       "max-snippet": -1,
       "max-video-preview": -1,
     },
+  },
+  // Search Console / Bing ownership proof. Set the tokens as env vars on the
+  // deployment; when unset the tags are simply omitted (DNS verification works too).
+  verification: {
+    ...(process.env.GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+      : {}),
+    ...(process.env.BING_SITE_VERIFICATION
+      ? { other: { "msvalidate.01": process.env.BING_SITE_VERIFICATION } }
+      : {}),
   },
   appleWebApp: {
     capable: true,

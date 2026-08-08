@@ -7,7 +7,16 @@ import { getProducts } from "@/lib/data/products";
  * product. Authenticated and transactional routes are intentionally excluded
  * (see robots.ts). One URL serves both locales (cookie-based i18n), so no
  * per-language alternates are emitted.
+ *
+ * Every <loc> is built from SITE_URL, the same constant that feeds
+ * `metadataBase`/canonicals — a sitemap listing a different host than the one
+ * serving it is rejected wholesale by Search Console.
  */
+
+// The catalogue lives in Firestore, so the sitemap must not be frozen at build
+// time or newly published products would never be submitted to Google.
+export const revalidate = 3600;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 

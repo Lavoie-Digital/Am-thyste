@@ -6,7 +6,16 @@ import type { Locale } from "../types";
  * server components, and JSON-LD builders alike.
  */
 
-export const SITE_URL = "https://amethystehairproducts.com";
+/**
+ * The ONE canonical production origin. Everything SEO-facing derives from it:
+ * `metadataBase`, every `alternates.canonical`, `og:url`, robots.txt, the
+ * sitemap and all JSON-LD `@id`/`url` nodes.
+ *
+ * Deliberately a hardcoded constant, not an env var: a wrong/missing env value
+ * on one deployment would emit canonicals pointing somewhere else and de-index
+ * the whole site. No trailing slash — `absoluteUrl()` handles joining.
+ */
+export const SITE_URL = "https://amethystehairproductscanada.ca";
 
 export const BRAND = {
   name: "Améthyste",
@@ -20,7 +29,7 @@ export const BRAND = {
     en: "Améthyste — premium professional Hair Botox and hair care, designed and made in Québec. Intense repair, mirror shine and deep nourishment with keratin and bamboo extract.",
   },
   telephone: "+1-514-691-1899",
-  email: "info@amethystehairproducts.com",
+  email: "info@amethystehairproductscanada.ca",
   logo: `${SITE_URL}/logo.jpeg`,
   address: {
     locality: "Rimouski",

@@ -168,10 +168,10 @@ export const SEED_PARTNERS: Partner[] = [
 export const SEED_SETTINGS: Settings = {
   freeShippingThreshold: 10000,
   flatShippingRate: 1500,
-  contactEmail: "info@amethystehairproducts.com",
+  contactEmail: "info@amethystehairproductscanada.ca",
   social: {
     instagram: "https://instagram.com/amethystehairproducts",
-    facebook: "https://facebook.com/amethystehairproducts",
+    facebook: "https://www.facebook.com/AmethysteHairProducts",
   },
   banner: {
     fr: "Livraison gratuite dès 100 $ · Fièrement canadien",

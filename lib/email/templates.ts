@@ -1,6 +1,7 @@
 import "server-only";
 import type { Locale, Order, ProProfile } from "../types";
 import { formatPrice, pick } from "../utils";
+import { absoluteUrl } from "../seo/site";
 
 /* Brand palette (mirrors app/globals.css) — inline hex only, for email clients. */
 const AMETHYST = "#65338e"; // Améthyste
@@ -159,7 +160,7 @@ export function orderOwnerEmail(order: Order, locale: Locale) {
     p("Une nouvelle commande vient d'être payée. Voici le récapitulatif :") +
     `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 14px;border-bottom:1px solid ${LINE};padding-bottom:8px;">${itemsHtml}</table>` +
     detailRows(rows) +
-    button("Voir les commandes", `${process.env.NEXT_PUBLIC_SITE_URL || ""}/tableau-de-bord/commandes`);
+    button("Voir les commandes", absoluteUrl("/tableau-de-bord/commandes"));
 
   return {
     subject: `Nouvelle commande — ${formatPrice(order.total, locale)} · ${order.email}`,
@@ -198,7 +199,7 @@ export function proApprovedEmail(name: string, locale: Locale) {
           body: "Your Améthyste professional access has been approved. You now benefit from reseller pricing. Sign in to explore the pro catalog.",
           cta: "View the pro catalog",
         };
-  const url = `${process.env.NEXT_PUBLIC_SITE_URL || ""}/pro/boutique`;
+  const url = absoluteUrl("/pro/boutique");
   return {
     subject: t.subject,
     html: shell(t.title, p(t.body) + button(t.cta, url), { preheader: t.body }),
@@ -306,7 +307,7 @@ export function proApplicationOwnerEmail(input: {
     p("Une nouvelle demande d'accès professionnel vient d'être soumise. Vérifiez le diplôme, puis approuvez ou refusez depuis l'espace d'administration.") +
     detailRows(rows) +
     (input.profile.diplomaUrl ? button("Voir le diplôme", input.profile.diplomaUrl) : "") +
-    button("Gérer les demandes", `${process.env.NEXT_PUBLIC_SITE_URL || ""}/admin`);
+    button("Gérer les demandes", absoluteUrl("/admin"));
   return {
     subject: `Nouvelle demande pro — ${input.profile.businessName || input.name}`,
     html: shell("Nouvelle demande professionnelle", body, {

@@ -30,7 +30,7 @@ npm run dev                  # http://localhost:3000
 - Les prix viennent **de Firestore**, jamais du client (`lib/orders/priceCart.ts`, réutilisé par `/api/square/checkout` et `/api/square/pay`).
 - Le paiement carte est **synchrone** : `/api/square/pay` appelle directement l'API Payments de Square (`fetch`, aucun SDK npm) et crée la commande dès que le paiement est `COMPLETED`. Le webhook n'est qu'un filet de sécurité idempotent.
 - La taxe (GST/HST/PST/QST) n'est **pas** calculée automatiquement par Square comme l'était Stripe Tax — voir `lib/tax/canada.ts` (table best-effort, à valider avec un comptable).
-- Webhook : URL fixe `https://amethystehairproducts.com/api/square/webhook`, à enregistrer dans Dashboard Square → Developer → Webhooks (événements `payment.updated`, `refund.updated`). Square affiche la "Signature Key" après création de la souscription → copiez-la dans `SQUARE_WEBHOOK_SIGNATURE_KEY`.
+- Webhook : URL fixe `https://amethystehairproductscanada.ca/api/square/webhook`, à enregistrer dans Dashboard Square → Developer → Webhooks (événements `payment.updated`, `refund.updated`). Square affiche la "Signature Key" après création de la souscription → copiez-la dans `SQUARE_WEBHOOK_SIGNATURE_KEY`.
 
 ### SendGrid (courriels — optionnel)
 - `SENDGRID_API_KEY` + `SENDGRID_FROM_EMAIL` (expéditeur vérifié). Sans clé, les envois sont ignorés proprement.
