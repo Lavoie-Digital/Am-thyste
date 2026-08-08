@@ -17,26 +17,6 @@ import type { Locale } from "../types";
  */
 export const SITE_URL = "https://amethystehairproductscanada.ca";
 
-/** Host portion of SITE_URL, e.g. `amethystehairproductscanada.ca`. */
-export const CANONICAL_HOST = new URL(SITE_URL).host;
-
-/**
- * True when a request arrived on the canonical production host.
- *
- * Any other public host — the retired amethystehairproducts.com domain, a
- * `www.` variant, a preview backend — serves byte-identical HTML. Google
- * clusters those URLs with the canonical one and picks a single winner; a
- * `rel="canonical"` tag is only a hint it is free to overrule (it did, in
- * favour of the old .com). So non-canonical hosts get a 301 in `proxy.ts`
- * and, should one ever slip past it, `noindex` in the root layout.
- *
- * Port and letter case are ignored; a missing host counts as non-canonical.
- */
-export function isCanonicalHost(host: string | null | undefined): boolean {
-  if (!host) return false;
-  return host.split(":")[0].toLowerCase() === CANONICAL_HOST;
-}
-
 export const BRAND = {
   name: "Améthyste",
   legalName: "Améthyste Hair Products",

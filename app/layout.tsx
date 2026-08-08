@@ -1,10 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { headers } from "next/headers";
 import { Cinzel, Cormorant_Garamond, Great_Vibes, Manrope } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { getI18n } from "@/lib/i18n/server";
-import { SITE_URL, BRAND, isCanonicalHost } from "@/lib/seo/site";
+import { SITE_URL, BRAND } from "@/lib/seo/site";
 
 const sans = Manrope({
   subsets: ["latin"],
@@ -34,7 +33,15 @@ const script = Great_Vibes({
   display: "swap",
 });
 
-const BASE_METADATA: Metadata = {
+/**
+ * Preview/branch deployments (*.vercel.app) serve the same HTML as production.
+ * Left indexable they become duplicate content that competes with the canonical
+ * domain, so only `VERCEL_ENV=production` (or a plain local/self-hosted run,
+ * where the var is absent) is allowed to be indexed.
+ */
+const INDEXABLE = process.env.VERCEL_ENV !== "preview" && process.env.VERCEL_ENV !== "development";
+
+export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default: "Améthyste — Hair Botox & Soins capillaires professionnels",
@@ -78,6 +85,17 @@ const BASE_METADATA: Metadata = {
       "Soins capillaires professionnels haut de gamme, conçus au Québec. Un rituel de transformation.",
     images: ["/logo.jpeg"],
   },
+  robots: {
+    index: INDEXABLE,
+    follow: INDEXABLE,
+    googleBot: {
+      index: INDEXABLE,
+      follow: INDEXABLE,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   // Search Console / Bing ownership proof. Set the tokens as env vars on the
   // deployment; when unset the tags are simply omitted (DNS verification works too).
   verification: {
@@ -94,38 +112,6 @@ const BASE_METADATA: Metadata = {
     statusBarStyle: "default",
   },
 };
-
-/**
- * Indexability is decided per request, from the host.
- *
- * Only the canonical domain may be indexed: every alias (the retired
- * amethystehairproducts.com, a `www.` variant, a preview backend) serves the
- * same HTML and would compete with it in the index — which is exactly how
- * Google came to treat the old .com as the canonical of this site.
- * `proxy.ts` already 301s those hosts; this is the second line of defence for
- * anything allowlisted there.
- *
- * The layout is dynamic regardless — `getI18n()` reads the locale cookie — so
- * reading a header here costs no static rendering.
- */
-export async function generateMetadata(): Promise<Metadata> {
-  const indexable = isCanonicalHost((await headers()).get("host"));
-
-  return {
-    ...BASE_METADATA,
-    robots: {
-      index: indexable,
-      follow: indexable,
-      googleBot: {
-        index: indexable,
-        follow: indexable,
-        "max-image-preview": "large",
-        "max-snippet": -1,
-        "max-video-preview": -1,
-      },
-    },
-  };
-}
 
 export const viewport: Viewport = {
   themeColor: BRAND.themeColor,
