@@ -93,6 +93,18 @@ export function productJsonLd(product: ProductDTO, locale: Locale) {
         shippingRate: { "@type": "MonetaryAmount", value: "0", currency: "CAD" },
         shippingDestination: { "@type": "DefinedRegion", addressCountry: "CA" },
       },
+      // Mirrors /retours: 7 days from delivery, customer pays return shipping.
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        applicableCountry: "CA",
+        returnPolicyCategory:
+          "https://schema.org/MerchantReturnFiniteReturnWindow",
+        merchantReturnDays: 7,
+        returnMethod: "https://schema.org/ReturnByMail",
+        returnFees: "https://schema.org/ReturnShippingFees",
+        returnPolicyCountry: "CA",
+        merchantReturnLink: absoluteUrl("/retours"),
+      },
     },
   };
 }

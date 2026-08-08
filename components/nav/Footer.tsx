@@ -81,6 +81,7 @@ export function Footer() {
             </a>
           </p>
           <div className="flex gap-4">
+            <Link href="/retours" className="transition-colors hover:text-ink">{dict.footer.returns}</Link>
             <Link href="/confidentialite" className="transition-colors hover:text-ink">{dict.footer.privacy}</Link>
             <Link href="/conditions" className="transition-colors hover:text-ink">{dict.footer.terms}</Link>
           </div>
