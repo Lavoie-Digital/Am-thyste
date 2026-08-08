@@ -69,6 +69,10 @@ export function CheckoutModal() {
   });
   const [email, setEmail] = useState("");
   const cardRef = useRef<SquareCard | null>(null);
+  // The card iframe can only be attached once the container is in the DOM,
+  // which happens a render *after* we switch to the "form" step.
+  const attachedRef = useRef(false);
+  const [cardReady, setCardReady] = useState(false);
   // One idempotency key per checkout attempt — reused across accidental
   // double-submits so a network retry can't charge the card twice.
   const idempotencyKeyRef = useRef<string>("");
@@ -83,6 +87,8 @@ export function CheckoutModal() {
       setStep("loading");
       setError(null);
       setPreview(null);
+      setCardReady(false);
+      attachedRef.current = false;
       setEmail(user?.email || "");
       idempotencyKeyRef.current = crypto.randomUUID();
       try {
@@ -125,11 +131,12 @@ export function CheckoutModal() {
         }
         const payments = window.Square.payments(appId, locationId);
         const card = await payments.card();
-        await card.attach(`#${cardContainerId}`);
         if (cancelled) {
-          await card.destroy();
+          await card.destroy().catch(() => {});
           return;
         }
+        // Attaching happens in the effect below: the container only exists
+        // once this step change has been committed to the DOM.
         cardRef.current = card;
         setStep("form");
       } catch {
@@ -142,15 +149,45 @@ export function CheckoutModal() {
 
     return () => {
       cancelled = true;
-      cardRef.current?.destroy();
+      cardRef.current?.destroy().catch(() => {});
       cardRef.current = null;
+      attachedRef.current = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkoutOpen, retryKey]);
 
+  // Mount the card iframe once the form (and therefore its container) is in
+  // the DOM. Kept separate from the effect above so `attach` never races the
+  // render that creates `#sq-card-container`.
+  useEffect(() => {
+    if (step !== "form" || !preview) return;
+    const card = cardRef.current;
+    if (!card || attachedRef.current) return;
+    attachedRef.current = true;
+
+    let cancelled = false;
+    (async () => {
+      try {
+        await card.attach(`#${cardContainerId}`);
+        if (!cancelled) setCardReady(true);
+      } catch {
+        if (!cancelled) {
+          attachedRef.current = false;
+          setError(dict.checkout.initError);
+          setStep("error");
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step, preview]);
+
   async function handlePay(e: React.FormEvent) {
     e.preventDefault();
-    if (!cardRef.current) return;
+    if (!cardRef.current || !cardReady) return;
     setStep("paying");
     setError(null);
     try {
@@ -334,12 +371,19 @@ export function CheckoutModal() {
 
                   <div className="space-y-2">
                     <p className="text-xs uppercase tracking-[0.15em] text-ink-mute">{dict.checkout.cardInfo}</p>
-                    <div id={cardContainerId} className="min-h-[90px] rounded-xl border border-ink/15 bg-white p-3" />
+                    <div className="relative">
+                      <div id={cardContainerId} className="min-h-[90px] rounded-xl border border-ink/15 bg-white p-3" />
+                      {!cardReady && (
+                        <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                          <span className="h-5 w-5 animate-spin rounded-full border-2 border-ink/15 border-t-amethyst-400" />
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   <button
                     type="submit"
-                    disabled={step === "paying"}
+                    disabled={step === "paying" || !cardReady}
                     className="flex h-12 w-full items-center justify-center rounded-full bg-ink text-xs uppercase tracking-[0.18em] text-ivory transition-colors hover:bg-amethyst-800 disabled:opacity-60"
                   >
                     {step === "paying" ? dict.checkout.paying : dict.checkout.payNow}
