@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import type { Locale } from "../types";
 
 /**
@@ -48,4 +49,25 @@ export function ogLocale(locale: Locale): string {
 /** Build an absolute URL from a site-relative path. */
 export function absoluteUrl(path = "/"): string {
   return new URL(path, SITE_URL).toString();
+}
+
+/**
+ * Metadata for routes that must never be indexed — sign-in, sign-up, checkout,
+ * dashboards. Deliberately emits NO canonical: pairing `noindex` with a
+ * canonical sends Google two contradicting instructions, and the root layout no
+ * longer supplies one to inherit.
+ *
+ * `follow` stays on by default so link equity still flows out of these pages to
+ * the public storefront; pass `follow: false` for authenticated areas whose
+ * links go nowhere useful.
+ */
+export function noindexMetadata(title: string, follow = true): Metadata {
+  return {
+    title,
+    robots: {
+      index: false,
+      follow,
+      googleBot: { index: false, follow },
+    },
+  };
 }

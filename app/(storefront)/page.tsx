@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { AmethystStarsHero } from "@/components/storefront/AmethystStarsHero";
@@ -13,6 +14,16 @@ import { getPartners } from "@/lib/data/partners";
 import { pick } from "@/lib/utils";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { faqJsonLd } from "@/lib/seo/jsonld";
+
+/**
+ * The homepage canonical lives here rather than in the root layout: metadata is
+ * inherited downward, so declaring it at the root made every route without its
+ * own canonical (all of /pro, /checkout, /admin, /tableau-de-bord) point at the
+ * homepage. Only this page may claim "/".
+ */
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 const FEATURE_ICONS = [Leaf, Flask, Mark, Heart];
 

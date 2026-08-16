@@ -1,9 +1,35 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { ButtonLink } from "@/components/ui/Button";
 import { Mark } from "@/components/ui/icons";
 import { getI18n } from "@/lib/i18n/server";
+
+/**
+ * Public partner landing page — indexable. It used to be swept up by the
+ * blanket `Disallow: /pro` in robots.txt even though it is linked from the
+ * footer, which is why Search Console filed it under "Blocked by robots.txt".
+ * Only the authenticated /pro/* sub-routes stay closed.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const { locale } = await getI18n();
+  const description =
+    locale === "fr"
+      ? "Devenez partenaire Améthyste : tarifs professionnels sur le Hair Botox et les soins capillaires à la kératine, formation et accompagnement pour les salons du Québec."
+      : "Become an Améthyste partner: professional pricing on Hair Botox and keratin hair care, training and support for salons across Québec.";
+  return {
+    title: locale === "fr" ? "Espace professionnel" : "For professionals",
+    description,
+    alternates: { canonical: "/pro" },
+    openGraph: {
+      title: locale === "fr" ? "Espace professionnel · Améthyste" : "For professionals · Améthyste",
+      description,
+      url: "/pro",
+      type: "website",
+    },
+  };
+}
 
 export default async function ProLandingPage() {
   const { dict } = await getI18n();

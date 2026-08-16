@@ -65,7 +65,13 @@ export const metadata: Metadata = {
   creator: "Améthyste",
   publisher: "Améthyste",
   category: "beauty",
-  alternates: { canonical: "/" },
+  // NOTE: no `alternates.canonical` here on purpose. Metadata fields are
+  // inherited by every route that does not override them, so a root-level
+  // `canonical: "/"` made /pro, /checkout, /tableau-de-bord and /admin all
+  // declare the homepage as their canonical. Google sees several different
+  // pages claiming one URL, stops trusting the declaration and picks its own —
+  // exactly the "Duplicate, Google chose different canonical than user" report.
+  // The homepage sets its own canonical in app/(storefront)/page.tsx.
   formatDetection: { telephone: true, address: true, email: true },
   openGraph: {
     title: "Améthyste — Hair Botox",

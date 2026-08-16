@@ -4,6 +4,9 @@ import { Container } from "@/components/ui/Container";
 import { ButtonLink } from "@/components/ui/Button";
 import { getI18n } from "@/lib/i18n/server";
 import { requireUser, isApprovedPro } from "@/lib/auth/dal";
+import { noindexMetadata } from "@/lib/seo/site";
+
+export const metadata = noindexMetadata("Espace partenaire", false);
 
 export default async function ProEspacePage() {
   const { dict } = await getI18n();

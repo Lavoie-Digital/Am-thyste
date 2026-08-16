@@ -1,6 +1,9 @@
 import { ProSignupForm } from "@/components/pro/ProSignupForm";
 import { Container } from "@/components/ui/Container";
 import { getI18n } from "@/lib/i18n/server";
+import { noindexMetadata } from "@/lib/seo/site";
+
+export const metadata = noindexMetadata("Inscription professionnelle");
 
 export default async function InscriptionPage() {
   const { dict } = await getI18n();

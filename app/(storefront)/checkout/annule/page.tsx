@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { getI18n } from "@/lib/i18n/server";
+import { noindexMetadata } from "@/lib/seo/site";
+
+export const metadata = noindexMetadata("Paiement annulé");
 
 export default async function CheckoutCancelPage() {
   const { dict } = await getI18n();

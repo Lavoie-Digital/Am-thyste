@@ -21,12 +21,24 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
       // Private / transactional / authenticated areas — no SEO value, keep out.
+      //
+      // The old blanket `Disallow: /pro` also swallowed the public partner
+      // landing page, which is linked from the footer — that is what Search
+      // Console reported as "Blocked by robots.txt". Only the two logged-in
+      // areas are blocked now.
+      //
+      // /pro/connexion, /pro/inscription and /pro/mot-de-passe-oublie stay
+      // crawlable on purpose: they are linked from the navbar, and a URL that
+      // is both linked and robots-blocked can still be indexed URL-only,
+      // because Google never gets to read the page's `noindex`. Letting it
+      // fetch them is what makes the noindex tag effective.
       disallow: [
         "/api/",
         "/admin",
         "/tableau-de-bord",
         "/checkout",
-        "/pro",
+        "/pro/espace",
+        "/pro/boutique",
       ],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,

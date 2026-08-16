@@ -5,6 +5,9 @@ import { Reveal } from "@/components/ui/Reveal";
 import { getI18n } from "@/lib/i18n/server";
 import { requireUser, isApprovedPro } from "@/lib/auth/dal";
 import { getProducts } from "@/lib/data/products";
+import { noindexMetadata } from "@/lib/seo/site";
+
+export const metadata = noindexMetadata("Boutique partenaire", false);
 
 export default async function ProBoutiquePage() {
   const { dict } = await getI18n();

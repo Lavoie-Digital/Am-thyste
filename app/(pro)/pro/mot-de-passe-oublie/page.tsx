@@ -2,6 +2,9 @@ import { Suspense } from "react";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { ForgotPasswordForm } from "@/components/auth/ForgotPasswordForm";
 import { getI18n } from "@/lib/i18n/server";
+import { noindexMetadata } from "@/lib/seo/site";
+
+export const metadata = noindexMetadata("Mot de passe oublié");
 
 export default async function MotDePasseOubliePage() {
   const { dict } = await getI18n();
