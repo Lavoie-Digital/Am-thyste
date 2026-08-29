@@ -35,8 +35,10 @@ export function GoogleButton() {
     setLoading(true);
     try {
       const user = await signInWithGoogle();
-      // Ensure a Firestore profile exists (no-op / preserves role for existing).
-      await createProfile({ displayName: user.displayName || user.email || "" });
+      // Ensure a Firestore profile exists. This preserves the role/proStatus of
+      // an existing account — it must never demote an approved pro to customer.
+      const res = await createProfile({ displayName: user.displayName || user.email || "" });
+      if (!res.ok && res.error === "unauthenticated") throw new Error("session-failed");
       // Force a fresh token so the session cookie carries up-to-date claims
       // (e.g. an admin role granted before this first sign-in).
       await refresh();
@@ -44,7 +46,10 @@ export function GoogleButton() {
       router.refresh();
     } catch (err: unknown) {
       const code = (err as { code?: string })?.code ?? "";
-      if (!code.includes("popup-closed") && !code.includes("cancelled")) {
+      const message = (err as { message?: string })?.message ?? "";
+      if (message === "session-failed") {
+        setError(dict.auth.errorSession);
+      } else if (!code.includes("popup-closed") && !code.includes("cancelled")) {
         setError(dict.auth.errorGeneric);
       }
     } finally {

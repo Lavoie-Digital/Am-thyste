@@ -12,9 +12,12 @@ export function AuthShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-[100svh] items-center justify-center py-32">
+    // The navbar is fixed and 133px tall (announcement bar + main bar), so the
+    // old `py-32` (128px) left the card jammed against it — on a phone the top
+    // corners and the ✦ mark sat behind the bar. pt-40 keeps a real gap.
+    <div className="flex min-h-[100svh] items-center justify-center pb-20 pt-40 sm:pb-28">
       <Container className="max-w-md">
-        <div className="surface rounded-2xl p-8 sm:p-10">
+        <div className="surface rounded-2xl p-6 sm:p-10">
           <div className="mb-8 text-center">
             <Mark className="mx-auto text-gold/80" />
             <h1 className="mt-4 heading text-3xl">{title}</h1>

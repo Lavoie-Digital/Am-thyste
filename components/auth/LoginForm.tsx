@@ -33,10 +33,13 @@ export function LoginForm() {
       router.refresh();
     } catch (err: unknown) {
       const code = (err as { code?: string })?.code ?? "";
+      const message = (err as { message?: string })?.message ?? "";
       setError(
-        code.includes("invalid") || code.includes("wrong-password") || code.includes("user-not-found")
-          ? dict.auth.errorInvalid
-          : dict.auth.errorGeneric,
+        message === "session-failed"
+          ? dict.auth.errorSession
+          : code.includes("invalid") || code.includes("wrong-password") || code.includes("user-not-found")
+            ? dict.auth.errorInvalid
+            : dict.auth.errorGeneric,
       );
     } finally {
       setLoading(false);
@@ -57,7 +60,7 @@ export function LoginForm() {
         <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className={inputClass} autoComplete="current-password" />
       </Field>
       <p className="text-right text-sm">
-        <Link href="/pro/mot-de-passe-oublie" className="text-ink/60 underline-offset-4 hover:text-ink hover:underline">
+        <Link href="/pro/mot-de-passe-oublie" className="inline-flex min-h-11 items-center text-ink/60 underline-offset-4 hover:text-ink hover:underline">
           {dict.auth.forgotPassword}
         </Link>
       </p>

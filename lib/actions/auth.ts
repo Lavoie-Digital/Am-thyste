@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { FieldValue } from "firebase-admin/firestore";
-import { getAdminDb, adminConfigured } from "../firebase/admin";
+import { getAdminAuth, getAdminDb, adminConfigured } from "../firebase/admin";
 import { usersCol } from "../firebase/collections";
 import { verifySession } from "../auth/dal";
 import { getLocale } from "../i18n/server";
@@ -52,9 +52,11 @@ export async function createProfile(input: {
 
   const ref = usersCol(db).doc(viewer.uid);
   const existing = await ref.get();
+  const prev = existing.exists ? (existing.data() as AppUser) : null;
 
   // Never let a profile downgrade an admin or re-trigger on existing accounts.
-  const baseRole = existing.exists ? (existing.data() as AppUser).role : "customer";
+  const baseRole = prev?.role ?? "customer";
+  const baseStatus = prev?.proStatus ?? "none";
   if (baseRole === "admin") {
     return { ok: true };
   }
@@ -82,39 +84,63 @@ export async function createProfile(input: {
     };
   }
 
+  // An already-approved pro must never be knocked back to "pending" by a
+  // re-submission, and a plain profile-touch (the Google sign-in path calls this
+  // with no pro payload) must never demote an existing pro/approved account to
+  // customer/none. Only ever move *up* from what is already on the document.
+  const nextRole = baseRole === "pro" ? "pro" : (proFields.role ?? baseRole);
+  const nextStatus =
+    baseStatus === "approved" ? "approved" : (proFields.proStatus ?? baseStatus);
+
   const data = {
     uid: viewer.uid,
     email: viewer.email,
-    displayName: input.displayName || viewer.email,
-    role: proFields.role ?? "customer",
-    proStatus: proFields.proStatus ?? "none",
+    displayName: input.displayName || prev?.displayName || viewer.email,
+    role: nextRole,
+    proStatus: nextStatus,
     ...(proFields.proProfile ? { proProfile: proFields.proProfile } : {}),
     ...(existing.exists ? {} : { createdAt: FieldValue.serverTimestamp() }),
   };
 
   await ref.set(data, { merge: true });
 
-  if (!existing.exists) {
-    const locale = await getLocale();
-    const name = input.displayName || viewer.email;
-
-    if (proFields.proProfile) {
-      // Acknowledge the pro applicant (48h) and notify the owner of the new request.
-      const ack = proApplicationAckEmail(name, locale);
-      const owner = proApplicationOwnerEmail({
-        name,
-        email: viewer.email,
-        profile: proFields.proProfile,
+  // Mirror role/proStatus into the custom claims so the ID token and the
+  // Firestore document can't drift apart (the DAL reads the document first, but
+  // anything reading claims — e.g. Firestore security rules — needs them too).
+  const auth = getAdminAuth();
+  if (auth) {
+    try {
+      await auth.setCustomUserClaims(viewer.uid, {
+        role: nextRole,
+        proStatus: nextStatus,
       });
-      const ownerEmail = await getOwnerEmail();
-      await Promise.all([
-        sendEmail({ to: viewer.email, subject: ack.subject, html: ack.html }),
-        sendEmail({ to: ownerEmail, subject: owner.subject, html: owner.html, replyTo: viewer.email }),
-      ]);
-    } else {
-      const mail = welcomeEmail(name, locale);
-      await sendEmail({ to: viewer.email, subject: mail.subject, html: mail.html });
+    } catch (err) {
+      console.error("[auth] failed to sync custom claims:", err);
     }
+  }
+
+  const locale = await getLocale();
+  const name = input.displayName || prev?.displayName || viewer.email;
+
+  if (proFields.proProfile) {
+    // A pro application was just filed. This must fire even when the Firestore
+    // document already existed — an existing customer applying from a signed-in
+    // session is the common case, and gating these on `!existing.exists` meant
+    // the owner was never notified of their request.
+    const ack = proApplicationAckEmail(name, locale);
+    const owner = proApplicationOwnerEmail({
+      name,
+      email: viewer.email,
+      profile: proFields.proProfile,
+    });
+    const ownerEmail = await getOwnerEmail();
+    await Promise.all([
+      sendEmail({ to: viewer.email, subject: ack.subject, html: ack.html }),
+      sendEmail({ to: ownerEmail, subject: owner.subject, html: owner.html, replyTo: viewer.email }),
+    ]);
+  } else if (!existing.exists) {
+    const mail = welcomeEmail(name, locale);
+    await sendEmail({ to: viewer.email, subject: mail.subject, html: mail.html });
   }
 
   return { ok: true };

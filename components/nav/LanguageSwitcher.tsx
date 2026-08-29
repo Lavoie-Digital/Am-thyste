@@ -20,7 +20,7 @@ export function LanguageSwitcher({ className, onDark = false }: { className?: st
   return (
     <div
       className={cn(
-        "inline-flex items-center rounded-full border p-0.5 text-xs",
+        "inline-flex items-center gap-0.5 rounded-full border p-0.5 text-xs",
         onDark ? "border-ivory/30" : "border-ink/10",
         pending && "opacity-60",
         className,
@@ -34,7 +34,9 @@ export function LanguageSwitcher({ className, onDark = false }: { className?: st
           onClick={() => switchTo(l)}
           aria-pressed={locale === l}
           className={cn(
-            "rounded-full px-2.5 py-1 font-medium uppercase tracking-wider transition-colors",
+            // min-h-10 keeps the pills comfortably tappable inside the mobile
+            // menu without changing the compact desktop navbar version.
+            "flex min-h-10 items-center justify-center rounded-lg px-5 font-medium uppercase tracking-wider transition-colors sm:min-h-0 sm:rounded-full sm:px-2.5 sm:py-1",
             onDark
               ? locale === l
                 ? "bg-ivory/20 text-ivory"

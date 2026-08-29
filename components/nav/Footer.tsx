@@ -11,7 +11,13 @@ export function Footer() {
 
   return (
     <footer className="relative mt-32 border-t border-ink/10 bg-bone">
-      <div className="mx-auto grid max-w-7xl gap-12 px-5 py-16 sm:px-8 md:grid-cols-[1.5fr_1fr_1fr_1.5fr]">
+      {/*
+        minmax(0,…) instead of a bare `1.5fr`: an `fr` track cannot shrink below
+        its min-content width, and the wide-tracking newsletter heading forced
+        its column to ~199px. That pushed the grid past the viewport and gave
+        every page ~34px of horizontal scroll at tablet width.
+      */}
+      <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-8 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.5fr)] md:gap-12">
         <div>
           <div className="flex items-center gap-3">
             <span className="relative h-12 w-12 overflow-hidden rounded-full ring-1 ring-ink/10">
@@ -56,9 +62,11 @@ export function Footer() {
             <input
               type="email"
               placeholder={dict.common.email}
-              className="flex-1 bg-transparent text-sm text-ink placeholder:text-ink/35 focus:outline-none"
+              /* 16px on mobile — iOS Safari force-zooms the whole page when a
+                 focused input is under 16px, which yanked the layout sideways. */
+              className="min-h-11 flex-1 bg-transparent text-base text-ink placeholder:text-ink/35 focus:outline-none sm:min-h-0 sm:text-sm"
             />
-            <button aria-label={dict.common.send} className="text-ink/60 transition-colors hover:text-ink">
+            <button aria-label={dict.common.send} className="p-3 text-ink/60 transition-colors hover:text-ink sm:p-2">
               <ArrowRight />
             </button>
           </form>

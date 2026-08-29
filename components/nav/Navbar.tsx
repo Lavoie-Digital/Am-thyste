@@ -115,7 +115,7 @@ export function Navbar() {
               onClick={() => setMenuOpen((v) => !v)}
               aria-label={menuOpen ? dict.nav.closeMenu : dict.nav.openMenu}
               aria-expanded={menuOpen}
-              className="-ml-2 rounded-full p-2 text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink lg:hidden"
+              className="-ml-2 rounded-full p-3 text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink sm:p-2 lg:hidden"
             >
               <MenuIcon open={menuOpen} />
             </button>
@@ -178,7 +178,7 @@ export function Navbar() {
             <Link
               href={user ? (role === "admin" ? "/tableau-de-bord" : "/pro/espace") : "/pro/connexion"}
               aria-label={dict.nav.account}
-              className="rounded-full p-2 text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink"
+              className="rounded-full p-3 text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink sm:p-2"
             >
               <UserIcon />
             </Link>
@@ -206,7 +206,7 @@ export function Navbar() {
             <button
               onClick={toggle}
               aria-label={dict.nav.cart}
-              className="relative rounded-full p-2 text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink"
+              className="relative rounded-full p-3 text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink sm:p-2"
             >
               <CartIcon />
               <AnimatePresence>
@@ -237,56 +237,158 @@ export function Navbar() {
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="fixed inset-0 z-40 flex flex-col bg-ivory lg:hidden"
           >
-            {/* Dedicated close button, top-right where users expect it. */}
-            <button
-              onClick={() => setMenuOpen(false)}
-              aria-label={dict.nav.closeMenu}
-              className="absolute right-5 top-16 z-10 rounded-full p-2 text-ink/70 transition-colors hover:bg-ink/[0.04] hover:text-ink sm:right-8"
-            >
-              <MenuIcon open />
-            </button>
-            <nav className="flex flex-1 flex-col px-6 pt-32">
-              {links.map((l, i) => (
-                <motion.div
-                  key={l.href}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.06 + i * 0.05, ease: [0.22, 1, 0.36, 1] }}
-                >
+            {/*
+              Overlay header: brand on the left, an unmistakable bordered close
+              button on the right. It sits outside the scrolling area, because
+              the overlay is a child of the z-50 header and therefore paints
+              over the navbar — this is the only way back out.
+            */}
+            <div className="flex h-16 shrink-0 items-center justify-between border-b border-ink/8 px-4">
+              {/* The brand lockup is a real link home, like every other logo. */}
+              <Link
+                href="/"
+                onClick={() => setMenuOpen(false)}
+                aria-label={dict.nav.home}
+                className="-ml-1 flex min-h-11 items-center gap-2.5 rounded-full px-1 pr-3 transition-colors active:bg-ink/[0.04]"
+              >
+                <span className="relative h-7 w-7 overflow-hidden rounded-full ring-1 ring-ink/10">
+                  <Image src="/logo.jpeg" alt="" fill sizes="28px" className="object-cover" />
+                </span>
+                <span className="text-[10px] uppercase tracking-[0.24em] text-ink/50">
+                  {dict.brand.name}
+                </span>
+              </Link>
+              <button
+                onClick={() => setMenuOpen(false)}
+                aria-label={dict.nav.closeMenu}
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-ink/15 bg-white/60 text-ink/70 transition-colors active:bg-ink/[0.06] active:text-ink"
+              >
+                <MenuIcon open />
+              </button>
+            </div>
+
+            {/*
+              Scrollable middle. The spacing is tuned so everything fits an
+              iPhone viewport (~656px with Safari's toolbars up) without
+              scrolling, but overflow-y stays on as a safety net for small
+              phones — the account actions used to be clipped off-screen.
+            */}
+            <div className="flex flex-1 flex-col overflow-y-auto overscroll-contain px-4 pb-5 pt-3">
+              <nav className="flex flex-col gap-0.5">
+                {links.map((l, i) => {
+                  const active = isActive(l.href);
+                  return (
+                    <motion.div
+                      key={l.href}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: 0.03 + i * 0.035, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      {/*
+                        onClick closes the menu on every tap — including a tap on
+                        the page you are already on. Relying on the `pathname`
+                        effect alone left the overlay stuck open in that case,
+                        which read as the menu being broken.
+                      */}
+                      <Link
+                        href={l.href}
+                        onClick={() => setMenuOpen(false)}
+                        aria-current={active ? "page" : undefined}
+                        className={cn(
+                          "flex min-h-12 items-center justify-between gap-3 rounded-xl px-3 transition-colors",
+                          active
+                            ? "bg-amethyst-500/10 text-ink"
+                            : "text-ink/75 active:bg-ink/[0.04] active:text-ink",
+                        )}
+                      >
+                        <span className="flex items-center gap-3">
+                          <span
+                            className={cn(
+                              "h-1.5 w-1.5 shrink-0 rounded-full transition-colors",
+                              active ? "bg-gold" : "bg-ink/15",
+                            )}
+                          />
+                          <span className="font-display text-xl tracking-wide">{l.label}</span>
+                        </span>
+                        <ChevronRight className={active ? "text-gold" : "text-ink/25"} />
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </nav>
+
+              {/* Account + shop actions, as labelled buttons rather than bare text. */}
+              <div className="mt-auto space-y-2 pt-5">
+                <div className="grid grid-cols-2 gap-2">
                   <Link
-                    href={l.href}
-                    className={cn(
-                      "flex items-baseline justify-between border-b border-ink/8 py-5 font-display text-2xl tracking-wide transition-colors",
-                      isActive(l.href) ? "text-ink" : "text-ink/70 hover:text-ink",
-                    )}
+                    href={user ? (role === "admin" ? "/tableau-de-bord" : "/pro/espace") : "/pro/connexion"}
+                    onClick={() => setMenuOpen(false)}
+                    className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-ink/12 bg-white/50 text-[11px] uppercase tracking-[0.14em] text-ink/70 transition-colors active:bg-ink/[0.05]"
                   >
-                    {l.label}
-                    <span className={cn("font-sans text-xs tracking-[0.2em]", isActive(l.href) ? "text-gold" : "text-ink-mute/40")}>
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
+                    <UserIcon className="h-4 w-4" />
+                    {user ? dict.nav.account : dict.nav.login}
                   </Link>
-                </motion.div>
-              ))}
-            </nav>
-            <div className="space-y-4 px-6 pb-10">
-              {canBecomePro && (
-                <Link
-                  href="/pro/inscription"
-                  className="flex items-center justify-center gap-1.5 rounded-full border border-amethyst-400/40 bg-amethyst-500/10 px-4 py-3 text-xs font-medium uppercase tracking-[0.15em] text-amethyst-600"
-                >
-                  <Gem className="h-3.5 w-3.5" />
-                  {dict.pro.becomeProBadge}
-                </Link>
-              )}
-              <LanguageSwitcher />
-              {user && (
-                <button
-                  onClick={handleLogout}
-                  className="w-full rounded-full border border-ink/10 py-3 text-xs uppercase tracking-[0.15em] text-ink/60 transition-colors hover:bg-ink/[0.04] hover:text-ink"
-                >
-                  {dict.nav.logout}
-                </button>
-              )}
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      toggle();
+                    }}
+                    className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-ink/12 bg-white/50 text-[11px] uppercase tracking-[0.14em] text-ink/70 transition-colors active:bg-ink/[0.05]"
+                  >
+                    <CartIcon className="h-4 w-4" />
+                    {dict.nav.cart}
+                    {count > 0 && (
+                      <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-ink px-1 text-[10px] font-medium text-ivory">
+                        {count}
+                      </span>
+                    )}
+                  </button>
+                </div>
+
+                {canBecomePro && (
+                  <Link
+                    href="/pro/inscription"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-amethyst-400/40 bg-amethyst-500/10 text-[11px] font-medium uppercase tracking-[0.14em] text-amethyst-600 transition-colors active:bg-amethyst-500/20"
+                  >
+                    <Gem className="h-3.5 w-3.5" />
+                    {dict.pro.becomeProBadge}
+                  </Link>
+                )}
+
+                {isApprovedPro && (
+                  <Link
+                    href="/pro/boutique"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-gold/40 bg-gold/10 text-[11px] font-medium uppercase tracking-[0.14em] text-gold transition-colors active:bg-gold/20"
+                  >
+                    <Gem className="h-3.5 w-3.5" />
+                    {dict.pro.viewCatalog}
+                  </Link>
+                )}
+
+                {role === "admin" && (
+                  <Link
+                    href="/admin"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex min-h-12 items-center justify-center rounded-xl border border-gold/40 text-[11px] uppercase tracking-[0.14em] text-gold transition-colors active:bg-gold/10"
+                  >
+                    {dict.nav.admin}
+                  </Link>
+                )}
+
+                <div className="flex items-center gap-2 pt-1">
+                  <LanguageSwitcher className="min-h-12 flex-1 justify-center rounded-xl" />
+                  {user && (
+                    <button
+                      onClick={handleLogout}
+                      className="flex min-h-12 flex-1 items-center justify-center rounded-xl border border-ink/12 text-[11px] uppercase tracking-[0.14em] text-ink/60 transition-colors active:bg-ink/[0.05]"
+                    >
+                      {dict.nav.logout}
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
           </motion.div>
         )}
@@ -295,18 +397,38 @@ export function Navbar() {
   );
 }
 
-function UserIcon() {
+/** Affordance on the mobile menu rows so they read as tappable, not as prose. */
+function ChevronRight({ className }: { className?: string }) {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      <path d="M9 6l6 6-6 6" />
+    </svg>
+  );
+}
+
+function UserIcon({ className }: { className?: string }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={className}>
       <circle cx="12" cy="8" r="4" />
       <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" strokeLinecap="round" />
     </svg>
   );
 }
 
-function CartIcon() {
+function CartIcon({ className }: { className?: string }) {
   return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={className}>
       <path d="M5 7h14l-1.2 11a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 7Z" strokeLinejoin="round" />
       <path d="M9 7a3 3 0 0 1 6 0" strokeLinecap="round" />
     </svg>

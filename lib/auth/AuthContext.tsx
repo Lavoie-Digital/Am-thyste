@@ -43,21 +43,53 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+/**
+ * Outcome of exchanging the Firebase ID token for the server session cookie.
+ *  - "ok"          → the HttpOnly cookie is set, server components can see the viewer
+ *  - "auth-failed" → the credential itself is dead (refresh token revoked after a
+ *                    password change, account disabled, token rejected). The client
+ *                    must stop pretending to be signed in.
+ *  - "unavailable" → transient/network/server problem. Keep the client session.
+ */
+type SyncResult = "ok" | "auth-failed" | "unavailable";
+
 /** POST the fresh ID token to the server so it can mint a session cookie. */
-async function syncSession(fbUser: FirebaseUser | null) {
-  try {
-    if (fbUser) {
-      const idToken = await fbUser.getIdToken();
-      await fetch("/api/session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idToken }),
-      });
-    } else {
+async function syncSession(fbUser: FirebaseUser | null): Promise<SyncResult> {
+  if (!fbUser) {
+    try {
       await fetch("/api/session", { method: "DELETE" });
+    } catch {
+      /* the cookie also expires on its own; nothing actionable client-side */
     }
+    return "ok";
+  }
+
+  let idToken: string;
+  try {
+    idToken = await fbUser.getIdToken();
+  } catch (err) {
+    // getIdToken() failing means the refresh token no longer works — this is
+    // what happens to an open tab after the password is changed elsewhere.
+    console.error("[auth] could not refresh ID token:", err);
+    return "auth-failed";
+  }
+
+  try {
+    const res = await fetch("/api/session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken }),
+    });
+    if (res.status === 401) return "auth-failed";
+    if (!res.ok) return "unavailable";
+    // `adminConfigured === false` answers 200 with { ok: false } — the client is
+    // usable but there is no server session, so guarded pages will still bounce.
+    const body = await res.json().catch(() => null);
+    if (body && body.ok === false) return "unavailable";
+    return "ok";
   } catch (err) {
     console.error("[auth] session sync failed:", err);
+    return "unavailable";
   }
 }
 
@@ -77,8 +109,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
     const unsub = onIdTokenChanged(auth, async (fbUser) => {
+      const result = await syncSession(fbUser);
+      if (result === "auth-failed" && fbUser) {
+        // The cached credential is dead. Leaving `user` set here is what made a
+        // stale tab show the "Déconnexion" button while every protected page
+        // redirected back to the login form.
+        setUser(null);
+        setProfile(null);
+        setLoading(false);
+        await fbSignOut(auth);
+        return;
+      }
       setUser(fbUser);
-      await syncSession(fbUser);
       setLoading(false);
     });
     return () => unsub();
@@ -134,7 +176,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const auth = getClientAuth();
     if (!auth) throw new Error("not-configured");
     const cred = await signInWithEmailAndPassword(auth, email, password);
-    await syncSession(cred.user);
+    // Credentials were accepted, but without the server cookie every guarded
+    // page bounces straight back to this form. Fail loudly instead of handing
+    // the caller a "successful" login that goes nowhere.
+    const result = await syncSession(cred.user);
+    if (result !== "ok") throw new Error("session-failed");
   }, []);
 
   const signUp = useCallback(
@@ -155,7 +201,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: "select_account" });
     const cred = await signInWithPopup(auth, provider);
-    await syncSession(cred.user);
+    const result = await syncSession(cred.user);
+    if (result !== "ok") throw new Error("session-failed");
     return cred.user;
   }, []);
 
