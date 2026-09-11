@@ -101,27 +101,36 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: false, error: "payment-declined" }, { status: 402 });
   }
 
-  const orderId = await recordPaidOrder({
-    userId: viewer?.uid ?? null,
-    email: parsed.email,
-    pricingContext: context,
-    lineItems: priced.lineItems,
-    subtotal: priced.subtotal,
-    shipping,
-    tax,
-    total,
-    shippingAddress: {
-      name,
-      line1,
-      line2: line2 || undefined,
-      city,
-      province: province.toUpperCase(),
-      postalCode,
-      country: "CA",
-    },
-    paymentId: data.payment.id,
-    locale,
-  });
+  // Past this point the card is charged. Nothing below may surface as a
+  // payment error: a buyer told "declined" after a successful capture will try
+  // again and pay twice. recordPaidOrder alerts the owner on failure, and the
+  // payment.updated webhook is the second line of defense.
+  let recorded: Awaited<ReturnType<typeof recordPaidOrder>> = { orderId: null, recorded: false };
+  try {
+    recorded = await recordPaidOrder({
+      userId: viewer?.uid ?? null,
+      email: parsed.email,
+      pricingContext: context,
+      lineItems: priced.lineItems,
+      subtotal: priced.subtotal,
+      shipping,
+      tax,
+      total,
+      shippingAddress: {
+        name,
+        line1,
+        line2: line2 || undefined,
+        city,
+        province: province.toUpperCase(),
+        postalCode,
+        country: "CA",
+      },
+      paymentId: data.payment.id,
+      locale,
+    });
+  } catch (err) {
+    console.error(`[square] post-payment handling failed for ${data.payment.id}:`, err);
+  }
 
-  return NextResponse.json({ ok: true, orderId });
+  return NextResponse.json({ ok: true, orderId: recorded.orderId, recorded: recorded.recorded });
 }

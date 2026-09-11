@@ -43,6 +43,7 @@ export const adminConfigured = Boolean(
 );
 
 let adminApp: App | null = null;
+let adminDb: Firestore | null = null;
 
 function getAdminApp(): App | null {
   if (!adminConfigured) return null;
@@ -69,5 +70,16 @@ export function getAdminAuth(): Auth | null {
 /** Firebase Admin Firestore, or null if not configured. */
 export function getAdminDb(): Firestore | null {
   const a = getAdminApp();
-  return a ? getFirestore(a) : null;
+  if (!a) return null;
+  if (!adminDb) {
+    adminDb = getFirestore(a);
+    // Firestore rejects `undefined` field values outright, so a single optional
+    // field left empty — an address without a line 2, a size-less product's
+    // `sizeId` — throws mid-write and aborts the whole operation. Dropping
+    // those keys matches the "field absent" semantics every reader here
+    // already handles. `settings()` has to run before the instance is used, so
+    // it lives in this memoized accessor: all Firestore access goes through it.
+    adminDb.settings({ ignoreUndefinedProperties: true });
+  }
+  return adminDb;
 }

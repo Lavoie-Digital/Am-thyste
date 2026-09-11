@@ -168,6 +168,49 @@ export function orderOwnerEmail(order: Order, locale: Locale) {
   };
 }
 
+/**
+ * Owner alert: Square captured the payment but the order document could not be
+ * written, so the order will NOT show up in the admin area. Everything needed
+ * to fulfill it and re-enter it by hand is inlined here, because this email is
+ * the only remaining record of the sale.
+ */
+export function unrecordedOrderEmail(order: Order, paymentId: string, error: unknown) {
+  const a = order.shippingAddress;
+  const itemsHtml = order.lineItems
+    .map(
+      (li) =>
+        `<tr><td style="padding:6px 0;font-family:Georgia,serif;font-size:14px;color:${INK}">${esc(pick(li.nameSnapshot, "fr"))} × ${li.quantity}</td>
+         <td style="padding:6px 0;text-align:right;font-family:Georgia,serif;font-size:14px;color:${INK}">${formatPrice(li.unitAmount * li.quantity, "fr")}</td></tr>`,
+    )
+    .join("");
+
+  const rows: Array<[string, string]> = [
+    ["Paiement Square", `<code>${esc(paymentId)}</code>`],
+    ["Courriel client", `<a href="mailto:${esc(order.email)}" style="color:${AMETHYST};text-decoration:none;">${esc(order.email)}</a>`],
+    ["Livraison", esc(`${a.name}\n${a.line1}${a.line2 ? `, ${a.line2}` : ""}\n${a.city}, ${a.province} ${a.postalCode}\n${a.country}`).replace(/\n/g, "<br>")],
+    ["Sous-total", formatPrice(order.subtotal, "fr")],
+    ["Livraison", order.shipping === 0 ? "Gratuite" : formatPrice(order.shipping, "fr")],
+    ["Taxes", formatPrice(order.tax ?? 0, "fr")],
+    ["Total encaissé", `<strong>${formatPrice(order.total, "fr")}</strong>`],
+    ["Erreur technique", esc(error instanceof Error ? error.message : String(error))],
+  ];
+
+  const body =
+    p(
+      "Un paiement a bien été <strong>encaissé par Square</strong>, mais la commande n'a pas pu être enregistrée : elle n'apparaîtra pas dans l'espace administrateur. Traitez-la manuellement à partir des informations ci-dessous.",
+    ) +
+    note("L'argent est encaissé — ne demandez pas un second paiement à la cliente.") +
+    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:8px 0 14px;border-bottom:1px solid ${LINE};padding-bottom:8px;">${itemsHtml}</table>` +
+    detailRows(rows);
+
+  return {
+    subject: `⚠️ Commande payée NON enregistrée — ${formatPrice(order.total, "fr")} · ${order.email}`,
+    html: shell("Commande payée non enregistrée", body, {
+      preheader: `Action requise · ${formatPrice(order.total, "fr")}`,
+    }),
+  };
+}
+
 export function welcomeEmail(name: string, locale: Locale) {
   const t =
     locale === "fr"
