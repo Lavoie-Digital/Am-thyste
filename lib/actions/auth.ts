@@ -6,7 +6,7 @@ import { getAdminAuth, getAdminDb, adminConfigured } from "../firebase/admin";
 import { usersCol } from "../firebase/collections";
 import { verifySession } from "../auth/dal";
 import { getLocale } from "../i18n/server";
-import { getOwnerEmail } from "../data/settings";
+import { getOwnerEmails } from "../data/settings";
 import { sendEmail } from "../email/sendgrid";
 import {
   welcomeEmail,
@@ -133,10 +133,10 @@ export async function createProfile(input: {
       email: viewer.email,
       profile: proFields.proProfile,
     });
-    const ownerEmail = await getOwnerEmail();
+    const ownerEmails = await getOwnerEmails();
     await Promise.all([
       sendEmail({ to: viewer.email, subject: ack.subject, html: ack.html }),
-      sendEmail({ to: ownerEmail, subject: owner.subject, html: owner.html, replyTo: viewer.email }),
+      sendEmail({ to: ownerEmails, subject: owner.subject, html: owner.html, replyTo: viewer.email }),
     ]);
   } else if (!existing.exists) {
     const mail = welcomeEmail(name, locale);

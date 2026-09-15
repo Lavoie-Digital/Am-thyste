@@ -34,6 +34,7 @@ npm run dev                  # http://localhost:3000
 
 ### SendGrid (courriels — optionnel)
 - `SENDGRID_API_KEY` + `SENDGRID_FROM_EMAIL` (expéditeur vérifié). Sans clé, les envois sont ignorés proprement.
+- `SENDGRID_OWNER_EMAIL` : destinataires des avis automatiques (nouvelle commande, demande pro, message de contact). **Plusieurs adresses séparées par des virgules** — chacune reçoit le même courriel. Si la variable est vide, on retombe sur `settings.contactEmail` dans Firestore.
 
 ## 3. Initialisation des données
 

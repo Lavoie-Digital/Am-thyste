@@ -43,7 +43,18 @@ export const adminConfigured = Boolean(
 );
 
 let adminApp: App | null = null;
-let adminDb: Firestore | null = null;
+
+/**
+ * Next bundles the server module graph per entry point, so this file is
+ * instantiated several times inside the same Node process (one copy per route
+ * handler / server action / page bundle). A module-level cache is therefore not
+ * a process-wide cache — but `firebase-admin` keeps its own process-wide
+ * registries, so the *second* module copy would receive a Firestore instance
+ * that is already in use. Pinning our handle on `globalThis` keeps every copy
+ * on the same instance and the `settings()` call below single-shot.
+ */
+const DB_KEY = Symbol.for("amethyste.firebase.adminDb");
+type DbGlobal = typeof globalThis & { [DB_KEY]?: Firestore };
 
 function getAdminApp(): App | null {
   if (!adminConfigured) return null;
@@ -71,15 +82,27 @@ export function getAdminAuth(): Auth | null {
 export function getAdminDb(): Firestore | null {
   const a = getAdminApp();
   if (!a) return null;
-  if (!adminDb) {
-    adminDb = getFirestore(a);
+
+  const g = globalThis as DbGlobal;
+  const cached = g[DB_KEY];
+  if (cached) return cached;
+
+  const db = getFirestore(a);
+  try {
     // Firestore rejects `undefined` field values outright, so a single optional
     // field left empty — an address without a line 2, a size-less product's
     // `sizeId` — throws mid-write and aborts the whole operation. Dropping
     // those keys matches the "field absent" semantics every reader here
     // already handles. `settings()` has to run before the instance is used, so
     // it lives in this memoized accessor: all Firestore access goes through it.
-    adminDb.settings({ ignoreUndefinedProperties: true });
+    db.settings({ ignoreUndefinedProperties: true });
+  } catch (err) {
+    // `settings()` throws if the instance was already configured or already
+    // used. Either way the desired setting is in place (or can no longer be
+    // applied) — never let that take down a checkout: this accessor is on the
+    // paid-order path.
+    console.warn("[firebase] Firestore settings() skipped:", (err as Error).message);
   }
-  return adminDb;
+  g[DB_KEY] = db;
+  return db;
 }

@@ -4,6 +4,7 @@ import type { Settings } from "../types";
 import { getAdminDb, adminConfigured } from "../firebase/admin";
 import { settingsDoc } from "../firebase/collections";
 import { SEED_SETTINGS } from "./seed";
+import { normalizeRecipients } from "../email/recipients";
 
 /** Global store settings: Firestore when configured, else seed defaults. */
 export const getSettings = cache(async (): Promise<Settings> => {
@@ -20,14 +21,18 @@ export const getSettings = cache(async (): Promise<Settings> => {
 });
 
 /**
- * Recipient for owner-facing notifications (new pro request, contact message).
- * Prefers SENDGRID_OWNER_EMAIL (handy for testing), else the store contactEmail.
+ * Recipients for owner-facing notifications (new order, pro request, contact
+ * message). SENDGRID_OWNER_EMAIL wins when set and accepts several addresses
+ * separated by commas — that's how a second person (ex. la gestionnaire) gets
+ * copied on every automated notice without touching the code. Falls back to the
+ * store contactEmail from the settings document.
  */
-export async function getOwnerEmail(): Promise<string> {
-  const override = process.env.SENDGRID_OWNER_EMAIL?.trim();
-  if (override) return override;
+export async function getOwnerEmails(): Promise<string[]> {
+  const override = process.env.SENDGRID_OWNER_EMAIL ?? "";
+  const fromEnv = normalizeRecipients(override.split(","));
+  if (fromEnv.length > 0) return fromEnv;
   const settings = await getSettings();
-  return settings.contactEmail;
+  return normalizeRecipients(settings.contactEmail ?? "");
 }
 
 /** Compute shipping (cents) from a subtotal against the configured threshold. */

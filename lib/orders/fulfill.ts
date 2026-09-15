@@ -4,7 +4,7 @@ import { getAdminDb } from "@/lib/firebase/admin";
 import { ordersCol } from "@/lib/firebase/collections";
 import { sendEmail } from "@/lib/email/sendgrid";
 import { orderConfirmationEmail, orderOwnerEmail, unrecordedOrderEmail } from "@/lib/email/templates";
-import { getOwnerEmail } from "@/lib/data/settings";
+import { getOwnerEmails } from "@/lib/data/settings";
 import type { Address, Locale, Order, OrderLineItem, PricingContext } from "@/lib/types";
 
 export type NewPaidOrderInput = {
@@ -101,12 +101,12 @@ export async function recordPaidOrder(input: NewPaidOrderInput): Promise<Recorde
   // Notify the store owner of the new order — or warn her that a paid order is
   // missing from the admin area and has to be handled by hand.
   try {
-    const ownerEmail = await getOwnerEmail();
-    if (ownerEmail) {
+    const ownerEmails = await getOwnerEmails();
+    if (ownerEmails.length > 0) {
       const ownerMail = writeError
         ? unrecordedOrderEmail(orderForEmail, input.paymentId, writeError)
         : orderOwnerEmail(orderForEmail, input.locale);
-      await sendEmail({ to: ownerEmail, subject: ownerMail.subject, html: ownerMail.html });
+      await sendEmail({ to: ownerEmails, subject: ownerMail.subject, html: ownerMail.html });
     }
   } catch (err) {
     console.error("[square] owner order notification failed:", err);
