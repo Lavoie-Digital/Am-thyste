@@ -165,6 +165,8 @@
     "thanksCta": "Go to the shop",
     "thanksCtaAccount": "View my pro account",
     "loggedInAs": "Signed in as {email}. Fill out the form below to request professional access.",
+    "existingAccount": "An account already exists with this email, but the password doesn't match. Sign in and you'll come straight back to this form to complete your request.",
+    "existingAccountLogin": "Sign in and complete my request",
     "businessName": "Business / salon name",
     "diploma": "Hairdressing diploma",
     "diplomaHint": "Required — to confirm your status as a hairdresser",

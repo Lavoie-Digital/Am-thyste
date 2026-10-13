@@ -15,12 +15,16 @@ import { Button } from "@/components/ui/Button";
 
 export function ProSignupForm() {
   const { dict } = useLocale();
-  const { user, signUp, signOut, configured } = useAuth();
+  const { user, signUp, signIn, signOut, configured } = useAuth();
   const router = useRouter();
   const isLoggedIn = !!user;
   const [error, setError] = useState("");
+  const [existingAccount, setExistingAccount] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  // True when the applicant ends up signed in (already was, or signed in to an
+  // existing account from this form) — they keep the session and go to /pro/espace.
+  const [keptSession, setKeptSession] = useState(false);
   const [diploma, setDiploma] = useState<File | null>(null);
   const [form, setForm] = useState({
     displayName: user?.displayName || "",
@@ -41,6 +45,7 @@ export function ProSignupForm() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setExistingAccount(false);
     if (!configured) {
       setError(dict.auth.errorGeneric);
       return;
@@ -52,13 +57,30 @@ export function ProSignupForm() {
     setLoading(true);
     let createdUser: FirebaseUser | null = null;
     let profileCreated = false;
+    let signedInExisting = false;
     try {
       if (isLoggedIn) {
         // Already authenticated (e.g. signed in as a customer): reuse the
         // existing session instead of creating a new Firebase account, which
         // would fail with email-already-in-use since that email is taken.
       } else {
-        createdUser = await signUp(form.email, form.password, form.displayName);
+        try {
+          createdUser = await signUp(form.email, form.password, form.displayName);
+        } catch (err) {
+          const code = (err as { code?: string })?.code ?? "";
+          if (!code.includes("email-already")) throw err;
+          // The email already has an account (typically a customer who signed up
+          // earlier). Bouncing them with "email already in use" is how a real
+          // applicant once walked away believing her request was sent. Sign in
+          // with the password typed here and attach the application to it.
+          try {
+            await signIn(form.email, form.password);
+            signedInExisting = true;
+          } catch {
+            setExistingAccount(true);
+            return;
+          }
+        }
       }
 
       // Upload the diploma now that the account (and Storage auth) exists.
@@ -90,10 +112,11 @@ export function ProSignupForm() {
       // so a hiccup below must NOT roll the account back.
       profileCreated = true;
 
-      if (isLoggedIn) {
-        // Already had a session before this application — keep them signed in
+      if (isLoggedIn || signedInExisting) {
+        // Already had an account before this application — keep them signed in
         // and send them to their account, where the pending status now shows.
         router.refresh();
+        setKeptSession(true);
         setSubmitted(true);
         setTimeout(() => router.push("/pro/espace"), 4000);
       } else {
@@ -129,10 +152,10 @@ export function ProSignupForm() {
         <h2 className="font-display text-2xl tracking-wide text-ink">{dict.pro.thanksTitle}</h2>
         <p className="mx-auto max-w-md text-sm leading-relaxed text-ink/65">{dict.pro.thanksDesc}</p>
         <Link
-          href={isLoggedIn ? "/pro/espace" : "/boutique"}
+          href={keptSession ? "/pro/espace" : "/boutique"}
           className="inline-flex h-12 items-center rounded-full bg-[#211a2c] px-7 text-xs uppercase tracking-[0.16em] text-[#faf7f2] transition-colors hover:bg-[#382c42]"
         >
-          {isLoggedIn ? dict.pro.thanksCtaAccount : dict.pro.thanksCta}
+          {keptSession ? dict.pro.thanksCtaAccount : dict.pro.thanksCta}
         </Link>
       </div>
     );
@@ -200,6 +223,22 @@ export function ProSignupForm() {
         </div>
       </div>
 
+      {existingAccount && (
+        <div className="rounded-xl border border-gold/30 bg-gold/10 px-4 py-4 text-sm leading-relaxed text-ink/80">
+          <p>{dict.pro.existingAccount}</p>
+          <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
+            <Link
+              href="/pro/connexion?redirect=/pro/inscription"
+              className="font-medium text-ink underline underline-offset-4"
+            >
+              {dict.pro.existingAccountLogin}
+            </Link>
+            <Link href="/pro/mot-de-passe-oublie" className="text-ink/60 underline-offset-4 hover:underline">
+              {dict.auth.forgotPassword}
+            </Link>
+          </div>
+        </div>
+      )}
       {error && <p className="text-sm text-red-300">{error}</p>}
       <Button type="submit" disabled={loading} className="w-full" size="lg">
         {loading ? dict.common.loading : dict.pro.submitApplication}

@@ -165,6 +165,8 @@
     "thanksCta": "Aller à la boutique",
     "thanksCtaAccount": "Voir mon espace pro",
     "loggedInAs": "Connecté comme {email}. Complétez le formulaire ci-dessous pour demander l'accès professionnel.",
+    "existingAccount": "Un compte existe déjà avec ce courriel, mais le mot de passe ne correspond pas. Connectez-vous : vous reviendrez directement à ce formulaire pour compléter votre demande.",
+    "existingAccountLogin": "Se connecter et compléter ma demande",
     "businessName": "Nom de l'entreprise / salon",
     "diploma": "Diplôme de coiffure",
     "diplomaHint": "Obligatoire — pour confirmer votre statut de coiffeur",

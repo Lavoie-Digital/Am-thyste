@@ -350,7 +350,7 @@ export function proApplicationOwnerEmail(input: {
     p("Une nouvelle demande d'accès professionnel vient d'être soumise. Vérifiez le diplôme, puis approuvez ou refusez depuis l'espace d'administration.") +
     detailRows(rows) +
     (input.profile.diplomaUrl ? button("Voir le diplôme", input.profile.diplomaUrl) : "") +
-    button("Gérer les demandes", absoluteUrl("/admin"));
+    button("Gérer les demandes", absoluteUrl("/admin/pros"));
   return {
     subject: `Nouvelle demande pro — ${input.profile.businessName || input.name}`,
     html: shell("Nouvelle demande professionnelle", body, {
