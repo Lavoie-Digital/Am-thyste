@@ -2,7 +2,7 @@ import "server-only";
 import { cache } from "react";
 import type { Partner } from "../types";
 import { getAdminDb, adminConfigured } from "../firebase/admin";
-import { partnersCol } from "../firebase/collections";
+import { partnersCol, partnersMetaDoc } from "../firebase/collections";
 import { SEED_PARTNERS } from "./seed";
 
 /** Firestore Timestamp → epoch ms (plain number, safe to serialize to client). */
@@ -20,7 +20,12 @@ const getRawPartners = cache(async (): Promise<Partner[]> => {
   }
   try {
     const snap = await partnersCol(db).orderBy("sortOrder").get();
-    if (snap.empty) return [...SEED_PARTNERS].sort((a, b) => a.sortOrder - b.sortOrder);
+    if (snap.empty) {
+      // Seed list only until the admin has touched partners once.
+      const meta = await partnersMetaDoc(db).get();
+      if (meta.exists) return [];
+      return [...SEED_PARTNERS].sort((a, b) => a.sortOrder - b.sortOrder);
+    }
     return snap.docs.map((d) => {
       const data = d.data() as Omit<Partner, "id">;
       return { ...data, id: d.id, createdAt: toMs(data.createdAt), updatedAt: toMs(data.updatedAt) };

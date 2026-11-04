@@ -47,6 +47,13 @@ export function PartnerManager({ initial }: { initial: Partner[] }) {
   const { dict, locale } = useLocale();
   const router = useRouter();
   const [rows, setRows] = useState(initial);
+  // Re-sync with the server list after router.refresh(), so the admin always
+  // shows what's actually stored instead of a stale optimistic copy.
+  const [prevInitial, setPrevInitial] = useState(initial);
+  if (initial !== prevInitial) {
+    setPrevInitial(initial);
+    setRows(initial);
+  }
   const [draft, setDraft] = useState<Draft | null>(null);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -122,11 +129,22 @@ export function PartnerManager({ initial }: { initial: Partner[] }) {
 
   const remove = async (id: string) => {
     if (!confirm("Supprimer ce partenaire ?")) return;
+    setError("");
     setBusy(id);
-    const res = await deletePartner(id);
-    if (res.ok) setRows((r) => r.filter((p) => p.id !== id));
-    setBusy(null);
-    router.refresh();
+    try {
+      const res = await deletePartner(id);
+      if (!res.ok) throw new Error(res.error);
+      setRows((r) => r.filter((p) => p.id !== id));
+      router.refresh();
+    } catch (err: unknown) {
+      setError(
+        (err as Error).message === "not-configured"
+          ? "Firebase non configuré."
+          : "La suppression a échoué. Réessayez.",
+      );
+    } finally {
+      setBusy(null);
+    }
   };
 
   return (
@@ -181,6 +199,8 @@ export function PartnerManager({ initial }: { initial: Partner[] }) {
           </div>
         ))}
       </div>
+
+      {!draft && error && <p className="text-sm text-red-300">{error}</p>}
 
       {!draft && (
         <Button type="button" onClick={openNew} size="lg">

@@ -163,26 +163,6 @@
   },
   "partners": [
     {
-      "id": "salon-centric",
-      "name": "Salon Centric",
-      "logo": "/salon-centric-logo.png",
-      "href": "https://www.saloncentricqc.ca/",
-      "role": {
-        "fr": "Distributeur autorisé",
-        "en": "Authorized distributor"
-      },
-      "desc": {
-        "fr": "Disponible en succursale.",
-        "en": "Available in store."
-      },
-      "cta": {
-        "fr": "Trouver une succursale",
-        "en": "Find a location"
-      },
-      "active": true,
-      "sortOrder": 1
-    },
-    {
       "id": "bella-extensions",
       "name": "Bella Extensions",
       "logo": "/bella-extensions-logo.avif",
@@ -200,7 +180,7 @@
         "en": "Visit the salon"
       },
       "active": true,
-      "sortOrder": 2
+      "sortOrder": 1
     }
   ]
 }

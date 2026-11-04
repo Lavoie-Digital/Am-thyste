@@ -51,7 +51,7 @@ const FAQ: Record<"fr" | "en", { eyebrow: string; heading: string; items: Array<
       },
       {
         q: "Où acheter les produits Améthyste ?",
-        a: "Commandez directement en ligne sur notre boutique, ou retrouvez Améthyste chez notre distributeur autorisé Salon Centric et au salon certifié Bella Extensions.",
+        a: "Commandez directement en ligne sur notre boutique, ou retrouvez Améthyste au salon certifié Bella Extensions.",
       },
       {
         q: "Quels sont les frais de livraison ?",
@@ -81,7 +81,7 @@ const FAQ: Record<"fr" | "en", { eyebrow: string; heading: string; items: Array<
       },
       {
         q: "Where can I buy Améthyste products?",
-        a: "Order directly online from our shop, or find Améthyste at our authorized distributor Salon Centric and at the certified salon Bella Extensions.",
+        a: "Order directly online from our shop, or find Améthyste at the certified salon Bella Extensions.",
       },
       {
         q: "What are the shipping fees?",

@@ -24,6 +24,14 @@ export function ordersCol(db: Firestore) {
 export function partnersCol(db: Firestore) {
   return db.collection(COLLECTIONS.partners);
 }
+/**
+ * Marker written the first time the admin edits partners. Once it exists the
+ * `partners` collection is the source of truth — an empty collection means
+ * "no partners", not "fall back to the seed list".
+ */
+export function partnersMetaDoc(db: Firestore) {
+  return db.collection(COLLECTIONS.settings).doc("partners-meta");
+}
 export function settingsDoc(db: Firestore) {
   return db.collection(COLLECTIONS.settings).doc(SETTINGS_DOC);
 }
