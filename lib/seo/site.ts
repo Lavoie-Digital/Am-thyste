@@ -21,6 +21,19 @@ export const SITE_URL = "https://amethystehairproductscanada.ca";
 export const BRAND = {
   name: "Améthyste",
   legalName: "Améthyste Hair Products",
+  /**
+   * Every spelling people (and engines) use for the brand. Feeds schema.org
+   * `alternateName` on Organization + WebSite so Google can match queries like
+   * "amethyste hair products canada" (no accent) to this site and pick a proper
+   * site name in results. Keep in sync with the Google Business Profile name.
+   */
+  alternateNames: [
+    "Améthyste Hair Products Canada",
+    "Amethyste Hair Products Canada",
+    "Améthyste Hair Products",
+    "Amethyste Hair Products",
+    "Amethyste",
+  ],
   slogan: {
     fr: "Ce n'est pas simplement un soin, c'est un rituel.",
     en: "It's not just a treatment, it's a ritual.",
@@ -37,6 +50,11 @@ export const BRAND = {
     region: "QC",
     country: "CA",
   },
+  /**
+   * Official profiles that confirm the brand's identity (Knowledge Graph / GEO).
+   * TODO: add the Google Business Profile share link (https://maps.app.goo.gl/…)
+   * and Instagram once they exist. Every profile must point back to SITE_URL.
+   */
   sameAs: ["https://www.facebook.com/AmethysteHairProducts"],
   themeColor: "#65338E",
 } as const;

@@ -20,6 +20,7 @@ export function organizationJsonLd(locale: Locale) {
     "@id": ORG_ID,
     name: BRAND.name,
     legalName: BRAND.legalName,
+    alternateName: BRAND.alternateNames,
     url: SITE_URL,
     logo: BRAND.logo,
     image: BRAND.logo,
@@ -53,6 +54,7 @@ export function websiteJsonLd(locale: Locale) {
     "@id": WEBSITE_ID,
     url: SITE_URL,
     name: BRAND.name,
+    alternateName: BRAND.alternateNames,
     description: BRAND.description[locale],
     inLanguage: locale === "fr" ? "fr-CA" : "en-CA",
     publisher: { "@id": ORG_ID },
@@ -88,11 +90,9 @@ export function productJsonLd(product: ProductDTO, locale: Locale) {
       availability: "https://schema.org/InStock",
       itemCondition: "https://schema.org/NewCondition",
       seller: { "@id": ORG_ID },
-      shippingDetails: {
-        "@type": "OfferShippingDetails",
-        shippingRate: { "@type": "MonetaryAmount", value: "0", currency: "CAD" },
-        shippingDestination: { "@type": "DefinedRegion", addressCountry: "CA" },
-      },
+      // No `shippingDetails`: shipping is a flat rate below the free-shipping
+      // threshold (admin settings), so a hardcoded "$0 to all of Canada" was
+      // false — mismatched structured data gets merchant listings demoted.
     },
   };
 }

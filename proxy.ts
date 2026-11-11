@@ -34,6 +34,6 @@ export const config = {
   // Keep crawler-facing static files (fonts, images, robots/sitemap/manifest)
   // out of the proxy entirely so they are served straight from the CDN.
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|manifest.webmanifest|.*\\.(?:jpe?g|png|svg|ico|webp|avif|woff2?)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|llms.txt|manifest.webmanifest|.*\\.(?:jpe?g|png|svg|ico|webp|avif|woff2?)$).*)",
   ],
 };

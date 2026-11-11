@@ -44,7 +44,9 @@ const INDEXABLE = process.env.VERCEL_ENV !== "preview" && process.env.VERCEL_ENV
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Améthyste — Hair Botox & Soins capillaires professionnels",
+    // Carries the full brand + "Canada" so the homepage matches the domain name
+    // people actually search (amethystehairproductscanada.ca). ~60 chars max.
+    default: "Améthyste Hair Products Canada · Hair Botox professionnel",
     template: "%s · Améthyste",
   },
   description: BRAND.description.fr,
