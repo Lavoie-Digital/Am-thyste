@@ -78,10 +78,13 @@ export function toDTO(product: Product, viewer: Viewer | null): ProductDTO {
  */
 export async function getProducts(viewer: Viewer | null): Promise<ProductDTO[]> {
   const products = await getRawProducts();
-  // Pro-only products always come last (stable sort keeps sortOrder within each group).
+  // Approved pros / admins see pro-only products first; everyone else sees them
+  // last. Stable sort keeps the dashboard sortOrder within each group.
+  const proFirst = pricingContextFor(viewer) === "reseller";
+  const rank = (p: Product) => (!!p.proOnly === proFirst ? 0 : 1);
   return products
     .filter((p) => p.active)
-    .sort((a, b) => Number(!!a.proOnly) - Number(!!b.proOnly))
+    .sort((a, b) => rank(a) - rank(b))
     .map((p) => toDTO(p, viewer));
 }
 

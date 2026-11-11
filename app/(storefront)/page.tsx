@@ -104,7 +104,14 @@ export default async function HomePage() {
   };
   const viewer = await verifySession();
   const products = await getProducts(viewer);
-  const featured = products.slice(0, 4);
+  // Shop preview: 4 products, always including the first pro-only product (the
+  // pro Hair Botox) so it's showcased to every visitor. For non-pros it sorts
+  // last, so it takes the 4th slot; for pros it's already first.
+  const firstPro = products.find((p) => p.proOnly);
+  const featured =
+    firstPro && !products.slice(0, 4).includes(firstPro)
+      ? [...products.filter((p) => p !== firstPro).slice(0, 3), firstPro]
+      : products.slice(0, 4);
   const partners = await getPartners();
 
   return (
