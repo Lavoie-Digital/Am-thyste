@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/nav/Navbar";
 import { Footer } from "@/components/nav/Footer";
 import { CartDrawer } from "@/components/storefront/CartDrawer";
+import { ProOnlyNotice } from "@/components/storefront/ProOnlyNotice";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo/jsonld";
 import { getLocale } from "@/lib/i18n/server";
@@ -17,6 +18,7 @@ export default async function StorefrontLayout({
       <JsonLd data={[organizationJsonLd(locale), websiteJsonLd(locale)]} />
       <Navbar />
       <CartDrawer />
+      <ProOnlyNotice />
       <main className="flex-1">{children}</main>
       <Footer />
     </>

@@ -277,5 +277,13 @@
     "privacy": "Politique de confidentialité",
     "terms": "Conditions d'utilisation",
     "newsletter": "Recevez nos rituels et nos offres exclusives."
+  },
+  "proNotice": {
+    "title": "Avis aux particuliers",
+    "body": "Le Hair Botox Améthyste est offert exclusivement aux professionnels détenant un compte pro approuvé. Nos autres soins restent accessibles à tous.",
+    "cta": "Créer un compte pro",
+    "login": "J'ai déjà un compte pro",
+    "dismiss": "Continuer vers le site",
+    "close": "Fermer"
   }
 }

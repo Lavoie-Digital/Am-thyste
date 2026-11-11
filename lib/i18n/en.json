@@ -277,5 +277,13 @@
     "privacy": "Privacy policy",
     "terms": "Terms of use",
     "newsletter": "Receive our rituals and our exclusive offers."
+  },
+  "proNotice": {
+    "title": "Notice to customers",
+    "body": "Améthyste Hair Botox is available exclusively to professionals with an approved pro account. Our other treatments remain available to everyone.",
+    "cta": "Create a pro account",
+    "login": "I already have a pro account",
+    "dismiss": "Continue to the site",
+    "close": "Close"
   }
 }

@@ -14,11 +14,11 @@ import { getLocale } from "@/lib/i18n/server";
      que la cliente a désigné la personne.
    • LAST_UPDATED : doit refléter la dernière modification réelle du texte.
    ──────────────────────────────────────────────────────────────────────── */
-const LAST_UPDATED = "2026-08-08";
+const LAST_UPDATED = "2026-11-11";
 
 const PRIVACY_OFFICER = {
   /** Laisser vide tant que la personne n'est pas désignée officiellement. */
-  name: "",
+  name: "Amelie Purtell",
   email: "info@amethystehairproductscanada.ca",
 };
 
@@ -130,10 +130,10 @@ const CONTENT: Record<"fr" | "en", Content> = {
         id: "temoins",
         heading: "Témoins (cookies) et stockage local",
         body: [
-          "Le site n'utilise que deux témoins, tous deux strictement nécessaires à son fonctionnement.",
+          "Le site n'enregistre dans votre navigateur que les éléments ci-dessous. Tous sont strictement nécessaires au fonctionnement d'un service que vous utilisez (connexion, langue, panier) ; ils ne servent ni à vous suivre ni à vous profiler, et ne requièrent donc pas de consentement préalable.",
           {
             table: {
-              head: ["Témoin", "Rôle", "Durée"],
+              head: ["Élément", "Rôle", "Durée"],
               rows: [
                 [
                   "session",
@@ -141,16 +141,32 @@ const CONTENT: Record<"fr" | "en", Content> = {
                   "5 jours",
                 ],
                 [
-                  "amethyste_locale",
+                  "amethyste_locale (témoin)",
                   "Mémorise votre choix de langue (français ou anglais).",
                   "12 mois",
+                ],
+                [
+                  "amethyste_cart (stockage local)",
+                  "Conserve le contenu de votre panier (produits, formats, quantités, prix affichés) pour qu'il ne soit pas perdu si vous rafraîchissez la page ou revenez plus tard. Il reste sur votre appareil et ne nous est transmis qu'au moment où vous passez commande.",
+                  "30 jours après la dernière modification, ou jusqu'à ce que la commande soit payée ou le panier vidé",
+                ],
+                [
+                  "amethyste:pro-notice-dismissed (stockage local)",
+                  "Retient que vous avez fermé l'avis indiquant que le Hair Botox est réservé aux comptes professionnels, pour ne pas vous le réafficher. Ne contient aucun renseignement personnel.",
+                  "Jusqu'à ce que vous l'effaciez",
+                ],
+                [
+                  "firebaseLocalStorageDb (IndexedDB, Firebase)",
+                  "Seulement si vous vous connectez : conserve les jetons d'authentification de Firebase qui maintiennent votre session ouverte sur cet appareil.",
+                  "Jusqu'à la déconnexion",
                 ],
               ],
             },
           },
           "Aucun témoin publicitaire, aucun outil de mesure d'audience, aucun traceur tiers et aucun profilage ne sont utilisés sur ce site.",
-          "Votre panier n'est enregistré nulle part : il reste en mémoire le temps de votre visite et se réinitialise dès que vous rafraîchissez ou quittez la page. Aucun autre renseignement n'est conservé dans votre navigateur.",
-          "Vous pouvez supprimer ces témoins depuis les réglages de votre navigateur. Supprimer le témoin de session vous déconnecte simplement de votre compte.",
+          "À l'étape du paiement, le formulaire sécurisé fourni par Square peut utiliser ses propres témoins ou recueillir des données techniques sur l'appareil afin de prévenir la fraude. Ces données relèvent de Square et de sa propre politique de confidentialité.",
+          "Aucun autre renseignement n'est conservé dans votre navigateur.",
+          "Vous pouvez supprimer ces éléments à tout moment depuis les réglages de votre navigateur (« Effacer les données de navigation » ou « Données de site »). Les supprimer videra votre panier et vous déconnectera de votre compte, sans autre conséquence.",
         ],
       },
       {
@@ -205,7 +221,7 @@ const CONTENT: Record<"fr" | "en", Content> = {
                   "Messages du formulaire de contact",
                   "Ils ne sont pas enregistrés dans notre base de données : ils nous parviennent par courriel et sont conservés au plus 24 mois.",
                 ],
-                ["Témoins", "Voir les durées indiquées à la section 6."],
+                ["Témoins et stockage local", "Voir les durées indiquées à la section 6."],
               ],
             },
           },
@@ -364,23 +380,39 @@ const CONTENT: Record<"fr" | "en", Content> = {
         id: "temoins",
         heading: "Cookies and local storage",
         body: [
-          "The site uses only two cookies, both strictly necessary for it to function.",
+          "The site stores only the items below in your browser. All are strictly necessary for a service you are using (sign-in, language, cart); they are not used to track or profile you and therefore do not require prior consent.",
           {
             table: {
-              head: ["Cookie", "Purpose", "Lifetime"],
+              head: ["Item", "Purpose", "Lifetime"],
               rows: [
                 [
                   "session",
                   "Keeps you signed in to your account. An encrypted HttpOnly cookie issued by Firebase, unreadable by browser scripts.",
                   "5 days",
                 ],
-                ["amethyste_locale", "Remembers your language choice (French or English).", "12 months"],
+                ["amethyste_locale (cookie)", "Remembers your language choice (French or English).", "12 months"],
+                [
+                  "amethyste_cart (local storage)",
+                  "Keeps the contents of your cart (products, sizes, quantities, displayed prices) so it isn't lost if you refresh the page or come back later. It stays on your device and is only sent to us when you place an order.",
+                  "30 days after the last change, or until the order is paid or the cart is emptied",
+                ],
+                [
+                  "amethyste:pro-notice-dismissed (local storage)",
+                  "Remembers that you closed the notice saying Hair Botox is reserved for professional accounts, so it isn't shown again. Contains no personal information.",
+                  "Until you clear it",
+                ],
+                [
+                  "firebaseLocalStorageDb (IndexedDB, Firebase)",
+                  "Only if you sign in: stores the Firebase authentication tokens that keep you signed in on this device.",
+                  "Until you sign out",
+                ],
               ],
             },
           },
           "No advertising cookies, no analytics tools, no third-party trackers and no profiling are used on this site.",
-          "Your cart is not saved anywhere: it stays in memory for the duration of your visit and resets as soon as you refresh or leave the page. No other information is kept in your browser.",
-          "You can delete these cookies from your browser settings. Deleting the session cookie simply signs you out of your account.",
+          "At checkout, the secure form provided by Square may use its own cookies or collect technical device data to prevent fraud. That data is handled by Square under its own privacy policy.",
+          "No other information is kept in your browser.",
+          "You can delete these items at any time from your browser settings (\"Clear browsing data\" or \"Site data\"). Doing so will empty your cart and sign you out of your account, with no other consequence.",
         ],
       },
       {
@@ -431,7 +463,7 @@ const CONTENT: Record<"fr" | "en", Content> = {
                   "Contact form messages",
                   "They are not stored in our database: they reach us by email and are kept for no more than 24 months.",
                 ],
-                ["Cookies", "See the lifetimes listed in section 6."],
+                ["Cookies and local storage", "See the lifetimes listed in section 6."],
               ],
             },
           },
