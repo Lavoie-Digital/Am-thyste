@@ -16,6 +16,15 @@ export function formatPrice(cents: number, locale: Locale = "fr"): string {
   }).format(cents / 100);
 }
 
+/** Amount for running text: "200 $" / "$200" (no cents when whole). */
+export function formatAmount(cents: number, locale: Locale = "fr"): string {
+  return new Intl.NumberFormat(locale === "fr" ? "fr-CA" : "en-CA", {
+    style: "currency",
+    currency: "CAD",
+    minimumFractionDigits: cents % 100 === 0 ? 0 : 2,
+  }).format(cents / 100);
+}
+
 /** Pick the localized string for a given locale, falling back to FR. */
 export function pick(value: { fr: string; en: string } | undefined, locale: Locale): string {
   if (!value) return "";

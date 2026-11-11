@@ -8,14 +8,17 @@ import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { formatPrice, pick } from "@/lib/utils";
 import { CheckoutModal } from "./CheckoutModal";
 
-const FREE_SHIPPING_THRESHOLD = 10000; // display-only; server is authoritative
-
-export function CartDrawer() {
+/**
+ * `freeShippingThreshold` (cents) comes from the store settings, read by the
+ * server layout. Display-only: the checkout API recomputes shipping itself.
+ */
+export function CartDrawer({ freeShippingThreshold }: { freeShippingThreshold: number }) {
   const { items, isOpen, close, subtotal, setQuantity, remove, openCheckout } = useCart();
   const { dict, locale } = useLocale();
 
-  const remaining = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
-  const progress = Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100);
+  const remaining = Math.max(0, freeShippingThreshold - subtotal);
+  const progress =
+    freeShippingThreshold > 0 ? Math.min(100, (subtotal / freeShippingThreshold) * 100) : 100;
 
   return (
     <>

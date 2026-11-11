@@ -11,7 +11,8 @@ import { getI18n, getLocale } from "@/lib/i18n/server";
 import { verifySession } from "@/lib/auth/dal";
 import { getProducts } from "@/lib/data/products";
 import { getPartners } from "@/lib/data/partners";
-import { pick } from "@/lib/utils";
+import { pick, formatAmount } from "@/lib/utils";
+import { getSettings } from "@/lib/data/settings";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { faqJsonLd } from "@/lib/seo/jsonld";
 
@@ -55,7 +56,7 @@ const FAQ: Record<"fr" | "en", { eyebrow: string; heading: string; items: Array<
       },
       {
         q: "Quels sont les frais de livraison ?",
-        a: "Nous livrons partout au Québec. La livraison est gratuite pour toute commande de 100 $ CAD et plus.",
+        a: "Nous livrons partout au Québec. La livraison est gratuite pour toute commande de {seuil} CAD et plus.",
       },
     ],
   },
@@ -85,7 +86,7 @@ const FAQ: Record<"fr" | "en", { eyebrow: string; heading: string; items: Array<
       },
       {
         q: "What are the shipping fees?",
-        a: "We ship across Québec. Shipping is free on every order of $100 CAD or more.",
+        a: "We ship across Québec. Shipping is free on every order of {seuil} CAD or more.",
       },
     ],
   },
@@ -95,7 +96,12 @@ export default async function HomePage() {
   const { dict } = await getI18n();
   const locale = await getLocale();
   const h = dict.home;
-  const faq = FAQ[locale];
+  const settings = await getSettings();
+  const seuil = formatAmount(settings.freeShippingThreshold, locale);
+  const faq = {
+    ...FAQ[locale],
+    items: FAQ[locale].items.map((i) => ({ ...i, a: i.a.replace("{seuil}", seuil) })),
+  };
   const viewer = await verifySession();
   const products = await getProducts(viewer);
   const featured = products.slice(0, 4);
