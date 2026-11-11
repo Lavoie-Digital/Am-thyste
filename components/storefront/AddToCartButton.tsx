@@ -26,7 +26,7 @@ export function AddToCartButton({
 }) {
   const { add } = useCart();
   const { dict } = useLocale();
-  const { role, proStatus } = useAuth();
+  const { user, role, proStatus } = useAuth();
   const [added, setAdded] = useState(false);
 
   // Pro-only products stay visible to everyone, but only approved pros / admins
@@ -35,14 +35,15 @@ export function AddToCartButton({
   if (product.proOnly && !canBuy) {
     return (
       <Link
-        href="/pro"
+        href={user ? "/pro" : "/pro/connexion"}
         className={cn(
           "inline-flex h-12 items-center justify-center rounded-full border border-ink/15 px-6 text-center text-xs uppercase tracking-[0.18em] text-ink/70 transition-colors hover:border-ink/40 hover:bg-ink/[0.03]",
           fullWidth && "w-full",
           className,
         )}
       >
-        {dict.shop.proOnlyCta}
+        {/* Signed out → invite to sign in; signed in but not an approved pro → explain why. */}
+        {user ? dict.shop.proOnlyCta : dict.shop.proOnlySignIn}
       </Link>
     );
   }

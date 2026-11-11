@@ -112,7 +112,8 @@
     "ingredients": "Ingrédients",
     "ritual": "Le rituel",
     "sizeLabel": "Format",
-    "proOnlyCta": "Réservé aux pros"
+    "proOnlyCta": "Réservé aux pros",
+    "proOnlySignIn": "Connectez-vous pour commander"
   },
   "cart": {
     "title": "Votre panier",

@@ -39,7 +39,11 @@ const getRawProducts = cache(async (): Promise<Product[]> => {
  * server-side enforcement that prevents reseller-price leakage.
  */
 export function toDTO(product: Product, viewer: Viewer | null): ProductDTO {
-  const canSeeReseller = pricingContextFor(viewer) === "reseller";
+  // Pro-only products are never sold at market rate — their reseller price is
+  // their ONLY price (marketPrice is typically 0), so there is no pro discount
+  // to hide. Expose it to everyone so the public preview shows a real price;
+  // purchase is still blocked for non-pros (AddToCartButton + priceCart()).
+  const canSeeReseller = pricingContextFor(viewer) === "reseller" || !!product.proOnly;
   return {
     id: product.id,
     slug: product.slug,
@@ -66,21 +70,18 @@ export function toDTO(product: Product, viewer: Viewer | null): ProductDTO {
   };
 }
 
-/** True when the viewer may see pro-only products (approved pros / admins). */
-function canSeePro(viewer: Viewer | null): boolean {
-  return pricingContextFor(viewer) === "reseller";
-}
-
 /**
  * Active products as client-safe DTOs for the given viewer. Pro-only products
- * are hidden entirely from non-pros — no public preview: they are never listed,
- * never served in the sitemap, and unreachable by direct URL.
+ * are listed for everyone (public preview), but only approved pros / admins can
+ * buy them: the add-to-cart button is swapped for a sign-in prompt, and
+ * priceCart() rejects them server-side at checkout.
  */
 export async function getProducts(viewer: Viewer | null): Promise<ProductDTO[]> {
   const products = await getRawProducts();
-  const showPro = canSeePro(viewer);
+  // Pro-only products always come last (stable sort keeps sortOrder within each group).
   return products
-    .filter((p) => p.active && (showPro || !p.proOnly))
+    .filter((p) => p.active)
+    .sort((a, b) => Number(!!a.proOnly) - Number(!!b.proOnly))
     .map((p) => toDTO(p, viewer));
 }
 
@@ -91,8 +92,7 @@ export async function getProduct(
 ): Promise<ProductDTO | null> {
   const products = await getRawProducts();
   const product = products.find((p) => p.slug === slug && p.active);
-  // Pro-only products are invisible to non-pros — treat as not found.
-  if (!product || (product.proOnly && !canSeePro(viewer))) return null;
+  if (!product) return null;
   return toDTO(product, viewer);
 }
 

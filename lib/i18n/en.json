@@ -112,7 +112,8 @@
     "ingredients": "Ingredients",
     "ritual": "The ritual",
     "sizeLabel": "Size",
-    "proOnlyCta": "Pros only"
+    "proOnlyCta": "Pros only",
+    "proOnlySignIn": "Sign in to order"
   },
   "cart": {
     "title": "Your cart",

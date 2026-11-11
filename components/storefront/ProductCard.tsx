@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
-import { pick } from "@/lib/utils";
+import { pick, cn } from "@/lib/utils";
 import type { ProductDTO } from "@/lib/types";
 import { PriceTag } from "./PriceTag";
 import { AddToCartButton } from "./AddToCartButton";
@@ -22,7 +22,16 @@ export function ProductCard({ product, index = 0 }: { product: ProductDTO; index
       transition={{ duration: 1, delay: index * 0.07, ease }}
       className="group flex h-full flex-col"
     >
-      <Link href={`/boutique/${product.slug}`} className="relative block aspect-square overflow-hidden rounded-sm bg-bone ring-1 ring-ink/[0.04]">
+      <Link
+        href={`/boutique/${product.slug}`}
+        className={cn(
+          "relative block aspect-square overflow-hidden rounded-sm bg-bone",
+          // Pro-only products get a thin neon-violet outline + soft glow.
+          product.proOnly
+            ? "ring-2 ring-[#c13bff] shadow-[0_0_14px_rgba(193,59,255,0.55)]"
+            : "ring-1 ring-ink/[0.04]",
+        )}
+      >
         <Image
           src={product.images[0]}
           alt={pick(product.name, locale)}

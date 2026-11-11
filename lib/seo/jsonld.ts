@@ -82,7 +82,9 @@ export function productJsonLd(product: ProductDTO, locale: Locale) {
     ...(product.ingredients
       ? { material: pick(product.ingredients, locale) }
       : {}),
-    offers: {
+    // Pro-only products aren't publicly purchasable: advertising an Offer
+    // (with a public price) would be false structured data, so omit it.
+    ...(product.proOnly ? {} : { offers: {
       "@type": "Offer",
       url,
       priceCurrency: "CAD",
@@ -93,7 +95,7 @@ export function productJsonLd(product: ProductDTO, locale: Locale) {
       // No `shippingDetails`: shipping is a flat rate below the free-shipping
       // threshold (admin settings), so a hardcoded "$0 to all of Canada" was
       // false — mismatched structured data gets merchant listings demoted.
-    },
+    } }),
   };
 }
 
