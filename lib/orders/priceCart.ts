@@ -7,7 +7,7 @@ export type CartInputItem = { productId: string; sizeId?: string; quantity: numb
 
 export type PricedCart =
   | { ok: true; lineItems: OrderLineItem[]; subtotal: number }
-  | { ok: false; error: "empty-cart" | "pro-only" };
+  | { ok: false; error: "empty-cart" | "pro-only" | "out-of-stock" };
 
 /**
  * Recomputes line items + subtotal from Firestore for a raw cart — the
@@ -30,6 +30,11 @@ export async function priceCartItems(
     if (product.proOnly && context !== "reseller") {
       return { ok: false, error: "pro-only" };
     }
+    // Same reasoning: an out-of-stock item fails the whole cart instead of
+    // being silently dropped from an order the buyer thinks is complete.
+    if (product.stockStatus === "out_of_stock") {
+      return { ok: false, error: "out-of-stock" };
+    }
     const unitAmount = resolveUnitAmount(product, context, item.sizeId);
     subtotal += unitAmount * item.quantity;
     lineItems.push({
@@ -38,6 +43,9 @@ export async function priceCartItems(
       nameSnapshot: product.name,
       unitAmount,
       quantity: item.quantity,
+      ...(product.stockStatus === "backorder"
+        ? { backorderDelay: product.backorderDelay ?? { fr: "", en: "" } }
+        : {}),
     });
   }
 

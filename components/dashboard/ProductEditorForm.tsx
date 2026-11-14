@@ -37,6 +37,9 @@ export function ProductEditorForm({ product }: { product: Product | null }) {
     sortOrder: product?.sortOrder?.toString() ?? "99",
     active: product?.active ?? true,
     proOnly: product?.proOnly ?? false,
+    stockStatus: product?.stockStatus ?? "in_stock",
+    backorderDelayFr: product?.backorderDelay?.fr ?? "",
+    backorderDelayEn: product?.backorderDelay?.en ?? "",
   });
 
   const upd = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
@@ -53,6 +56,9 @@ export function ProductEditorForm({ product }: { product: Product | null }) {
         version: product?.version,
         active: f.active,
         proOnly: f.proOnly,
+        stockStatus: f.stockStatus as "in_stock" | "out_of_stock" | "backorder",
+        backorderDelayFr: f.backorderDelayFr,
+        backorderDelayEn: f.backorderDelayEn,
         nameFr: f.nameFr,
         nameEn: f.nameEn,
         shortDescFr: f.shortDescFr,
@@ -115,6 +121,25 @@ export function ProductEditorForm({ product }: { product: Product | null }) {
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           <Field label="Format (FR)" hint="ex. 500 g / 17,6 oz"><input value={f.sizeLabelFr} onChange={upd("sizeLabelFr")} className={inputClass} /></Field>
           <Field label="Format (EN)"><input value={f.sizeLabelEn} onChange={upd("sizeLabelEn")} className={inputClass} /></Field>
+        </div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-3">
+          <Field label={dict.dashboard.stockLabel}>
+            <select value={f.stockStatus} onChange={upd("stockStatus")} className={inputClass}>
+              <option value="in_stock">{dict.dashboard.stockInStock}</option>
+              <option value="backorder">{dict.dashboard.stockBackorder}</option>
+              <option value="out_of_stock">{dict.dashboard.stockOutOfStock}</option>
+            </select>
+          </Field>
+          {f.stockStatus === "backorder" && (
+            <>
+              <Field label={dict.dashboard.backorderDelayFr} hint={dict.dashboard.backorderDelayHint}>
+                <input value={f.backorderDelayFr} onChange={upd("backorderDelayFr")} placeholder="2 à 3 semaines" className={inputClass} />
+              </Field>
+              <Field label={dict.dashboard.backorderDelayEn}>
+                <input value={f.backorderDelayEn} onChange={upd("backorderDelayEn")} placeholder="2 to 3 weeks" className={inputClass} />
+              </Field>
+            </>
+          )}
         </div>
       </div>
 

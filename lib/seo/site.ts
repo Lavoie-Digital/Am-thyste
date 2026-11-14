@@ -39,8 +39,8 @@ export const BRAND = {
     en: "It's not just a treatment, it's a ritual.",
   },
   description: {
-    fr: "Améthyste — Hair Botox et soins capillaires professionnels haut de gamme, conçus et fabriqués au Québec. Réparation intense, brillance miroir et nutrition profonde à la kératine et à l'extrait de bambou.",
-    en: "Améthyste — premium professional Hair Botox and hair care, designed and made in Québec. Intense repair, mirror shine and deep nourishment with keratin and bamboo extract.",
+    fr: "AMÉTHYSTE Hair Products Canada — une marque québécoise spécialisée dans les soins capillaires professionnels. Traitements Hair Botox réservés aux professionnels et produits d'entretien à domicile à la kératine et à l'extrait de bambou.",
+    en: "AMÉTHYSTE Hair Products Canada — a Québec brand specialized in professional hair care. Hair Botox treatments reserved for professionals, and at-home care products with keratin and bamboo extract.",
   },
   telephone: "+1-514-691-1899",
   email: "info@amethystehairproductscanada.ca",

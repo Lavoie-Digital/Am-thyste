@@ -32,6 +32,9 @@ const productSchema = z.object({
   marketPrice: z.number().nonnegative(),
   resellerPrice: z.number().nonnegative(),
   proOnly: z.boolean().default(false),
+  stockStatus: z.enum(["in_stock", "out_of_stock", "backorder"]).default("in_stock"),
+  backorderDelayFr: z.string().default(""),
+  backorderDelayEn: z.string().default(""),
   images: z.array(z.string()).default([]),
   sizeLabelFr: z.string().default(""),
   sizeLabelEn: z.string().default(""),
@@ -67,6 +70,10 @@ export async function upsertProduct(input: ProductFormInput) {
     marketPrice: Math.round(p.marketPrice * 100),
     resellerPrice: Math.round(p.resellerPrice * 100),
     proOnly: p.proOnly,
+    stockStatus: p.stockStatus,
+    // Always written (empty when unused) so a stale delay can't survive a
+    // switch back to in-stock through the merge below.
+    backorderDelay: { fr: p.backorderDelayFr.trim(), en: p.backorderDelayEn.trim() },
     currency: "cad" as const,
     images: p.images.filter(Boolean),
     sizes:

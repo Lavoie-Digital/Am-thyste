@@ -5,7 +5,9 @@ import { motion, AnimatePresence } from "motion/react";
 import { useCart } from "@/lib/cart/CartContext";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
 import { useAuth } from "@/lib/auth/AuthContext";
-import { formatPrice } from "@/lib/utils";
+import Link from "next/link";
+import { formatPrice, pick } from "@/lib/utils";
+import type { Localized } from "@/lib/types";
 
 /* --- Minimal Square Web Payments SDK typing (no official npm types package) --- */
 interface SquareCardTokenizeResult {
@@ -52,13 +54,18 @@ type Step = "loading" | "form" | "paying" | "success" | "error";
 
 export function CheckoutModal() {
   const { checkoutOpen, closeCheckout, items, clear } = useCart();
-  const { dict } = useLocale();
+  const { dict, locale } = useLocale();
   const { user } = useAuth();
 
   const [step, setStep] = useState<Step>("loading");
   const [error, setError] = useState<string | null>(null);
   const [retryKey, setRetryKey] = useState(0);
-  const [preview, setPreview] = useState<{ subtotal: number; shipping: number } | null>(null);
+  const [preview, setPreview] = useState<{
+    subtotal: number;
+    shipping: number;
+    backorders: Array<{ name: Localized; delay?: Localized }>;
+  } | null>(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [address, setAddress] = useState({
     name: "",
     line1: "",
@@ -88,6 +95,7 @@ export function CheckoutModal() {
       setError(null);
       setPreview(null);
       setCardReady(false);
+      setTermsAccepted(false);
       attachedRef.current = false;
       setEmail(user?.email || "");
       idempotencyKeyRef.current = crypto.randomUUID();
@@ -104,11 +112,12 @@ export function CheckoutModal() {
         if (!data.ok) {
           if (data.reason === "square-not-configured") setError(dict.checkout.notConfigured);
           else if (data.error === "pro-only") setError(dict.checkout.proOnlyError);
+          else if (data.error === "out-of-stock") setError(dict.checkout.outOfStockError);
           else setError(dict.checkout.loadError);
           setStep("error");
           return;
         }
-        setPreview({ subtotal: data.subtotal, shipping: data.shipping });
+        setPreview({ subtotal: data.subtotal, shipping: data.shipping, backorders: data.backorders ?? [] });
       } catch {
         if (!cancelled) {
           setError(dict.checkout.loadError);
@@ -188,6 +197,10 @@ export function CheckoutModal() {
   async function handlePay(e: React.FormEvent) {
     e.preventDefault();
     if (!cardRef.current || !cardReady) return;
+    if (!termsAccepted) {
+      setError(dict.checkout.termsRequired);
+      return;
+    }
     setStep("paying");
     setError(null);
     try {
@@ -210,7 +223,13 @@ export function CheckoutModal() {
       });
       const data = await res.json();
       if (!data.ok) {
-        setError(data.error === "pro-only" ? dict.checkout.proOnlyError : dict.checkout.cardError);
+        setError(
+          data.error === "pro-only"
+            ? dict.checkout.proOnlyError
+            : data.error === "out-of-stock"
+              ? dict.checkout.outOfStockError
+              : dict.checkout.cardError,
+        );
         setStep("form");
         return;
       }
@@ -312,6 +331,24 @@ export function CheckoutModal() {
                     <p className="text-xs text-ink/40">{dict.checkout.taxNote}</p>
                   </div>
 
+                  {preview.backorders.length > 0 && (
+                    <div className="rounded-xl border border-ink/15 bg-bone px-4 py-3 text-sm text-ink/75">
+                      <p className="text-xs uppercase tracking-[0.15em] text-ink-mute">{dict.checkout.backorderNotice}</p>
+                      <ul className="mt-2 space-y-1">
+                        {preview.backorders.map((b, i) => {
+                          const delay = b.delay ? pick(b.delay, locale).trim() : "";
+                          return (
+                            <li key={i}>
+                              <span className="text-ink">{pick(b.name, locale)}</span>
+                              {" — "}
+                              {delay ? dict.shop.backorderDelay.replace("{delay}", delay) : dict.shop.backorderNoDelay}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  )}
+
                   <div className="space-y-3">
                     <p className="text-xs uppercase tracking-[0.15em] text-ink-mute">{dict.checkout.shippingInfo}</p>
                     <input
@@ -380,6 +417,31 @@ export function CheckoutModal() {
                       )}
                     </div>
                   </div>
+
+                  <label className="flex items-start gap-3 text-sm leading-relaxed text-ink/70">
+                    <input
+                      type="checkbox"
+                      required
+                      checked={termsAccepted}
+                      onChange={(e) => setTermsAccepted(e.target.checked)}
+                      className="mt-1 h-4 w-4 shrink-0 rounded"
+                    />
+                    <span>
+                      {dict.checkout.termsAccept.split(/(\{terms\}|\{privacy\})/).map((part, i) =>
+                        part === "{terms}" ? (
+                          <Link key={i} href="/conditions" target="_blank" className="underline underline-offset-2 hover:text-ink">
+                            {dict.checkout.termsLink}
+                          </Link>
+                        ) : part === "{privacy}" ? (
+                          <Link key={i} href="/confidentialite" target="_blank" className="underline underline-offset-2 hover:text-ink">
+                            {dict.checkout.privacyLink}
+                          </Link>
+                        ) : (
+                          part
+                        ),
+                      )}
+                    </span>
+                  </label>
 
                   <button
                     type="submit"

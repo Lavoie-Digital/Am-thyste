@@ -14,11 +14,11 @@ import { getLocale } from "@/lib/i18n/server";
      que la cliente a désigné la personne.
    • LAST_UPDATED : doit refléter la dernière modification réelle du texte.
    ──────────────────────────────────────────────────────────────────────── */
-const LAST_UPDATED = "2026-11-11";
+const LAST_UPDATED = "2026-11-14";
 
 const PRIVACY_OFFICER = {
-  /** Laisser vide tant que la personne n'est pas désignée officiellement. */
-  name: "Amelie Purtell",
+  /** Nom publié dans la section « Responsable » et dans l'encadré de contact. */
+  name: "Amélie Purtell",
   email: "info@amethystehairproductscanada.ca",
 };
 
@@ -59,7 +59,7 @@ const CONTENT: Record<"fr" | "en", Content> = {
         heading: "Responsable de la protection des renseignements personnels",
         body: [
           "Améthyste exploite la boutique en ligne amethystehairproductscanada.ca et est responsable des renseignements personnels qu'elle y recueille.",
-          "Conformément à l'article 3.1 de la Loi 25, la personne ayant la plus haute autorité au sein d'Améthyste assume la fonction de responsable de la protection des renseignements personnels. Elle veille à l'application de la présente politique et traite toute demande d'accès, de rectification ou de plainte. Ses coordonnées figurent au bas de cette page.",
+          `Conformément à l'article 3.1 de la Loi 25, la personne responsable de la protection des renseignements personnels chez Améthyste est ${PRIVACY_OFFICER.name}, que vous pouvez joindre à ${PRIVACY_OFFICER.email}. Elle veille à l'application de la présente politique et traite toute demande d'accès, de rectification ou de plainte.`,
         ],
       },
       {
@@ -107,7 +107,7 @@ const CONTENT: Record<"fr" | "en", Content> = {
               "Assurer la sécurité du site, authentifier les connexions et prévenir la fraude.",
             ],
           },
-          "Nous n'utilisons vos renseignements à aucune autre fin. Nous ne vous envoyons pas d'infolettre et n'utilisons pas vos coordonnées à des fins publicitaires. Si une nouvelle finalité devait s'ajouter, nous vous en informerions et obtiendrions votre consentement au préalable.",
+          "Nous n'utilisons vos renseignements à aucune autre fin. Nous n'envoyons actuellement aucune infolettre ni aucune offre promotionnelle, et passer une commande ou créer un compte ne vous y abonne pas. Si nous en offrons un jour, l'inscription se fera uniquement avec votre consentement exprès, conformément à la Loi canadienne anti-pourriel, et chaque envoi comportera un lien de désabonnement. Si une nouvelle finalité devait s'ajouter, nous vous en informerions et obtiendrions votre consentement au préalable.",
         ],
       },
       {
@@ -309,7 +309,7 @@ const CONTENT: Record<"fr" | "en", Content> = {
         heading: "Privacy officer",
         body: [
           "Améthyste operates the online store at amethystehairproductscanada.ca and is responsible for the personal information collected there.",
-          "In accordance with section 3.1 of Law 25, the person with the highest authority within Améthyste acts as the person in charge of the protection of personal information. They oversee the application of this policy and handle any access request, correction request or complaint. Their contact details appear at the bottom of this page.",
+          `In accordance with section 3.1 of Law 25, the person in charge of the protection of personal information at Améthyste is ${PRIVACY_OFFICER.name}, who can be reached at ${PRIVACY_OFFICER.email}. They oversee the application of this policy and handle any access request, correction request or complaint.`,
         ],
       },
       {
@@ -357,7 +357,7 @@ const CONTENT: Record<"fr" | "en", Content> = {
               "Keep the site secure, authenticate sign-ins and prevent fraud.",
             ],
           },
-          "We use your information for no other purpose. We send no newsletter and use your contact details for no advertising purpose. Should a new purpose arise, we would inform you and obtain your consent beforehand.",
+          "We use your information for no other purpose. We do not currently send any newsletter or promotional offers, and placing an order or creating an account does not subscribe you to any. Should we offer one in the future, sign-up will require your express consent, in accordance with Canada's Anti-Spam Legislation, and every message will include an unsubscribe link. Should a new purpose arise, we would inform you and obtain your consent beforehand.",
         ],
       },
       {

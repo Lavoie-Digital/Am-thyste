@@ -48,6 +48,21 @@ export function AddToCartButton({
     );
   }
 
+  if (product.stockStatus === "out_of_stock") {
+    return (
+      <span
+        aria-disabled="true"
+        className={cn(
+          "inline-flex h-12 cursor-not-allowed items-center justify-center rounded-full border border-ink/10 px-6 text-center text-xs uppercase tracking-[0.18em] text-ink/40",
+          fullWidth && "w-full",
+          className,
+        )}
+      >
+        {dict.shop.outOfStock}
+      </span>
+    );
+  }
+
   const handleAdd = () => {
     const size = sizeId ? product.sizes.find((s) => s.id === sizeId) : product.sizes[0];
     const unit = product.resellerPrice ?? size?.marketPrice ?? product.marketPrice;

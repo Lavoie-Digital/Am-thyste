@@ -8,6 +8,7 @@ import { pick, cn } from "@/lib/utils";
 import type { ProductDTO } from "@/lib/types";
 import { PriceTag } from "./PriceTag";
 import { AddToCartButton } from "./AddToCartButton";
+import { ProductFlags } from "./ProductFlags";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -48,6 +49,7 @@ export function ProductCard({ product, index = 0 }: { product: ProductDTO; index
       </Link>
 
       <div className="flex flex-1 flex-col pt-5">
+        <ProductFlags product={product} className="mb-3" />
         <Link href={`/boutique/${product.slug}`}>
           <h3 className="font-display text-base tracking-wide text-ink transition-colors group-hover:text-amethyst-700">
             {pick(product.name, locale)}

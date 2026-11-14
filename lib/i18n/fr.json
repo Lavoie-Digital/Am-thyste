@@ -7,7 +7,7 @@
   },
   "topbar": {
     "left": "Livraison rapide au Québec",
-    "center": "Formules professionnelles • Résultats exceptionnels",
+    "center": "Soins capillaires professionnels • Marque québécoise",
     "right": "Service client 7j/7"
   },
   "nav": {
@@ -71,11 +71,26 @@
     "heroTitleAccent": "révélée",
     "heroDesc": "Des soins d'exception pour des cheveux plus forts, plus sains et infiniment lumineux.",
     "heroCtaMain": "Découvrir la boutique",
+    "introTitle": "AMÉTHYSTE Hair Products Canada",
+    "introLead": "Une marque québécoise spécialisée dans les soins capillaires professionnels.",
+    "introDesc": "Découvrez notre gamme de traitements capillaires professionnels et de produits d'entretien à domicile.",
     "features": [
-      { "t": "Ingrédients haut de gamme", "d": "Sélection rigoureuse pour des résultats visibles" },
-      { "t": "Formules professionnelles", "d": "Développées avec expertise, sans compromis" },
-      { "t": "Résultats exceptionnels", "d": "Transformations durables dès la première utilisation" },
-      { "t": "Fait avec passion", "d": "Conçus et fabriqués au Québec" }
+      {
+        "t": "Ingrédients choisis",
+        "d": "Une sélection rigoureuse pour chaque formule"
+      },
+      {
+        "t": "Formules professionnelles",
+        "d": "Pensées pour les salons et leur clientèle"
+      },
+      {
+        "t": "Soin et entretien",
+        "d": "Traitements en salon et produits d'entretien à domicile"
+      },
+      {
+        "t": "Marque québécoise",
+        "d": "Spécialisée dans les soins capillaires professionnels"
+      }
     ],
     "shopEyebrow": "Boutique",
     "shopHeading": "Des soins conçus pour sublimer chaque chevelure",
@@ -84,15 +99,24 @@
     "ctaTitle": "La meilleure version de vos cheveux ?",
     "ritualBadge": "Soin rituel professionnel",
     "featured": "Nos soins signature",
-    "featuredSub": "Une transformation au cœur de la fibre, sans compromis.",
+    "featuredSub": "Des soins professionnels pour sublimer la fibre.",
     "benefitsTitle": "La puissance de l'améthyste",
     "benefits": [
-      { "title": "Réparation intense", "desc": "Reconstruit la fibre en profondeur pour des cheveux visiblement régénérés." },
-      { "title": "Brillance miroir", "desc": "Une lumière immédiate, une douceur qui dure." },
-      { "title": "Nutrition profonde", "desc": "Kératine et extrait de bambou pour nourrir sans alourdir." }
+      {
+        "title": "Soin intense",
+        "desc": "Aide à nourrir la fibre pour des cheveux d'apparence plus saine."
+      },
+      {
+        "title": "Brillance",
+        "desc": "Des cheveux plus brillants et plus doux au toucher."
+      },
+      {
+        "title": "Nutrition",
+        "desc": "Kératine et extrait de bambou pour nourrir sans alourdir."
+      }
     ],
     "ritualTitle": "Le rituel Améthyste",
-    "ritualDesc": "Chaque geste compte. Un protocole pensé pour révéler la beauté naturelle du cheveu et prolonger les résultats bien au-delà du salon.",
+    "ritualDesc": "Chaque geste compte. Une routine pensée pour entretenir la beauté naturelle du cheveu, en salon comme à la maison.",
     "freeShipping": "Livraison gratuite dès 100 $",
     "proTitle": "Vous êtes professionnel ?",
     "proDesc": "Accédez à nos tarifs de revente et faites rayonner Améthyste dans votre salon.",
@@ -105,7 +129,7 @@
   },
   "shop": {
     "title": "La boutique",
-    "subtitle": "Des soins haut de gamme pour cheveux fins, ondulés, abîmés ou frisés.",
+    "subtitle": "Des traitements capillaires professionnels et des produits d'entretien pour cheveux fins, ondulés, abîmés ou frisés.",
     "empty": "Aucun produit pour le moment.",
     "categoryAll": "Tous les soins",
     "details": "Détails",
@@ -113,7 +137,16 @@
     "ritual": "Le rituel",
     "sizeLabel": "Format",
     "proOnlyCta": "Réservé aux pros",
-    "proOnlySignIn": "Connectez-vous pour commander"
+    "proOnlySignIn": "Connectez-vous pour commander",
+    "audienceTitle": "À savoir avant de commander",
+    "audiencePro": "Les traitements Botox capillaires AMÉTHYSTE sont exclusivement réservés aux professionnels de la beauté dont le compte a été approuvé.",
+    "audiencePublic": "Les shampoings, revitalisants, masques et huiles capillaires sont accessibles au grand public.",
+    "proUseOnly": "Usage professionnel seulement",
+    "inStock": "En stock",
+    "outOfStock": "Rupture de stock",
+    "backorder": "Commande différée",
+    "backorderDelay": "Expédition prévue : {delay}",
+    "backorderNoDelay": "Délai d'expédition confirmé par courriel avant l'envoi."
   },
   "cart": {
     "title": "Votre panier",
@@ -148,12 +181,18 @@
     "postalCode": "Code postal",
     "cardInfo": "Carte de crédit",
     "paying": "Paiement en cours…",
-    "cardError": "Le paiement n'a pas pu être complété. Vérifiez votre carte et réessayez."
+    "cardError": "Le paiement n'a pas pu être complété. Vérifiez votre carte et réessayez.",
+    "outOfStockError": "Un produit de votre panier est en rupture de stock. Retirez-le pour continuer.",
+    "backorderNotice": "Commande différée",
+    "termsAccept": "J'ai lu et j'accepte les {terms} et la {privacy}.",
+    "termsLink": "conditions de vente",
+    "privacyLink": "politique de confidentialité",
+    "termsRequired": "Veuillez accepter les conditions de vente pour continuer."
   },
   "pro": {
     "title": "Espace professionnel",
     "hero": "Sublimez votre offre avec Améthyste",
-    "heroDesc": "Des résultats mesurables, une clientèle fidèle, et l'expertise valorisée. Profitez de nos tarifs de revente réservés aux professionnels approuvés.",
+    "heroDesc": "Des soins professionnels pour votre salon, une clientèle fidèle et une expertise valorisée. Profitez de nos tarifs de revente réservés aux professionnels approuvés.",
     "join": "Devenir pro",
     "alreadyMember": "Déjà pro ?",
     "signupTitle": "Demande d'accès professionnel",
@@ -237,7 +276,14 @@
     "partnerDesc": "Description",
     "partnerCta": "Libellé du lien",
     "partnerOrder": "Ordre d'affichage",
-    "partnerActive": "Partenaire actif"
+    "partnerActive": "Partenaire actif",
+    "stockLabel": "Disponibilité",
+    "stockInStock": "En stock",
+    "stockOutOfStock": "Rupture de stock (achat bloqué)",
+    "stockBackorder": "Commande différée (achat permis)",
+    "backorderDelayFr": "Délai d'expédition (FR)",
+    "backorderDelayEn": "Délai d'expédition (EN)",
+    "backorderDelayHint": "Affiché sur la fiche et dans le courriel de confirmation. Ex. : « 2 à 3 semaines »."
   },
   "auth": {
     "loginTitle": "Connexion",
@@ -277,11 +323,11 @@
     "legal": "Mentions légales",
     "privacy": "Politique de confidentialité",
     "terms": "Conditions d'utilisation",
-    "newsletter": "Recevez nos rituels et nos offres exclusives."
+    "contact": "Nous joindre"
   },
   "proNotice": {
     "title": "Avis aux particuliers",
-    "body": "Le Hair Botox Améthyste est offert exclusivement aux professionnels détenant un compte pro approuvé. Nos autres soins restent accessibles à tous.",
+    "body": "Les traitements Botox capillaires AMÉTHYSTE sont exclusivement réservés aux professionnels de la beauté dont le compte a été approuvé. Les shampoings, revitalisants, masques et huiles capillaires sont accessibles au grand public.",
     "cta": "Créer un compte pro",
     "login": "J'ai déjà un compte pro",
     "dismiss": "Continuer vers le site",

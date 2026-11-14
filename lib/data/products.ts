@@ -56,6 +56,10 @@ export function toDTO(product: Product, viewer: Viewer | null): ProductDTO {
     marketPrice: product.marketPrice,
     ...(canSeeReseller ? { resellerPrice: product.resellerPrice } : {}),
     proOnly: product.proOnly ?? false,
+    stockStatus: product.stockStatus ?? "in_stock",
+    ...(product.stockStatus === "backorder" && product.backorderDelay
+      ? { backorderDelay: product.backorderDelay }
+      : {}),
     currency: product.currency,
     images: product.images,
     sizes: product.sizes.map((s) => ({

@@ -8,6 +8,7 @@ import { pick, cn } from "@/lib/utils";
 import type { ProductDTO } from "@/lib/types";
 import { PriceTag } from "./PriceTag";
 import { AddToCartButton } from "./AddToCartButton";
+import { ProductFlags, BackorderNote } from "./ProductFlags";
 
 type Tab = "description" | "ritual" | "ingredients";
 
@@ -79,6 +80,7 @@ export function ProductDetail({ product }: { product: ProductDTO }) {
       <div className="flex flex-col">
         <p className="eyebrow">{dict.brand.subtitle}</p>
         <h1 className="mt-4 heading text-4xl sm:text-5xl">{pick(product.name, locale)}</h1>
+        <ProductFlags product={product} className="mt-4" />
         <p className="mt-5 text-lg leading-relaxed text-ink/65">
           {pick(product.shortDesc, locale)}
         </p>
@@ -86,6 +88,13 @@ export function ProductDetail({ product }: { product: ProductDTO }) {
         <div className="mt-6">
           <PriceTag marketPrice={product.marketPrice} resellerPrice={product.resellerPrice} proOnly={product.proOnly} size="lg" />
         </div>
+
+        {/* Format — always shown, even for a single size, so the buyer knows what they get. */}
+        {product.sizes.length === 1 && (
+          <p className="mt-4 text-sm text-ink/60">
+            {dict.shop.sizeLabel} : {pick(product.sizes[0].label, locale)}
+          </p>
+        )}
 
         {/* Sizes */}
         {product.sizes.length > 1 && (
@@ -121,6 +130,10 @@ export function ProductDetail({ product }: { product: ProductDTO }) {
           </div>
           <AddToCartButton product={product} sizeId={sizeId} quantity={quantity} className="flex-1" />
         </div>
+        <BackorderNote product={product} className="mt-4" />
+        {product.proOnly && (
+          <p className="mt-4 text-sm leading-relaxed text-ink/60">{dict.shop.audiencePro}</p>
+        )}
 
         {/* Tabs */}
         {tabs.length > 0 && (

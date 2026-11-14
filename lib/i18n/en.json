@@ -7,7 +7,7 @@
   },
   "topbar": {
     "left": "Fast shipping across Québec",
-    "center": "Professional formulas • Exceptional results",
+    "center": "Professional hair care • A Québec brand",
     "right": "Customer care 7/7"
   },
   "nav": {
@@ -71,11 +71,26 @@
     "heroTitleAccent": "revealed",
     "heroDesc": "Exceptional care for stronger, healthier and infinitely luminous hair.",
     "heroCtaMain": "Explore the shop",
+    "introTitle": "AMÉTHYSTE Hair Products Canada",
+    "introLead": "A Québec brand specialized in professional hair care.",
+    "introDesc": "Discover our range of professional hair treatments and at-home care products.",
     "features": [
-      { "t": "Premium ingredients", "d": "Rigorous selection for visible results" },
-      { "t": "Professional formulas", "d": "Developed with expertise, no compromise" },
-      { "t": "Exceptional results", "d": "Lasting transformation from the first use" },
-      { "t": "Made with passion", "d": "Designed and made in Québec" }
+      {
+        "t": "Selected ingredients",
+        "d": "A rigorous selection for every formula"
+      },
+      {
+        "t": "Professional formulas",
+        "d": "Made for salons and their clients"
+      },
+      {
+        "t": "Treatment and care",
+        "d": "In-salon treatments and at-home care products"
+      },
+      {
+        "t": "A Québec brand",
+        "d": "Specialized in professional hair care"
+      }
     ],
     "shopEyebrow": "Shop",
     "shopHeading": "Care crafted to elevate every head of hair",
@@ -84,15 +99,24 @@
     "ctaTitle": "The best version of your hair?",
     "ritualBadge": "Professional ritual care",
     "featured": "Our signature treatments",
-    "featuredSub": "A transformation at the core of the fiber, no compromise.",
+    "featuredSub": "Professional care to enhance the hair fiber.",
     "benefitsTitle": "The power of amethyst",
     "benefits": [
-      { "title": "Intense repair", "desc": "Rebuilds the fiber deep down for visibly regenerated hair." },
-      { "title": "Mirror shine", "desc": "Immediate light, long-lasting softness." },
-      { "title": "Deep nutrition", "desc": "Keratin and bamboo extract to nourish without weighing down." }
+      {
+        "title": "Intense care",
+        "desc": "Helps nourish the fiber for healthier-looking hair."
+      },
+      {
+        "title": "Shine",
+        "desc": "Shinier hair that feels softer to the touch."
+      },
+      {
+        "title": "Nutrition",
+        "desc": "Keratin and bamboo extract to nourish without weighing down."
+      }
     ],
     "ritualTitle": "The Améthyste ritual",
-    "ritualDesc": "Every gesture matters. A protocol designed to reveal hair's natural beauty and extend results far beyond the salon.",
+    "ritualDesc": "Every gesture matters. A routine designed to care for hair's natural beauty, in the salon and at home.",
     "freeShipping": "Free shipping over $100",
     "proTitle": "Are you a professional?",
     "proDesc": "Access our reseller pricing and bring Améthyste to your salon.",
@@ -105,7 +129,7 @@
   },
   "shop": {
     "title": "The shop",
-    "subtitle": "High-end care for fine, wavy, damaged or frizzy hair.",
+    "subtitle": "Professional hair treatments and care products for fine, wavy, damaged or frizzy hair.",
     "empty": "No products yet.",
     "categoryAll": "All treatments",
     "details": "Details",
@@ -113,7 +137,16 @@
     "ritual": "The ritual",
     "sizeLabel": "Size",
     "proOnlyCta": "Pros only",
-    "proOnlySignIn": "Sign in to order"
+    "proOnlySignIn": "Sign in to order",
+    "audienceTitle": "Good to know before you order",
+    "audiencePro": "AMÉTHYSTE Hair Botox treatments are reserved exclusively for beauty professionals whose account has been approved.",
+    "audiencePublic": "Shampoos, conditioners, masks and hair oils are available to the general public.",
+    "proUseOnly": "Professional use only",
+    "inStock": "In stock",
+    "outOfStock": "Out of stock",
+    "backorder": "Backorder",
+    "backorderDelay": "Expected to ship: {delay}",
+    "backorderNoDelay": "Shipping time confirmed by email before dispatch."
   },
   "cart": {
     "title": "Your cart",
@@ -148,12 +181,18 @@
     "postalCode": "Postal code",
     "cardInfo": "Credit card",
     "paying": "Processing payment…",
-    "cardError": "Payment couldn't be completed. Check your card and try again."
+    "cardError": "Payment couldn't be completed. Check your card and try again.",
+    "outOfStockError": "An item in your cart is out of stock. Remove it to continue.",
+    "backorderNotice": "Backorder",
+    "termsAccept": "I have read and accept the {terms} and the {privacy}.",
+    "termsLink": "terms of sale",
+    "privacyLink": "privacy policy",
+    "termsRequired": "Please accept the terms of sale to continue."
   },
   "pro": {
     "title": "Professional space",
     "hero": "Elevate your offering with Améthyste",
-    "heroDesc": "Measurable results, loyal clients, and valued expertise. Enjoy reseller pricing reserved for approved professionals.",
+    "heroDesc": "Professional care for your salon, loyal clients and valued expertise. Enjoy reseller pricing reserved for approved professionals.",
     "join": "Become a pro",
     "alreadyMember": "Already a pro?",
     "signupTitle": "Professional access request",
@@ -237,7 +276,14 @@
     "partnerDesc": "Description",
     "partnerCta": "Link label",
     "partnerOrder": "Display order",
-    "partnerActive": "Active partner"
+    "partnerActive": "Active partner",
+    "stockLabel": "Availability",
+    "stockInStock": "In stock",
+    "stockOutOfStock": "Out of stock (purchase blocked)",
+    "stockBackorder": "Backorder (purchase allowed)",
+    "backorderDelayFr": "Shipping delay (FR)",
+    "backorderDelayEn": "Shipping delay (EN)",
+    "backorderDelayHint": "Shown on the product page and in the confirmation email. E.g. \"2 to 3 weeks\"."
   },
   "auth": {
     "loginTitle": "Sign in",
@@ -277,11 +323,11 @@
     "legal": "Legal",
     "privacy": "Privacy policy",
     "terms": "Terms of use",
-    "newsletter": "Receive our rituals and our exclusive offers."
+    "contact": "Get in touch"
   },
   "proNotice": {
     "title": "Notice to customers",
-    "body": "Améthyste Hair Botox is available exclusively to professionals with an approved pro account. Our other treatments remain available to everyone.",
+    "body": "AMÉTHYSTE Hair Botox treatments are reserved exclusively for beauty professionals whose account has been approved. Shampoos, conditioners, masks and hair oils are available to the general public.",
     "cta": "Create a pro account",
     "login": "I already have a pro account",
     "dismiss": "Continue to the site",

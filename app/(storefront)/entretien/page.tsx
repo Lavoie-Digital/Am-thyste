@@ -9,8 +9,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
   const fr = locale === "fr";
   const description = fr
-    ? "Le rituel Améthyste en quatre gestes : préparer, transformer, sceller, sublimer. Prolongez les résultats du Hair Botox bien au-delà du salon."
-    : "The Améthyste ritual in four steps: prepare, transform, seal, sublimate. Extend Hair Botox results well beyond the salon.";
+    ? "Le rituel Améthyste en quatre gestes : préparer, traiter en salon, sceller, sublimer. Comment entretenir vos cheveux à la maison après un traitement Hair Botox."
+    : "The Améthyste ritual in four steps: prepare, treat in the salon, seal, sublimate. How to care for your hair at home after a Hair Botox treatment.";
   return {
     title: fr ? "Entretien · Le rituel" : "Care · The ritual",
     description,
@@ -26,16 +26,16 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const STEPS = {
   fr: [
-    { n: "01", t: "Préparer", d: "Lavez avec le Shampoing Lissant pour purifier la fibre et ouvrir l'écaille en douceur." },
-    { n: "02", t: "Transformer", d: "Appliquez le masque mèche par mèche. Laissez poser 20 à 40 minutes." },
+    { n: "01", t: "Préparer", d: "Lavez avec le Shampoing Lissant pour nettoyer les cheveux en douceur." },
+    { n: "02", t: "Traiter en salon", d: "Le traitement Hair Botox, à usage professionnel seulement, est appliqué en salon par votre coiffeuse ou coiffeur." },
     { n: "03", t: "Sceller", d: "Rincez, puis nourrissez avec le Revitalisant Lissant pour sceller l'hydratation." },
-    { n: "04", t: "Sublimer", d: "Quelques gouttes d'Huile Prestige sur les longueurs pour une brillance miroir et une protection durable." },
+    { n: "04", t: "Sublimer", d: "Quelques gouttes d'Huile Prestige sur les longueurs pour plus de brillance et de douceur." },
   ],
   en: [
-    { n: "01", t: "Prepare", d: "Cleanse with the Smoothing Shampoo to purify the fiber and gently open the cuticle." },
-    { n: "02", t: "Transform", d: "Apply the Hair Botox mask section by section. Leave on for 20 to 40 minutes." },
+    { n: "01", t: "Prepare", d: "Cleanse with the Smoothing Shampoo to gently wash the hair." },
+    { n: "02", t: "Treat in the salon", d: "Hair Botox, for professional use only, is applied in the salon by your hairdresser." },
     { n: "03", t: "Seal", d: "Rinse, then nourish with the Smoothing Conditioner to lock in hydration." },
-    { n: "04", t: "Sublimate", d: "A few drops of Huile Prestige on the lengths for mirror shine and lasting protection." },
+    { n: "04", t: "Sublimate", d: "A few drops of Huile Prestige on the lengths for extra shine and softness." },
   ],
 };
 
@@ -50,8 +50,8 @@ export default async function EntretienPage() {
         title={locale === "fr" ? "L'entretien" : "The care ritual"}
         subtitle={
           locale === "fr"
-            ? "Quatre gestes pour prolonger la transformation bien au-delà du salon. La durabilité se cultive."
-            : "Four gestures to extend the transformation well beyond the salon. Longevity is cultivated."
+            ? "Quatre gestes pour entretenir vos cheveux entre deux visites au salon."
+            : "Four gestures to care for your hair between salon visits."
         }
       />
       <section className="pb-24">

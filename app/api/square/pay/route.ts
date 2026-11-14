@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
   // Recompute everything server-side — the buyer's browser is never trusted for amounts.
   const priced = await priceCartItems(parsed.items, context);
   if (!priced.ok) {
-    const status = priced.error === "pro-only" ? 403 : 400;
+    const status = priced.error === "pro-only" ? 403 : priced.error === "out-of-stock" ? 409 : 400;
     return NextResponse.json({ ok: false, error: priced.error }, { status });
   }
 

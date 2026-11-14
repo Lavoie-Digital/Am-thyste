@@ -3,7 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useLocale } from "@/lib/i18n/LocaleProvider";
-import { ArrowRight } from "@/components/ui/icons";
 
 export function Footer() {
   const { dict } = useLocale();
@@ -13,7 +12,7 @@ export function Footer() {
     <footer className="relative mt-32 border-t border-ink/10 bg-bone">
       {/*
         minmax(0,…) instead of a bare `1.5fr`: an `fr` track cannot shrink below
-        its min-content width, and the wide-tracking newsletter heading forced
+        its min-content width, and a wide-tracking heading forced
         its column to ~199px. That pushed the grid past the viewport and gave
         every page ~34px of horizontal scroll at tablet width.
       */}
@@ -54,23 +53,26 @@ export function Footer() {
           </ul>
         </div>
 
+        {/*
+          No newsletter signup here: the privacy policy states that no newsletter
+          is sent. If one is added later, it needs express CASL consent and a
+          matching update to /confidentialite first.
+        */}
         <div>
           <h4 className="text-xs uppercase tracking-[0.25em] text-ink-mute">
-            {dict.footer.newsletter}
+            {dict.footer.contact}
           </h4>
-          <form className="mt-4 flex items-center gap-3 border-b border-ink/15 pb-2" onSubmit={(e) => e.preventDefault()}>
-            <input
-              type="email"
-              placeholder={dict.common.email}
-              /* 16px on mobile — iOS Safari force-zooms the whole page when a
-                 focused input is under 16px, which yanked the layout sideways. */
-              className="min-h-11 flex-1 bg-transparent text-base text-ink placeholder:text-ink/35 focus:outline-none sm:min-h-0 sm:text-sm"
-            />
-            <button aria-label={dict.common.send} className="p-3 text-ink/60 transition-colors hover:text-ink sm:p-2">
-              <ArrowRight />
-            </button>
-          </form>
-          <p className="mt-4 text-sm text-ink/55">514-691-1899</p>
+          <ul className="mt-4 space-y-2.5 text-sm text-ink/60">
+            <li>
+              <a href="mailto:info@amethystehairproductscanada.ca" className="break-all transition-colors hover:text-ink">
+                info@amethystehairproductscanada.ca
+              </a>
+            </li>
+            <li>
+              <a href="tel:+15146911899" className="transition-colors hover:text-ink">514-691-1899</a>
+            </li>
+            <li>{dict.contact.location}</li>
+          </ul>
         </div>
       </div>
 

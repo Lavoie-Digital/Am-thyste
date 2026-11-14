@@ -9,20 +9,20 @@
         "en": "Hair Botox"
       },
       "shortDesc": {
-        "fr": "Le soin signature. Réparation intense pour cheveux fins, ondulés, abîmés ou frisés.",
-        "en": "The signature treatment. Intense repair for fine, wavy, damaged or frizzy hair."
+        "fr": "Traitement capillaire professionnel à la kératine et à l'extrait de bambou. Usage professionnel seulement.",
+        "en": "Professional hair treatment with keratin and bamboo extract. Professional use only."
       },
       "description": {
-        "fr": "Notre masque Hair Botox reconstruit la fibre capillaire en profondeur. Enrichi en kératine et en actifs nourrissants, il discipline les frisottis, ravive la brillance et redonne souplesse et vitalité dès la première application.",
-        "en": "Our Hair Botox mask rebuilds the hair fiber from within. Enriched with keratin and nourishing actives, it tames frizz, revives shine and restores softness and vitality from the very first use."
+        "fr": "Traitement capillaire professionnel enrichi en kératine et en extrait de bambou, pour cheveux fins, ondulés, abîmés ou frisés. Appliqué en salon, il aide à discipliner les frisottis et laisse les cheveux plus doux et plus brillants. Réservé aux professionnels de la beauté dont le compte a été approuvé.",
+        "en": "Professional hair treatment enriched with keratin and bamboo extract, for fine, wavy, damaged or frizzy hair. Applied in the salon, it helps tame frizz and leaves hair softer and shinier. Reserved for beauty professionals whose account has been approved."
       },
       "ritual": {
-        "fr": "Appliquer sur cheveux propres et essorés, mèche par mèche. Laisser poser 20 à 40 minutes, puis rincer abondamment. Une fois par semaine.",
-        "en": "Apply to clean, towel-dried hair, section by section. Leave on 20 to 40 minutes, then rinse thoroughly. Once a week."
+        "fr": "Usage professionnel seulement. Appliquer en salon sur cheveux propres et essorés, mèche par mèche, selon le protocole fourni avec le produit. Laisser poser 20 à 40 minutes, puis rincer abondamment.",
+        "en": "Professional use only. Apply in the salon to clean, towel-dried hair, section by section, following the protocol supplied with the product. Leave on for 20 to 40 minutes, then rinse thoroughly."
       },
       "ingredients": {
-        "fr": "Kératine, extrait de bambou, huiles végétales nourrissantes.",
-        "en": "Keratin, bamboo extract, nourishing plant oils."
+        "fr": "Kératine, extrait de bambou, huiles végétales. Liste complète des ingrédients sur l'emballage.",
+        "en": "Keratin, bamboo extract, plant oils. Full ingredient list on the packaging."
       },
       "marketPrice": 4999,
       "resellerPrice": 2999,
@@ -42,7 +42,9 @@
         }
       ],
       "category": "mask",
-      "sortOrder": 1
+      "sortOrder": 1,
+      "proOnly": true,
+      "stockStatus": "in_stock"
     },
     {
       "id": "huile-prestige",
@@ -53,12 +55,12 @@
         "en": "Huile Prestige"
       },
       "shortDesc": {
-        "fr": "Sérum sublimateur. Brillance miroir et protection thermique, sans effet gras.",
-        "en": "Finishing serum. Mirror shine and heat protection, without a greasy feel."
+        "fr": "Huile de finition pour les longueurs et les pointes. Brillance sans effet gras.",
+        "en": "Finishing oil for lengths and ends. Shine without a greasy feel."
       },
       "description": {
-        "fr": "Quelques gouttes suffisent pour sceller l'hydratation, dompter les pointes et offrir une finition lumineuse. L'Huile Prestige protège la fibre de la chaleur.",
-        "en": "A few drops are enough to seal in hydration, tame the ends and deliver a luminous finish. Huile Prestige protects the fiber from heat."
+        "fr": "Quelques gouttes suffisent pour discipliner les pointes et apporter une finition lumineuse. L'Huile Prestige laisse les cheveux doux, soyeux et brillants.",
+        "en": "A few drops are enough to tame the ends and add a luminous finish. Huile Prestige leaves hair soft, silky and shiny."
       },
       "marketPrice": 3499,
       "resellerPrice": 1999,
@@ -77,7 +79,16 @@
         }
       ],
       "category": "serum",
-      "sortOrder": 2
+      "sortOrder": 2,
+      "ritual": {
+        "fr": "Chauffer une à deux gouttes entre les paumes et appliquer sur les longueurs et les pointes, sur cheveux humides ou secs.",
+        "en": "Warm one to two drops between the palms and apply to lengths and ends, on damp or dry hair."
+      },
+      "ingredients": {
+        "fr": "Complexe d'huiles végétales. Liste complète des ingrédients sur l'emballage.",
+        "en": "Plant oil complex. Full ingredient list on the packaging."
+      },
+      "stockStatus": "in_stock"
     },
     {
       "id": "shampoing-lissant",
@@ -88,12 +99,12 @@
         "en": "Smoothing Shampoo"
       },
       "shortDesc": {
-        "fr": "Nettoie en douceur tout en lissant. Kératine & extrait de bambou.",
-        "en": "Gently cleanses while smoothing. Keratin & bamboo extract."
+        "fr": "Nettoie en douceur et laisse les cheveux plus lisses. Kératine et extrait de bambou.",
+        "en": "Gently cleanses and leaves hair smoother. Keratin and bamboo extract."
       },
       "description": {
-        "fr": "Un shampoing lissant pour tous types de cheveux. Sa formule à la kératine et à l'extrait de bambou répare, lisse et fait briller.",
-        "en": "A smoothing shampoo for all hair types. Its keratin and bamboo extract formula repairs, smooths and adds shine."
+        "fr": "Un shampoing lissant pour tous types de cheveux. Sa formule à la kératine et à l'extrait de bambou nettoie en douceur et laisse les cheveux plus lisses et plus brillants. Le premier geste de la routine Améthyste à la maison.",
+        "en": "A smoothing shampoo for all hair types. Its keratin and bamboo extract formula gently cleanses and leaves hair smoother and shinier. The first step of the Améthyste at-home routine."
       },
       "marketPrice": 2799,
       "resellerPrice": 1699,
@@ -111,7 +122,12 @@
         }
       ],
       "category": "shampoo",
-      "sortOrder": 3
+      "sortOrder": 3,
+      "ingredients": {
+        "fr": "Kératine, extrait de bambou. Tous types de cheveux. Liste complète des ingrédients sur l'emballage.",
+        "en": "Keratin, bamboo extract. For all hair types. Full ingredient list on the packaging."
+      },
+      "stockStatus": "in_stock"
     },
     {
       "id": "revitalisant-lissant",
@@ -122,12 +138,12 @@
         "en": "Smoothing Conditioner"
       },
       "shortDesc": {
-        "fr": "Démêle, nourrit et lisse. Le duo parfait du shampoing.",
-        "en": "Detangles, nourishes and smooths. The perfect pair to the shampoo."
+        "fr": "Démêle, adoucit et lisse. Le complément du Shampoing Lissant.",
+        "en": "Detangles, softens and smooths. The companion to the Smoothing Shampoo."
       },
       "description": {
-        "fr": "Ce revitalisant lissant enveloppe la fibre d'une nutrition profonde. Kératine et extrait de bambou réparent, lissent et subliment la brillance.",
-        "en": "This smoothing conditioner wraps the fiber in deep nutrition. Keratin and bamboo extract repair, smooth and enhance shine."
+        "fr": "Ce revitalisant lissant à la kératine et à l'extrait de bambou facilite le démêlage et laisse les cheveux doux, lisses et faciles à coiffer.",
+        "en": "This smoothing conditioner with keratin and bamboo extract makes detangling easier and leaves hair soft, smooth and easy to style."
       },
       "marketPrice": 2799,
       "resellerPrice": 1699,
@@ -145,7 +161,12 @@
         }
       ],
       "category": "conditioner",
-      "sortOrder": 4
+      "sortOrder": 4,
+      "ingredients": {
+        "fr": "Kératine, extrait de bambou. Tous types de cheveux. Liste complète des ingrédients sur l'emballage.",
+        "en": "Keratin, bamboo extract. For all hair types. Full ingredient list on the packaging."
+      },
+      "stockStatus": "in_stock"
     }
   ],
   "settings": {

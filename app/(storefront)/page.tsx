@@ -36,19 +36,19 @@ const FAQ: Record<"fr" | "en", { eyebrow: string; heading: string; items: Array<
     items: [
       {
         q: "Qu'est-ce que le Hair Botox d'Améthyste ?",
-        a: "Le Hair Botox Améthyste est un masque capillaire reconstructeur qui agit au cœur de la fibre. Enrichi de kératine et d'extrait de bambou, il répare les cheveux en profondeur, discipline les frisottis et ravive la brillance dès la première application.",
+        a: "Le Hair Botox Améthyste est un traitement capillaire professionnel enrichi de kératine et d'extrait de bambou. Appliqué en salon, il aide à discipliner les frisottis et à rendre les cheveux plus doux et plus brillants. Il est réservé aux professionnels de la beauté dont le compte a été approuvé.",
       },
       {
         q: "Pour quels types de cheveux le Hair Botox est-il conçu ?",
-        a: "Il convient aux cheveux fins, ondulés, abîmés ou frisés. C'est un soin haut de gamme pensé pour réparer, lisser et sublimer tout en respectant l'intégrité du cheveu.",
+        a: "Il s'adresse aux cheveux fins, ondulés, abîmés ou frisés. Votre coiffeuse ou coiffeur évalue en salon si le traitement convient à vos cheveux.",
       },
       {
         q: "Comment appliquer le soin Hair Botox ?",
-        a: "Appliquez sur cheveux propres et essorés, mèche par mèche. Laissez poser de 20 à 40 minutes, puis rincez abondamment. Pour des résultats durables, utilisez le rituel une fois par semaine.",
+        a: "Le Hair Botox est un produit à usage professionnel seulement : il est appliqué en salon par une ou un professionnel, selon le protocole fourni avec le produit. À la maison, on prolonge le soin avec le shampoing, le revitalisant et l'huile Améthyste.",
       },
       {
         q: "Puis-je utiliser Améthyste à la maison ou seulement en salon ?",
-        a: "Les soins Améthyste sont pensés autant pour la maison que pour le salon. Vous obtenez des résultats professionnels chez vous, et les coiffeurs peuvent l'intégrer à leurs services.",
+        a: "Les deux. Les traitements Botox capillaires sont réservés aux professionnels et s'appliquent en salon. Les shampoings, revitalisants, masques et huiles capillaires sont accessibles au grand public pour l'entretien à domicile.",
       },
       {
         q: "Où acheter les produits Améthyste ?",
@@ -66,19 +66,19 @@ const FAQ: Record<"fr" | "en", { eyebrow: string; heading: string; items: Array<
     items: [
       {
         q: "What is Améthyste Hair Botox?",
-        a: "Améthyste Hair Botox is a rebuilding hair mask that works at the core of the fiber. Enriched with keratin and bamboo extract, it repairs hair deeply, tames frizz and revives shine from the very first application.",
+        a: "Améthyste Hair Botox is a professional hair treatment enriched with keratin and bamboo extract. Applied in the salon, it helps tame frizz and leaves hair softer and shinier. It is reserved for beauty professionals whose account has been approved.",
       },
       {
         q: "Which hair types is Hair Botox designed for?",
-        a: "It suits fine, wavy, damaged or frizzy hair. It is a premium treatment made to repair, smooth and sublimate while respecting the hair's integrity.",
+        a: "It is intended for fine, wavy, damaged or frizzy hair. Your hairdresser assesses in the salon whether the treatment suits your hair.",
       },
       {
         q: "How do I apply the Hair Botox treatment?",
-        a: "Apply to clean, towel-dried hair, section by section. Leave on for 20 to 40 minutes, then rinse thoroughly. For lasting results, use the ritual once a week.",
+        a: "Hair Botox is for professional use only: it is applied in the salon by a professional, following the protocol supplied with the product. At home, the care continues with Améthyste shampoo, conditioner and oil.",
       },
       {
         q: "Can I use Améthyste at home or only in a salon?",
-        a: "Améthyste treatments are designed for both home and salon. You get professional results at home, and hairdressers can add it to their services.",
+        a: "Both. Hair Botox treatments are reserved for professionals and applied in the salon. Shampoos, conditioners, masks and hair oils are available to the general public for at-home care.",
       },
       {
         q: "Where can I buy Améthyste products?",
@@ -118,6 +118,17 @@ export default async function HomePage() {
     <>
       <JsonLd data={faqJsonLd(faq.items)} />
       <AmethystStarsHero />
+
+      {/* Brand intro — wording supplied by the client (identity: Québec brand, not "made in Québec") */}
+      <section className="pb-16 pt-6">
+        <Container>
+          <Reveal className="mx-auto max-w-3xl text-center">
+            <h2 className="heading text-2xl tracking-[0.08em] sm:text-3xl">{h.introTitle}</h2>
+            <p className="mt-5 font-serif-lux text-xl italic leading-relaxed text-ink/75 sm:text-2xl">{h.introLead}</p>
+            <p className="mx-auto mt-4 max-w-xl leading-relaxed text-ink/60">{h.introDesc}</p>
+          </Reveal>
+        </Container>
+      </section>
 
       {/* Feature strip */}
       <section className="border-y border-ink/[0.06] bg-shell/60">

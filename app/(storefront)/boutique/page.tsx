@@ -45,6 +45,13 @@ export default async function BoutiquePage() {
           <p className="mx-auto mt-5 max-w-xl text-ink/55">{dict.shop.subtitle}</p>
         </Reveal>
 
+        {/* Who can buy what — the pro-only gate itself is enforced in AddToCartButton + priceCartItems(). */}
+        <Reveal className="mx-auto mt-10 max-w-3xl rounded-2xl border border-ink/10 bg-bone/70 px-6 py-5 text-sm leading-relaxed text-ink/70 sm:px-8">
+          <p className="eyebrow mb-3 text-amethyst-500">{dict.shop.audienceTitle}</p>
+          <p>{dict.shop.audiencePro}</p>
+          <p className="mt-2">{dict.shop.audiencePublic}</p>
+        </Reveal>
+
         {products.length === 0 ? (
           <p className="mt-20 text-center text-ink/55">{dict.shop.empty}</p>
         ) : (

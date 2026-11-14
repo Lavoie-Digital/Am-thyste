@@ -78,7 +78,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Améthyste — Hair Botox",
     description:
-      "Soins capillaires professionnels haut de gamme, conçus au Québec. Un rituel de transformation à la kératine et à l'extrait de bambou.",
+      "Une marque québécoise spécialisée dans les soins capillaires professionnels. Traitements professionnels et produits d'entretien à domicile.",
     url: SITE_URL,
     type: "website",
     locale: "fr_CA",
@@ -90,7 +90,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Améthyste — Hair Botox",
     description:
-      "Soins capillaires professionnels haut de gamme, conçus au Québec. Un rituel de transformation.",
+      "Une marque québécoise spécialisée dans les soins capillaires professionnels.",
     images: ["/logo.jpeg"],
   },
   robots: {

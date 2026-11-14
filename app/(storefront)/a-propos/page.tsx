@@ -9,8 +9,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const { locale } = await getI18n();
   const description =
     locale === "fr"
-      ? "Née à Rimouski au Québec, Améthyste conçoit des soins capillaires Hair Botox à la kératine et à l'extrait de bambou. Découvrez notre histoire et notre promesse."
-      : "Born in Rimouski, Québec, Améthyste crafts Hair Botox hair care with keratin and bamboo extract. Discover our story and our promise.";
+      ? "AMÉTHYSTE est une marque québécoise de soins capillaires professionnels et de produits d'entretien à domicile, au service des professionnels de la coiffure et de leur clientèle."
+      : "AMÉTHYSTE is a Québec brand of professional hair care and at-home care products, serving hairdressing professionals and their clients.";
   return {
     title: locale === "fr" ? "À propos" : "About",
     description,
@@ -30,14 +30,14 @@ export default async function AProposPage() {
   const body =
     locale === "fr"
       ? [
-          "Née à Rimouski, Améthyste est portée par une conviction : prendre soin de ses cheveux devrait être un véritable rituel, pas une simple routine.",
-          "Notre gamme Hair Botox agit au cœur de la fibre. Enrichie de kératine et d'extrait de bambou, elle répare, lisse et sublime — en respectant l'intégrité du cheveu.",
-          "Des résultats visibles, durables, et un soin pensé autant pour la maison que pour le salon. C'est la promesse Améthyste.",
+          "AMÉTHYSTE est une marque québécoise née d'une passion pour la beauté et les soins capillaires.",
+          "Nous proposons une gamme de soins capillaires professionnels ainsi que des produits d'entretien conçus pour accompagner les routines capillaires à domicile.",
+          "Notre mission est d'offrir des produits de qualité répondant aux besoins des professionnels de la coiffure et de leur clientèle.",
         ]
       : [
-          "Born in Rimouski, Améthyste is driven by one conviction: caring for your hair should be a true ritual, not a mere routine.",
-          "Our Hair Botox range works at the core of the fiber. Enriched with keratin and bamboo extract, it repairs, smooths and sublimates — respecting the hair's integrity.",
-          "Visible, lasting results, and care designed for home and salon alike. That is the Améthyste promise.",
+          "AMÉTHYSTE is a Québec brand born from a passion for beauty and hair care.",
+          "We offer a range of professional hair care treatments, along with care products designed to support at-home hair routines.",
+          "Our mission is to provide quality products that meet the needs of hairdressing professionals and their clients.",
         ];
 
   return (

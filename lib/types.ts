@@ -43,6 +43,13 @@ export interface AppUser {
 
 export type ProductCategory = "mask" | "serum" | "shampoo" | "conditioner" | "other";
 
+/**
+ * Availability shown on the storefront. `out_of_stock` blocks purchase (UI and
+ * server); `backorder` still sells but shows `backorderDelay` on the product
+ * page, at checkout and in the confirmation email. Missing == "in_stock".
+ */
+export type StockStatus = "in_stock" | "out_of_stock" | "backorder";
+
 export interface ProductSize {
   id: string;
   label: Localized;
@@ -64,6 +71,9 @@ export interface Product {
   resellerPrice: number; // cents — NEVER serialized to unauthorized viewers
   /** When true, the product is shown to everyone but only approved pros / admins can buy it. */
   proOnly?: boolean;
+  stockStatus?: StockStatus;
+  /** Expected shipping delay for backorders, e.g. "2 à 3 semaines". */
+  backorderDelay?: Localized;
   currency: "cad";
   images: string[];
   sizes: ProductSize[];
@@ -93,6 +103,8 @@ export interface ProductDTO {
   resellerPrice?: number; // present only for approved pros / admin
   /** When true, everyone sees it but only approved pros / admins may purchase. */
   proOnly?: boolean;
+  stockStatus: StockStatus;
+  backorderDelay?: Localized;
   currency: "cad";
   images: string[];
   sizes: Array<{
@@ -114,6 +126,8 @@ export interface OrderLineItem {
   nameSnapshot: Localized;
   unitAmount: number; // cents, server-computed
   quantity: number;
+  /** Snapshot of the shipping delay when the item was on backorder at purchase time. */
+  backorderDelay?: Localized;
 }
 
 export interface Order {

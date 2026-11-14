@@ -42,10 +42,15 @@ export async function POST(request: NextRequest) {
 
   const priced = await priceCartItems(parsed.items, context);
   if (!priced.ok) {
-    const status = priced.error === "pro-only" ? 403 : 400;
+    const status = priced.error === "pro-only" ? 403 : priced.error === "out-of-stock" ? 409 : 400;
     return NextResponse.json({ ok: false, error: priced.error }, { status });
   }
 
   const shipping = computeShipping(priced.subtotal, settings);
-  return NextResponse.json({ ok: true, subtotal: priced.subtotal, shipping });
+  // Backordered lines are surfaced before payment so the buyer accepts the
+  // delay knowingly, not only after the fact in the confirmation email.
+  const backorders = priced.lineItems
+    .filter((li) => li.backorderDelay)
+    .map((li) => ({ name: li.nameSnapshot, delay: li.backorderDelay }));
+  return NextResponse.json({ ok: true, subtotal: priced.subtotal, shipping, backorders });
 }

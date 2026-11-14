@@ -20,7 +20,7 @@ export async function GET() {
 
 > ${BRAND.description.fr}
 
-${BRAND.name} (aussi appelée ${BRAND.alternateNames.join(", ")}) est une marque québécoise de soins capillaires professionnels basée à ${BRAND.address.locality}, ${BRAND.address.region}, Canada. Son produit phare est le Hair Botox, un masque reconstructeur à la kératine et à l'extrait de bambou pour cheveux fins, ondulés, abîmés ou frisés. Produits vendus en ligne et aux professionnels de la coiffure.
+${BRAND.name} (aussi appelée ${BRAND.alternateNames.join(", ")}) est une marque québécoise de soins capillaires professionnels basée à ${BRAND.address.locality}, ${BRAND.address.region}, Canada. Son produit phare est le Hair Botox, un traitement capillaire professionnel à la kératine et à l'extrait de bambou, réservé aux professionnels de la beauté dont le compte a été approuvé. Les shampoings, revitalisants, masques et huiles capillaires sont vendus en ligne au grand public.
 
 Site officiel : ${SITE_URL}
 Téléphone : ${BRAND.telephone}

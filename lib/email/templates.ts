@@ -102,6 +102,10 @@ export function orderConfirmationEmail(order: Order, locale: Locale) {
           tax: "Taxes (TPS/TVQ)",
           total: "Total",
           free: "Gratuite",
+          backorder: (d: string) => (d ? `Commande différée — expédition prévue : ${d}` : "Commande différée — nous vous confirmerons le délai d'expédition par courriel."),
+          terms: "Conditions de vente",
+          privacy: "Politique de confidentialité",
+          help: "Une question sur votre commande ? Répondez à ce courriel ou écrivez-nous.",
         }
       : {
           subject: `Order confirmation — Améthyste`,
@@ -112,12 +116,20 @@ export function orderConfirmationEmail(order: Order, locale: Locale) {
           tax: "Tax (GST/QST)",
           total: "Total",
           free: "Free",
+          backorder: (d: string) => (d ? `Backorder — expected to ship: ${d}` : "Backorder — we will confirm the shipping time by email."),
+          terms: "Terms of sale",
+          privacy: "Privacy policy",
+          help: "A question about your order? Reply to this email or write to us.",
         };
 
   const rows = order.lineItems
     .map(
       (li) =>
-        `<tr><td style="padding:8px 0;font-family:Georgia,serif;color:#3a3040;">${pick(li.nameSnapshot, locale)} × ${li.quantity}</td>
+        `<tr><td style="padding:8px 0;font-family:Georgia,serif;color:#3a3040;">${esc(pick(li.nameSnapshot, locale))} × ${li.quantity}${
+          li.backorderDelay
+            ? `<div style="margin-top:4px;font-family:Arial,sans-serif;font-size:12px;color:${AMETHYST};">${esc(t.backorder(pick(li.backorderDelay, locale).trim()))}</div>`
+            : ""
+        }</td>
          <td style="padding:8px 0;text-align:right;font-family:Georgia,serif;color:${INK}">${formatPrice(li.unitAmount * li.quantity, locale)}</td></tr>`,
     )
     .join("");
@@ -131,7 +143,11 @@ export function orderConfirmationEmail(order: Order, locale: Locale) {
       ${order.tax > 0 ? `<tr><td style="font-family:Arial,sans-serif;color:${INK_MUTE}">${t.tax}</td><td style="text-align:right;font-family:Georgia,serif;color:#3a3040">${formatPrice(order.tax, locale)}</td></tr>` : ""}
       <tr><td style="padding-top:10px;font-family:Georgia,serif;font-weight:bold;color:${INK}">${t.total}</td>
       <td style="padding-top:10px;text-align:right;font-family:Georgia,serif;font-weight:bold;color:${AMETHYST}">${formatPrice(order.total, locale)}</td></tr>
-    </table>`;
+    </table>
+    <p style="margin:24px 0 0;font-family:Arial,sans-serif;font-size:12px;line-height:1.6;color:${INK_MUTE};">${t.help}<br>
+      <a href="${absoluteUrl("/conditions")}" style="color:${AMETHYST};">${t.terms}</a> ·
+      <a href="${absoluteUrl("/confidentialite")}" style="color:${AMETHYST};">${t.privacy}</a>
+    </p>`;
 
   return { subject: t.subject, html: shell(t.title, body, { preheader: t.intro }) };
 }
@@ -142,7 +158,7 @@ export function orderOwnerEmail(order: Order, locale: Locale) {
   const itemsHtml = order.lineItems
     .map(
       (li) =>
-        `<tr><td style="padding:6px 0;font-family:Georgia,serif;font-size:14px;color:${INK}">${esc(pick(li.nameSnapshot, locale))} × ${li.quantity}</td>
+        `<tr><td style="padding:6px 0;font-family:Georgia,serif;font-size:14px;color:${INK}">${esc(pick(li.nameSnapshot, locale))} × ${li.quantity}${li.backorderDelay ? ` <span style="font-family:Arial,sans-serif;font-size:12px;color:${AMETHYST};">(commande différée${pick(li.backorderDelay, "fr").trim() ? ` · ${esc(pick(li.backorderDelay, "fr").trim())}` : ""})</span>` : ""}</td>
          <td style="padding:6px 0;text-align:right;font-family:Georgia,serif;font-size:14px;color:${INK}">${formatPrice(li.unitAmount * li.quantity, locale)}</td></tr>`,
     )
     .join("");
@@ -217,12 +233,12 @@ export function welcomeEmail(name: string, locale: Locale) {
       ? {
           subject: "Bienvenue chez Améthyste ✨",
           title: `Bienvenue, ${name}`,
-          body: "Merci d'avoir rejoint l'univers Améthyste. Préparez-vous à transformer vos cheveux au cœur de la fibre.",
+          body: "Merci d'avoir rejoint l'univers Améthyste. Découvrez nos soins capillaires professionnels et nos produits d'entretien à domicile.",
         }
       : {
           subject: "Welcome to Améthyste ✨",
           title: `Welcome, ${name}`,
-          body: "Thank you for joining the Améthyste world. Get ready to transform your hair at the core of the fiber.",
+          body: "Thank you for joining the Améthyste world. Discover our professional hair care and at-home care products.",
         };
   return { subject: t.subject, html: shell(t.title, p(t.body), { preheader: t.body }) };
 }
