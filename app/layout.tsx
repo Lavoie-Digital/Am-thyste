@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     "soin lissant",
     "cheveux abîmés",
     "Améthyste",
-    "Rimouski",
+    "Clermont",
     "Québec",
   ],
   authors: [{ name: "Améthyste" }],

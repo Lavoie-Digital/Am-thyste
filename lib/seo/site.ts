@@ -46,7 +46,9 @@ export const BRAND = {
   email: "info@amethystehairproductscanada.ca",
   logo: `${SITE_URL}/logo.jpeg`,
   address: {
-    locality: "Rimouski",
+    street: "199 boulevard Notre-Dame",
+    locality: "Clermont",
+    postalCode: "G4A 1E9",
     region: "QC",
     country: "CA",
   },

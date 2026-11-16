@@ -14,7 +14,7 @@ Le site amethystehairproductscanada.ca est exploité par :
 
 - **Nom de l'entreprise :** [À CONFIRMER : nom légal exact, p. ex. « 9XXX-XXXX Québec inc. » ou nom de l'entreprise individuelle], faisant affaire sous le nom AMÉTHYSTE Hair Products Canada
 - **NEQ :** [À CONFIRMER]
-- **Adresse :** [À CONFIRMER : adresse civique complète], Rimouski (Québec) [code postal], Canada
+- **Adresse :** 199 boulevard Notre-Dame, Clermont (Québec) G4A 1E9, Canada
 - **Téléphone :** 514-691-1899
 - **Courriel :** info@amethystehairproductscanada.ca
 - **Numéros de TPS / TVQ :** [À CONFIRMER]

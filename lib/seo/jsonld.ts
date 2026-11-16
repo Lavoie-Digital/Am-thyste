@@ -31,7 +31,9 @@ export function organizationJsonLd(locale: Locale) {
     priceRange: "$$",
     address: {
       "@type": "PostalAddress",
+      streetAddress: BRAND.address.street,
       addressLocality: BRAND.address.locality,
+      postalCode: BRAND.address.postalCode,
       addressRegion: BRAND.address.region,
       addressCountry: BRAND.address.country,
     },

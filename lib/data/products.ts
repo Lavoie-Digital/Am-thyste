@@ -39,11 +39,12 @@ const getRawProducts = cache(async (): Promise<Product[]> => {
  * server-side enforcement that prevents reseller-price leakage.
  */
 export function toDTO(product: Product, viewer: Viewer | null): ProductDTO {
-  // Pro-only products are never sold at market rate — their reseller price is
-  // their ONLY price (marketPrice is typically 0), so there is no pro discount
-  // to hide. Expose it to everyone so the public preview shows a real price;
-  // purchase is still blocked for non-pros (AddToCartButton + priceCart()).
-  const canSeeReseller = pricingContextFor(viewer) === "reseller" || !!product.proOnly;
+  // Pro-only products (Hair Botox): at the official distributor's request, NO
+  // price of any kind is shown to the public — only approved pros / admin see
+  // it. The product itself stays visible (with its "professional use only"
+  // badge); market prices are zeroed too so nothing leaks in the payload.
+  const canSeeReseller = pricingContextFor(viewer) === "reseller";
+  const hidePrices = !!product.proOnly && !canSeeReseller;
   return {
     id: product.id,
     slug: product.slug,
@@ -53,7 +54,7 @@ export function toDTO(product: Product, viewer: Viewer | null): ProductDTO {
     description: product.description,
     ritual: product.ritual,
     ingredients: product.ingredients,
-    marketPrice: product.marketPrice,
+    marketPrice: hidePrices ? 0 : product.marketPrice,
     ...(canSeeReseller ? { resellerPrice: product.resellerPrice } : {}),
     proOnly: product.proOnly ?? false,
     stockStatus: product.stockStatus ?? "in_stock",
@@ -65,7 +66,7 @@ export function toDTO(product: Product, viewer: Viewer | null): ProductDTO {
     sizes: product.sizes.map((s) => ({
       id: s.id,
       label: s.label,
-      marketPrice: s.marketPrice,
+      marketPrice: hidePrices ? 0 : s.marketPrice,
       ...(canSeeReseller ? { resellerPrice: s.resellerPrice } : {}),
       sku: s.sku,
     })),

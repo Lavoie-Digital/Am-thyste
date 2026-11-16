@@ -9,7 +9,8 @@ import { formatPrice, cn } from "@/lib/utils";
  * struck through and a discreet "Pro" marker.
  *
  * For pro-only products we show the professional price alone — no struck-through
- * market price, since these items are never sold at market rate.
+ * market price, since these items are never sold at market rate. Non-pros get
+ * no price at all for these (the server strips it), just a discreet notice.
  */
 export function PriceTag({
   marketPrice,
@@ -33,6 +34,20 @@ export function PriceTag({
   const showMarketCompare = hasReseller && !proOnly;
 
   const sizes = { sm: "text-sm", md: "text-lg", lg: "text-2xl" };
+
+  if (proOnly && !hasReseller) {
+    return (
+      <p
+        className={cn(
+          "text-[11px] uppercase tracking-[0.2em] text-ink/50",
+          align === "right" && "text-right",
+          className,
+        )}
+      >
+        {dict.shop.proPriceHidden}
+      </p>
+    );
+  }
 
   return (
     <div
